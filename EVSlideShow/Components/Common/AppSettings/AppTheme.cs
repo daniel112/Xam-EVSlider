@@ -11,11 +11,6 @@ namespace EVSlideShow.Core.Common {
         #region Variables
         private static readonly Lazy<AppTheme> lazy = new Lazy<AppTheme>(() => new AppTheme());
 
-        public string MainColor { get; set; }
-        public string SecondaryColor { get; set; }
-        public string TextColor { get; set; }
-        public string SideMenuHeaderIcon { get; set; }
-        public string IconTintColor { get; set; } 
         public static AppTheme Instance {
             get {
                 return lazy.Value;
@@ -41,8 +36,11 @@ namespace EVSlideShow.Core.Common {
             return "#ffffff";
         }
 
-        public static string DefaultBakcgroundColor() {
-            return "#CCCCCC";
+        public static string SecondaryColor() {
+            return "#405978";
+        }
+        public static string PrimaryColor() {
+            return "#2a3444";
         }
         #endregion
 

@@ -8,7 +8,7 @@ namespace EVSlideShow.Views {
         }
 
         public BaseNavigationPage(Page root) : base(root) {
-            BarBackgroundColor = Color.FromHex(AppTheme.Instance.MainColor);
+            BarBackgroundColor = Color.FromHex(AppTheme.PrimaryColor());
             BarTextColor = Color.FromHex(AppTheme.DefaultTextColor());
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,7 +17,7 @@ namespace EVSlideShow {
         public App() {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new SplashScreenContentPage();
         }
 
         protected override void OnStart() {
