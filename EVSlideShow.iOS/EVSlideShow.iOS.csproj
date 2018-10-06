@@ -95,6 +95,9 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Common\.DS_Store" />
+    <Compile Include="Common\DeviceOrientation.cs" />
+    <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -139,5 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets.xcassets\splash_icon.imageset\" />
+    <Folder Include="Resources\Fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\phagspa.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\phagspab.ttf" />
   </ItemGroup>
 </Project>

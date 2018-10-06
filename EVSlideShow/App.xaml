@@ -1,5 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="EVSlideShow.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <OnPlatform x:TypeArguments="x:String" x:Key="AppFont-Bold">
+                <On Platform="Android" Value="phagspab.ttf#Open Sans" />
+                <On Platform="iOS" Value="phagspab" />
+            </OnPlatform>
+            <OnPlatform x:TypeArguments="x:String" x:Key="AppFont">
+                <On Platform="Android" Value="OpenSans-Regular.ttf#Open Sans" />
+                <On Platform="iOS" Value="Microsoft PhagsPa" />
+            </OnPlatform>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

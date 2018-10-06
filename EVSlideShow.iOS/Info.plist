@@ -34,5 +34,14 @@
 	<string>EVSlideShow</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fonts/phagspa.ttf</string>
+		<string>Fonts/phagspab.ttf</string>
+	</array>
 </dict>
 </plist>
