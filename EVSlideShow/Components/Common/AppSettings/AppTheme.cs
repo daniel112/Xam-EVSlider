@@ -35,13 +35,16 @@ namespace EVSlideShow.Core.Common {
         public static string DefaultTextColor() {
             return "#ffffff";
         }
-
+        public static string SecondaryTextColor() {
+            return "#618ec3";
+        }
         public static string SecondaryColor() {
             return "#405978";
         }
         public static string PrimaryColor() {
             return "#2a3444";
         }
+
         #endregion
 
     }
