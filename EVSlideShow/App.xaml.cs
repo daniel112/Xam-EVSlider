@@ -17,7 +17,7 @@ namespace EVSlideShow {
         public App() {
             InitializeComponent();
 
-            MainPage = new SplashScreenContentPage();
+            MainPage = new SplashContentPage();
         }
 
         protected override void OnStart() {

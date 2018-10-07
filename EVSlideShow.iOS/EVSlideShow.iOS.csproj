@@ -121,6 +121,11 @@
     <ImageAsset Include="Assets.xcassets\splash_icon.imageset\40x40.png" />
     <ImageAsset Include="Assets.xcassets\splash_icon.imageset\80x80.png" />
     <ImageAsset Include="Assets.xcassets\splash_icon.imageset\120x120.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -143,9 +148,15 @@
   <ItemGroup>
     <Folder Include="Assets.xcassets\splash_icon.imageset\" />
     <Folder Include="Resources\Fonts\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Fonts\phagspa.ttf" />
-    <EmbeddedResource Include="Resources\Fonts\phagspab.ttf" />
+    <Content Include="Resources\Fonts\phagspa.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Fonts\phagspab.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

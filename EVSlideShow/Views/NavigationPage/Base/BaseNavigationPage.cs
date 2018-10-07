@@ -11,5 +11,12 @@ namespace EVSlideShow.Views {
             BarBackgroundColor = Color.FromHex(AppTheme.PrimaryColor());
             BarTextColor = Color.FromHex(AppTheme.DefaultTextColor());
         }
+
+        public bool IgnoreLayoutChange { get; set; } = false;
+
+        protected override void OnSizeAllocated(double width, double height) {
+            if (!IgnoreLayoutChange)
+                base.OnSizeAllocated(width, height);
+        }
     }
 }

@@ -19,5 +19,6 @@
     <Folder Include="Components\" />
     <Folder Include="AppSettings\" />
     <Folder Include="Network\" />
+    <Folder Include="Constants\" />
   </ItemGroup>
 </Project>

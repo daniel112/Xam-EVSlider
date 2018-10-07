@@ -1,11 +1,12 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
-    public class LoginContentPage : BaseContentPage<LoginViewModel> {
+    public class IntroContentPage : BaseContentPage<IntroViewModel> {
 
         #region Variables
         private Image _ImageLogo;
@@ -17,7 +18,6 @@ namespace EVSlideShow.Core.Views {
                         Source = "splash_icon",
                         WidthRequest = 80,
                         HeightRequest = 80,
-                        HorizontalOptions = LayoutOptions.CenterAndExpand
                     };
                 }
                 return _ImageLogo;
@@ -35,14 +35,13 @@ namespace EVSlideShow.Core.Views {
                         Text = "EV SLIDESHOW",
                         FontSize = 24,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        FontFamily = "Microsoft PhagsPa",
                         FontAttributes = FontAttributes.Bold,
                         LineBreakMode = LineBreakMode.WordWrap,
-                        HorizontalOptions = LayoutOptions.Center,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalOptions = LayoutOptions.Center,
                         Margin = new Thickness(30, 15, 30, 0)
                     };
+                    _LabelTitleTop.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+
                 }
 
                 return _LabelTitleTop;
@@ -57,13 +56,11 @@ namespace EVSlideShow.Core.Views {
                         Text = "For TESLA",
                         FontSize = 22,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        FontFamily = "Microsoft PhagsPa",
                         LineBreakMode = LineBreakMode.WordWrap,
-                        HorizontalOptions = LayoutOptions.Center,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalOptions = LayoutOptions.Center,
                         Margin = new Thickness(30, 0, 30, 0)
                     };
+                    _LabelTitleBottom.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
                 }
 
                 return _LabelTitleBottom;
@@ -76,15 +73,14 @@ namespace EVSlideShow.Core.Views {
                 if (_LabelSummary == null) {
                     _LabelSummary = new Label {
                         Text = "TO VIEW THE FREE CONTENT SLIDESHOWS, CREATE AFREE ACCOUNT WITH NO OBLIGATIONS",
-                        FontSize = 18,
+                        FontSize = 16,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        FontFamily = "Microsoft PhagsPa",
                         LineBreakMode = LineBreakMode.WordWrap,
-                        HorizontalOptions = LayoutOptions.Center,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalOptions = LayoutOptions.Center,
                         Margin = new Thickness(30, 20, 30, 0)
                     };
+                    _LabelSummary.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+
                 }
 
                 return _LabelSummary;
@@ -110,29 +106,18 @@ namespace EVSlideShow.Core.Views {
                 if (_LabelInstruction == null) {
                     _LabelInstruction = new Label {
                         Text = "To create your personal photo slideshows with your own photos you will need to create an account and subscribe",
-                        FontSize = 18,
+                        FontSize = 16,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        FontFamily = "Microsoft PhagsPa",
                         LineBreakMode = LineBreakMode.WordWrap,
                         HorizontalOptions = LayoutOptions.Center,
                         HorizontalTextAlignment = TextAlignment.Center,
                         VerticalOptions = LayoutOptions.Center,
                     };
+                    _LabelInstruction.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+
                 }
 
                 return _LabelInstruction;
-            }
-        }
-
-        private StackLayout _StackContent;
-        private StackLayout StackContent {
-            get {
-                if (_StackContent == null) {
-                    _StackContent = new StackLayout {
-                        Margin = new Thickness(0, 50, 0, 30)
-                    };
-                }
-                return _StackContent;
             }
         }
 
@@ -153,10 +138,8 @@ namespace EVSlideShow.Core.Views {
                     _ButtonCreateAccount = new Button {
                         Text = "Create an Account",
                         FontSize = 18,
-                        FontFamily = "Microsoft PhagsPa",
                         TextColor = Color.White,
                         BackgroundColor = Color.FromHex("618ec6"),
-                        HorizontalOptions = LayoutOptions.FillAndExpand,
                         CornerRadius = 8,
                         HeightRequest = 50,
                         Margin = new Thickness(30, 20, 30, 0)
@@ -173,11 +156,9 @@ namespace EVSlideShow.Core.Views {
                 if (_ButtonLogin == null) {
                     _ButtonLogin = new Button {
                         Text = "Login",
-                        FontFamily = "Microsoft PhagsPa",
                         FontSize = 18,
                         TextColor = Color.White,
                         BackgroundColor = Color.FromHex("618ec6"),
-                        HorizontalOptions = LayoutOptions.FillAndExpand,
                         CornerRadius = 8,
                         HeightRequest = 50,
                         Margin = new Thickness(30, 20, 30, 0)
@@ -188,10 +169,11 @@ namespace EVSlideShow.Core.Views {
                 return _ButtonLogin;
             }
         }
+        
         #endregion
 
         #region Lifecycle method
-        public LoginContentPage() {
+        public IntroContentPage() {
             this.Setup();
         }
 
@@ -205,22 +187,30 @@ namespace EVSlideShow.Core.Views {
         private void Setup() {
 
 
-            // stackview
-            this.StackContent.Children.Add(this.ImageLogo);
-            this.StackContent.Children.Add(this.LabelTitleTop);
-            this.StackContent.Children.Add(this.LabelTitleBottom);
-            this.StackContent.Children.Add(this.LabelSummary);
-
             this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
-            this.StackContent.Children.Add(this.ContentViewInstructionWrapper);
 
-            // buttons
-            this.StackContent.Children.Add(this.ButtonCreateAccount);
-            this.StackContent.Children.Add(this.ButtonLogin);
+            ContentView imageview = new ContentView {
+                Content = this.ImageLogo,
 
+            };
 
-            // scrollview
-            this.ScrollViewContent.Content = StackContent;
+            FlexLayout flexLayout = new FlexLayout {
+                Direction = FlexDirection.Column,
+                //AlignItems = FlexAlignItems.Stretch,
+                JustifyContent = FlexJustify.Center,
+                Children = {
+                    imageview,
+                    this.LabelTitleTop,
+                    this.LabelTitleBottom,
+                    this.LabelSummary,
+                    this.ContentViewInstructionWrapper,
+                    this.ButtonCreateAccount,
+                    this.ButtonLogin
+                },
+            };
+
+            this.ScrollViewContent.Content = flexLayout;
+
 
             Content = this.ScrollViewContent;
         }
@@ -230,6 +220,7 @@ namespace EVSlideShow.Core.Views {
         }
 
         void ButtonLogin_Clicked(object sender, EventArgs e) {
+            this.Navigation.PushModalAsync(new LoginContentPage());
         }
         #endregion
 

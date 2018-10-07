@@ -2,14 +2,25 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="EVSlideShow.App">
     <Application.Resources>
         <ResourceDictionary>
-            <OnPlatform x:TypeArguments="x:String" x:Key="AppFont-Bold">
-                <On Platform="Android" Value="phagspab.ttf#Open Sans" />
-                <On Platform="iOS" Value="phagspab" />
-            </OnPlatform>
-            <OnPlatform x:TypeArguments="x:String" x:Key="AppFont">
-                <On Platform="Android" Value="OpenSans-Regular.ttf#Open Sans" />
-                <On Platform="iOS" Value="Microsoft PhagsPa" />
-            </OnPlatform>
+            <Style x:Key="LabelFontFamily" TargetType="Label">
+                <Setter Property="Label.FontFamily">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:String">
+                            <OnPlatform.Android>Fonts/phagspa.ttf#Microsoft PhagsPa
+                            </OnPlatform.Android>
+                            <OnPlatform.iOS>Microsoft PhagsPa</OnPlatform.iOS>
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+                <!--<Setter Property="FontSize">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS" Value="24" />
+                            <On Platform="Android" Value="24" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>-->
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
