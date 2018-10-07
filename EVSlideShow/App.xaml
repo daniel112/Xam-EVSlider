@@ -12,14 +12,17 @@
                         </OnPlatform>
                     </Setter.Value>
                 </Setter>
-                <!--<Setter Property="FontSize">
+            </Style>
+            <Style x:Key="LabelFontFamily_Bold" TargetType="Label">
+                <Setter Property="Label.FontFamily">
                     <Setter.Value>
-                        <OnPlatform x:TypeArguments="x:Double">
-                            <On Platform="iOS" Value="24" />
-                            <On Platform="Android" Value="24" />
+                        <OnPlatform x:TypeArguments="x:String">
+                            <OnPlatform.Android>Fonts/phagspab.ttf#Microsoft PhagsPa
+                            </OnPlatform.Android>
+                            <OnPlatform.iOS>Microsoft PhagsPa</OnPlatform.iOS>
                         </OnPlatform>
                     </Setter.Value>
-                </Setter>-->
+                </Setter>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

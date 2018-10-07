@@ -1,8 +1,10 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
+using EVSlideShow.Core.Views.ContentViews;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
@@ -40,7 +42,7 @@ namespace EVSlideShow.Core.Views {
                         HorizontalTextAlignment = TextAlignment.Center,
                         Margin = new Thickness(30, 15, 30, 0)
                     };
-                    _LabelTitleTop.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+                    _LabelTitleTop.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily_Bold);
 
                 }
 
@@ -169,7 +171,7 @@ namespace EVSlideShow.Core.Views {
                 return _ButtonLogin;
             }
         }
-        
+
         #endregion
 
         #region Lifecycle method
@@ -184,8 +186,9 @@ namespace EVSlideShow.Core.Views {
 
 
         #region Private API
-        private void Setup() {
 
+
+        private void Setup() {
 
             this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
 
@@ -196,7 +199,6 @@ namespace EVSlideShow.Core.Views {
 
             FlexLayout flexLayout = new FlexLayout {
                 Direction = FlexDirection.Column,
-                //AlignItems = FlexAlignItems.Stretch,
                 JustifyContent = FlexJustify.Center,
                 Children = {
                     imageview,
@@ -205,7 +207,7 @@ namespace EVSlideShow.Core.Views {
                     this.LabelSummary,
                     this.ContentViewInstructionWrapper,
                     this.ButtonCreateAccount,
-                    this.ButtonLogin
+                    this.ButtonLogin,
                 },
             };
 
@@ -217,6 +219,7 @@ namespace EVSlideShow.Core.Views {
 
         // UIResponder
         void ButtonCreateAccount_Clicked(object sender, EventArgs e) {
+            this.Navigation.PushModalAsync(new SignUpContentPage());
         }
 
         void ButtonLogin_Clicked(object sender, EventArgs e) {

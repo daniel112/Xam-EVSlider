@@ -3,13 +3,16 @@ using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
-using Plugin.InputKit.Shared.Controls;
+using EVSlideShow.Core.Views.ContentViews;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
-    public class LoginContentPage : BaseContentPage<LoginViewModel> {
+    public class LoginContentPage : BaseContentPage<LoginViewModel>, IInputTitle {
 
         #region Variables
+        private const string InputTextIdentifierUsername = "username";
+        private const string InputTextIdentifierPassword = "password";
+
         private string TextUsername;
         private string TextPassword;
         private FlexLayout _FlexLayoutContent;
@@ -93,6 +96,7 @@ namespace EVSlideShow.Core.Views {
                     _ButtonClose = new Button {
                         Image = "nav_close",
                         Margin = new Thickness(20, 20, 0, 0),
+                        BackgroundColor = Color.Transparent,
                         WidthRequest = 36,
                         HeightRequest = 36,
                         HorizontalOptions = LayoutOptions.Start,
@@ -129,87 +133,32 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        private Label _LabelUsername;
-        private Label LabelUsername {
+        private InputText _InputUsername;
+        private InputText InputUsername {
             get {
-                if (_LabelUsername == null) {
-                    _LabelUsername = new Label {
-                        Text = "Username",
-                        FontSize = 18,
-                        TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        HorizontalTextAlignment = TextAlignment.Start,
-                        Margin = new Thickness(30, 0, 30, 10)
-                    };
-                    _LabelUsername.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
-                }
-
-                return _LabelUsername;
-            }
-        }
-
-        private Label _LabelPassword;
-        private Label LabelPassword {
-            get {
-                if (_LabelPassword == null) {
-                    _LabelPassword = new Label {
-                        Text = "Password",
-                        FontSize = 18,
-                        TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
-                        LineBreakMode = LineBreakMode.WordWrap,
-                        HorizontalTextAlignment = TextAlignment.Start,
+                if (_InputUsername == null) {
+                    _InputUsername = new InputText(InputTextIdentifierUsername, "Name", "Name", false, "input_username", this) {
                         Margin = new Thickness(30, 20, 30, 10)
                     };
-                    _LabelPassword.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
-                }
 
-                return _LabelPassword;
+                }
+                return _InputUsername;
             }
         }
 
-
-        private AdvancedEntry _EntryUsername;
-        private AdvancedEntry EntryUsername {
+        private InputText _InputPassword;
+        private InputText InputPassword {
             get {
-                if (_EntryUsername == null) {
-                    _EntryUsername = new AdvancedEntry {
-                        Placeholder = "Name",
-                        TextColor = Color.White,
-                        PlaceholderColor = Color.White.MultiplyAlpha(0.3),
-                        BorderColor = Color.White.MultiplyAlpha(0.5),
-                        Margin = new Thickness(30, 0, 30, 0),
-                        HeightRequest = 50,
-                        BackgroundColor = Color.Transparent,
-                        CornerRadius = 8
+                if (_InputPassword == null) {
+                    _InputPassword = new InputText(InputTextIdentifierPassword, "Password", "Password", true, "input_password", this) {
+                        Margin = new Thickness(30, 10, 30, 10)
                     };
-                    _EntryUsername.Completed += EntryUsername_Completed;
-                    _EntryUsername.TextChanged += EntryUsername_TextChanged;
+
                 }
-                return _EntryUsername;
+                return _InputPassword;
             }
         }
 
-        private AdvancedEntry _EntryPassword;
-        private AdvancedEntry EntryPassword {
-            get {
-                if (_EntryPassword == null) {
-                    _EntryPassword = new AdvancedEntry {
-                        Placeholder = "Password",
-                        TextColor = Color.White,
-                        PlaceholderColor = Color.White.MultiplyAlpha(0.3),
-                        BorderColor = Color.White.MultiplyAlpha(0.5),
-                        Margin = new Thickness(30, 0, 30, 0),
-                        HeightRequest = 50,
-                        BackgroundColor = Color.Transparent,
-                        CornerRadius = 8,
-                        Annotation = AdvancedEntry.AnnotationType.Password
-                    };
-                    _EntryPassword.Completed += EntryPassword_Completed;
-                    _EntryPassword.TextChanged += EntryPassword_TextChanged;
-                }
-                return _EntryPassword;
-            }
-
-        }
         #endregion
 
         #region Initialization
@@ -232,10 +181,8 @@ namespace EVSlideShow.Core.Views {
                 JustifyContent = FlexJustify.Center,
                 Children = {
                     this.ContentViewImage,
-                    this.LabelUsername,
-                    this.EntryUsername,
-                    this.LabelPassword,
-                    this.EntryPassword,
+                    this.InputUsername,
+                    this.InputPassword,
                     this.ButtonLogin,
                 },
             };
@@ -275,25 +222,6 @@ namespace EVSlideShow.Core.Views {
             Console.WriteLine("TAPPED");
         }
 
-        // AdvancedEntry
-        void EntryPassword_TextChanged(object sender, EventArgs e) {
-            AdvancedEntry entry = (AdvancedEntry)sender;
-            this.TextPassword = entry.Text;
-        }
-        void EntryPassword_Completed(object sender, EventArgs e) {
-            AdvancedEntry entry = (AdvancedEntry)sender;
-            this.ValidateLogin();
-
-        }
-
-        void EntryUsername_TextChanged(object sender, EventArgs e) {
-            AdvancedEntry entry = (AdvancedEntry)sender;
-            this.TextUsername = entry.Text;
-        }
-        void EntryUsername_Completed(object sender, EventArgs e) {
-            AdvancedEntry entry = (AdvancedEntry)sender;
-            entry.FocusNext();
-        }
 
         #endregion
         #endregion
@@ -304,6 +232,16 @@ namespace EVSlideShow.Core.Views {
 
         #region Delegates
 
+        void IInputTitle.Input_TextChanged(string text, InputText inputText) {
+            if (inputText.Identifier == InputTextIdentifierUsername) {
+                this.TextUsername = text;
+            } else {
+                this.TextPassword = text;
+            }
+        }
+
+        void IInputTitle.Input_DidPressReturn(string text, InputText inputText) {
+        }
         #endregion
     }
 }

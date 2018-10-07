@@ -6,7 +6,8 @@ namespace EVSlideShow.Core.Constants {
     /// </summary>
     public static class ApplicationResourcesConstants {
 
-        public static string StyleLabelFontFamily = "LabelFontFamily"; 
+        public static string StyleLabelFontFamily = "LabelFontFamily";
+        public static string StyleLabelFontFamily_Bold = "LabelFontFamily_Bold";
 
     }
 }

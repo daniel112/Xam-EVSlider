@@ -99,7 +99,7 @@ namespace EVSlideShow.Core.Views {
             this.BackgroundColor = Color.FromHex(AppTheme.PrimaryColor());
 
             // set custom style
-            this.LabelTop.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+            this.LabelTop.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily_Bold);
             this.LabelBottom.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
             Console.WriteLine(this.LabelTop.FontSize);
 

@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\DeviceOrientation.cs" />
     <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
+    <Compile Include="CustomRenderers\BorderlessEntryCustomRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -91,6 +92,21 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\splash_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\splash_icon.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable\input_username.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable\input_password.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\nav_close.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -102,14 +118,14 @@
     <Folder Include="CustomRenderers\" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="Assets\Fonts\phagspa.ttf" />
+    <AndroidAsset Include="Assets\Fonts\phagspab.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EVSlideShow\EVSlideShow.Core.csproj">
       <Project>{119D0052-BD4B-4321-A6D5-732F6122B921}</Project>
       <Name>EVSlideShow.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\Fonts\phagspa.ttf" />
-    <AndroidAsset Include="Assets\Fonts\phagspab.ttf" />
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
