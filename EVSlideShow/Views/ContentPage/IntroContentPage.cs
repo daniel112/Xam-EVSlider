@@ -35,7 +35,7 @@ namespace EVSlideShow.Core.Views {
                 if (_LabelTitleTop == null) {
                     _LabelTitleTop = new Label {
                         Text = "EV SLIDESHOW",
-                        FontSize = 24,
+                        FontSize = 22,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
                         FontAttributes = FontAttributes.Bold,
                         LineBreakMode = LineBreakMode.WordWrap,
@@ -56,7 +56,7 @@ namespace EVSlideShow.Core.Views {
                 if (_LabelTitleBottom == null) {
                     _LabelTitleBottom = new Label {
                         Text = "For TESLA",
-                        FontSize = 22,
+                        FontSize = 20,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
                         LineBreakMode = LineBreakMode.WordWrap,
                         HorizontalTextAlignment = TextAlignment.Center,
@@ -74,12 +74,11 @@ namespace EVSlideShow.Core.Views {
             get {
                 if (_LabelSummary == null) {
                     _LabelSummary = new Label {
-                        Text = "TO VIEW THE FREE CONTENT SLIDESHOWS, CREATE AFREE ACCOUNT WITH NO OBLIGATIONS",
+                        Text = "TO VIEW THE FREE CONTENT SLIDESHOWS, CREATE A FREE ACCOUNT WITH NO OBLIGATIONS",
                         FontSize = 16,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
                         LineBreakMode = LineBreakMode.WordWrap,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        Margin = new Thickness(30, 20, 30, 0)
                     };
                     _LabelSummary.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
 
@@ -95,8 +94,9 @@ namespace EVSlideShow.Core.Views {
                 if (_ContentViewInstructionWrapper == null) {
                     _ContentViewInstructionWrapper = new ContentView {
                         BackgroundColor = Color.FromHex(AppTheme.SecondaryColor()),
-                        Margin = new Thickness(30, 50, 30, 0),
-                        Padding = new Thickness(12)
+                        Padding = new Thickness(10),
+                        //Margin = new Thickness(35, 10, 0, 0),
+
                     };
                 }
                 return _ContentViewInstructionWrapper;
@@ -111,9 +111,11 @@ namespace EVSlideShow.Core.Views {
                         FontSize = 16,
                         TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
                         LineBreakMode = LineBreakMode.WordWrap,
-                        HorizontalOptions = LayoutOptions.Center,
+                        BackgroundColor = Color.Transparent,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        VerticalOptions = LayoutOptions.Center,
+
                     };
                     _LabelInstruction.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
 
@@ -190,12 +192,24 @@ namespace EVSlideShow.Core.Views {
 
         private void Setup() {
 
-            this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
 
             ContentView imageview = new ContentView {
                 Content = this.ImageLogo,
 
             };
+
+            // Label wrapping is buggy, so we put the wrapped label in 1x1 grid
+            var gridSummary = new Grid {
+                Margin = new Thickness(30, 20, 30, 20),
+                RowSpacing = 30
+            };
+            gridSummary.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+            gridSummary.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+            gridSummary.Children.Add(this.LabelSummary, 0, 0);
+            gridSummary.Children.Add(this.ContentViewInstructionWrapper, 0, 1);
+
+            this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
+
 
             FlexLayout flexLayout = new FlexLayout {
                 Direction = FlexDirection.Column,
@@ -204,8 +218,7 @@ namespace EVSlideShow.Core.Views {
                     imageview,
                     this.LabelTitleTop,
                     this.LabelTitleBottom,
-                    this.LabelSummary,
-                    this.ContentViewInstructionWrapper,
+                    gridSummary,
                     this.ButtonCreateAccount,
                     this.ButtonLogin,
                 },

@@ -7,14 +7,19 @@ using Xamarin.Forms;
 namespace EVSlideShow.Core.Views.ContentViews {
 
     public interface IInputTitle {
-        void Input_TextChanged(string text, InputText inputText);
-        void Input_DidPressReturn(string text, InputText inputText);
+        void Input_TextChanged(string text, InputTextContentView inputText);
+        void Input_DidPressReturn(string text, InputTextContentView inputText);
 
     }
-    public class InputText : ContentView {
+    public class InputTextContentView : ContentView {
         #region Variables
 
         public IInputTitle Delegate;
+        public float CornerRadius {
+            set {
+                this.FrameWrapper.CornerRadius = value;
+            }
+        }
         public string Identifier;
         public string InputTitle {
             set {
@@ -51,7 +56,7 @@ namespace EVSlideShow.Core.Views.ContentViews {
             }
         }
         private BorderlessEntry _EntryItem;
-        private BorderlessEntry EntryItem {
+        public BorderlessEntry EntryItem {
             get {
                 if (_EntryItem == null) {
                     _EntryItem = new BorderlessEntry {
@@ -134,10 +139,10 @@ namespace EVSlideShow.Core.Views.ContentViews {
         #endregion
 
 
-        public InputText() {
+        public InputTextContentView() {
         }
 
-        public InputText(string identifier, string title, string placeholder, bool isPasswordType, string imageLogo, IInputTitle inputDelegate) {
+        public InputTextContentView(string identifier, string title, string placeholder, bool isPasswordType, string imageLogo, IInputTitle inputDelegate) {
             this.Identifier = identifier;
             this.InputTitle = title;
             this.InputPlaceholder = placeholder;

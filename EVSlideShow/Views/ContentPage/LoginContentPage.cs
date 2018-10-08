@@ -1,5 +1,6 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
@@ -120,7 +121,6 @@ namespace EVSlideShow.Core.Views {
                         TextColor = Color.FromHex(AppTheme.SecondaryTextColor()),
                         BackgroundColor = Color.Transparent,
                         Margin = new Thickness(30, 10, 30, 0),
-                        //WidthRequest = 100,
                         HorizontalOptions = LayoutOptions.End,
                     };
                     _LabelForgotPassword.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
@@ -133,11 +133,11 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        private InputText _InputUsername;
-        private InputText InputUsername {
+        private InputTextContentView _InputUsername;
+        private InputTextContentView InputUsername {
             get {
                 if (_InputUsername == null) {
-                    _InputUsername = new InputText(InputTextIdentifierUsername, "Name", "Name", false, "input_username", this) {
+                    _InputUsername = new InputTextContentView(InputTextIdentifierUsername, "Name", "Name", false, "input_username", this) {
                         Margin = new Thickness(30, 20, 30, 10)
                     };
 
@@ -146,16 +146,70 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        private InputText _InputPassword;
-        private InputText InputPassword {
+        private InputTextContentView _InputPassword;
+        private InputTextContentView InputPassword {
             get {
                 if (_InputPassword == null) {
-                    _InputPassword = new InputText(InputTextIdentifierPassword, "Password", "Password", true, "input_password", this) {
+                    _InputPassword = new InputTextContentView(InputTextIdentifierPassword, "Password", "Password", true, "input_password", this) {
                         Margin = new Thickness(30, 10, 30, 10)
                     };
 
                 }
                 return _InputPassword;
+            }
+        }
+
+        private ContentView _ContentViewInstructionWrapper;
+        private ContentView ContentViewInstructionWrapper {
+            get {
+                if (_ContentViewInstructionWrapper == null) {
+                    _ContentViewInstructionWrapper = new ContentView {
+                        BackgroundColor = Color.FromHex(AppTheme.SecondaryColor()),
+                        Margin = new Thickness(30, 10, 30, 0),
+                        IsVisible = false
+                    };
+                }
+                return _ContentViewInstructionWrapper;
+            }
+        }
+        private Label _LabelInstruction;
+        private Label LabelInstruction {
+            get {
+                if (_LabelInstruction == null) {
+                    _LabelInstruction = new Label {
+                        Text = "Enter your email address and click return to start recovery",
+                        HorizontalTextAlignment = TextAlignment.Start,
+                        FontSize = 15,
+                        TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
+                        BackgroundColor = Color.Transparent,
+                        Margin = new Thickness(10, 10, 10, 10),
+                        HorizontalOptions = LayoutOptions.End,
+                    };
+                    _LabelInstruction.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+                }
+
+                return _LabelInstruction;
+            }
+        }
+
+        private BorderlessEntry _EntryEmailRecovery;
+        public BorderlessEntry EntryEmailRecovery {
+            get {
+                if (_EntryEmailRecovery == null) {
+                    _EntryEmailRecovery = new BorderlessEntry {
+                        TextColor = Color.Black,
+                        PlaceholderColor = Color.White.MultiplyAlpha(0.3),
+                        HeightRequest = 50,
+                        BackgroundColor = Color.White,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        Margin = new Thickness(0, 0, 0, 0)
+                    }; 
+                    // TODO: update for recovery input
+                    //_EntryEmailRecovery.TextChanged += EntryItem_TextChanged;
+                    //_EntryEmailRecovery.Completed += EntryItem_Completed;
+
+                }
+                return _EntryEmailRecovery;
             }
         }
 
@@ -176,6 +230,13 @@ namespace EVSlideShow.Core.Views {
             // image
             this.ContentViewImage.Content = this.ImageLogo;
 
+            this.ContentViewInstructionWrapper.Content = new StackLayout {
+                Children = {
+                    this.LabelInstruction,
+                    this.EntryEmailRecovery
+                }
+            };
+
             FlexLayout flexLayoutMainContent = new FlexLayout {
                 Direction = FlexDirection.Column,
                 JustifyContent = FlexJustify.Center,
@@ -190,7 +251,9 @@ namespace EVSlideShow.Core.Views {
             this.ScrollViewContent.Content = new StackLayout {
                 Children = {
                     flexLayoutMainContent,
-                    this.LabelForgotPassword
+                    this.LabelForgotPassword,
+                    this.ContentViewInstructionWrapper
+
                 }
             };
 
@@ -219,7 +282,8 @@ namespace EVSlideShow.Core.Views {
 
         // GestureRecognizers
         void LabelForgotPassword_Tapped(object sender, EventArgs e) {
-            Console.WriteLine("TAPPED");
+            this.ContentViewInstructionWrapper.IsVisible = true;
+            this.EntryEmailRecovery.Focus();
         }
 
 
@@ -232,7 +296,7 @@ namespace EVSlideShow.Core.Views {
 
         #region Delegates
 
-        void IInputTitle.Input_TextChanged(string text, InputText inputText) {
+        void IInputTitle.Input_TextChanged(string text, InputTextContentView inputText) {
             if (inputText.Identifier == InputTextIdentifierUsername) {
                 this.TextUsername = text;
             } else {
@@ -240,7 +304,12 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        void IInputTitle.Input_DidPressReturn(string text, InputText inputText) {
+        void IInputTitle.Input_DidPressReturn(string text, InputTextContentView inputText) {
+            if (this.InputUsername.Identifier == InputTextIdentifierUsername) {
+                this.InputPassword.EntryItem.Focus();
+            } else {
+                this.ValidateLogin();
+            }
         }
         #endregion
     }

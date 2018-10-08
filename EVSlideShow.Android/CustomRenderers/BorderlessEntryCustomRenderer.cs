@@ -23,12 +23,6 @@ namespace EVSlideShow.Droid.CustomRenderers {
             }
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e) {
-            base.OnElementPropertyChanged(sender, e);
-            if (Control != null) {
-                Control.Background = new ColorDrawable(Android.Graphics.Color.Transparent);
-            }
-        }
 
     }
 

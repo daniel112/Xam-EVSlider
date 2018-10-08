@@ -25,7 +25,8 @@
 	<key>CFBundleDisplayName</key>
 	<string>EVSlideShow</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.danielyo.EVSlideShow.EVSlideShow</string>
+	<string>
+com.EVSlideshow</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
@@ -43,5 +44,7 @@
 		<string>Fonts/phagspa.ttf</string>
 		<string>Fonts/phagspab.ttf</string>
 	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
 </dict>
 </plist>
