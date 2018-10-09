@@ -41,6 +41,11 @@ namespace EVSlideShow.Core.Views.ContentViews {
                 this.ImageLogo.Source = value;
             }
         }
+        public double TitleFontSize {
+            set {
+                this.LabelTitle.FontSize = value;
+            }
+        }
         private Image _ImageLogo;
         private Image ImageLogo {
             get {
@@ -49,7 +54,9 @@ namespace EVSlideShow.Core.Views.ContentViews {
                         Aspect = Aspect.AspectFit,
                         WidthRequest = 24,
                         HeightRequest = 24,
-                        Margin = new Thickness(15, 0,0,0)
+                        Margin = new Thickness(15, 0,0,0),
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.Center,
                     };
                 }
                 return _ImageLogo;
@@ -65,6 +72,7 @@ namespace EVSlideShow.Core.Views.ContentViews {
                         HeightRequest = 50,
                         BackgroundColor = Color.Transparent,
                         HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.Center,
                         Margin = new Thickness(0, 0, 10, 0)
                     };
                     _EntryItem.TextChanged += EntryItem_TextChanged;

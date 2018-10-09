@@ -58,12 +58,13 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\DeviceOrientation.cs" />
     <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
     <Compile Include="CustomRenderers\BorderlessEntryCustomRenderer.cs" />
+    <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Activities\LaunchActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -112,6 +113,12 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+    <AndroidResource Include="Resources\drawable\input_email.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_email.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -126,6 +133,7 @@
     <Folder Include="Resources\mipmap-xhdpi\" />
     <Folder Include="Resources\mipmap-xxhdpi\" />
     <Folder Include="Resources\mipmap-xxxhdpi\" />
+    <Folder Include="Activities\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Fonts\phagspa.ttf" />

@@ -95,7 +95,6 @@ namespace EVSlideShow.Core.Views {
                     _ContentViewInstructionWrapper = new ContentView {
                         BackgroundColor = Color.FromHex(AppTheme.SecondaryColor()),
                         Padding = new Thickness(10),
-                        //Margin = new Thickness(35, 10, 0, 0),
 
                     };
                 }
@@ -115,6 +114,7 @@ namespace EVSlideShow.Core.Views {
                         HorizontalOptions = LayoutOptions.CenterAndExpand,
                         VerticalOptions = LayoutOptions.CenterAndExpand,
                         HorizontalTextAlignment = TextAlignment.Center,
+                        //Margin = new Thickness(20)
 
                     };
                     _LabelInstruction.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
@@ -200,15 +200,15 @@ namespace EVSlideShow.Core.Views {
 
             // Label wrapping is buggy, so we put the wrapped label in 1x1 grid
             var gridSummary = new Grid {
-                Margin = new Thickness(30, 20, 30, 20),
+                Padding = new Thickness(20, 20, 30, 20),
                 RowSpacing = 30
             };
+            this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
             gridSummary.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
             gridSummary.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
             gridSummary.Children.Add(this.LabelSummary, 0, 0);
             gridSummary.Children.Add(this.ContentViewInstructionWrapper, 0, 1);
 
-            this.ContentViewInstructionWrapper.Content = this.LabelInstruction;
 
 
             FlexLayout flexLayout = new FlexLayout {

@@ -16,18 +16,8 @@ namespace EVSlideShow.Core.Views {
 
         private string TextUsername;
         private string TextPassword;
-        private FlexLayout _FlexLayoutContent;
-        private FlexLayout FlexLayoutContent {
-            get {
-                if (_FlexLayoutContent == null) {
-                    _FlexLayoutContent = new FlexLayout {
-                        Direction = FlexDirection.Column,
-                        JustifyContent = FlexJustify.Center,
-                    };
-                }
-                return _FlexLayoutContent;
-            }
-        }
+        private string TextEmail;
+
         private ScrollView _ScrollViewContent;
         private ScrollView ScrollViewContent {
             get {
@@ -204,9 +194,8 @@ namespace EVSlideShow.Core.Views {
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         Margin = new Thickness(0, 0, 0, 0)
                     }; 
-                    // TODO: update for recovery input
-                    //_EntryEmailRecovery.TextChanged += EntryItem_TextChanged;
-                    //_EntryEmailRecovery.Completed += EntryItem_Completed;
+                    _EntryEmailRecovery.TextChanged += EntryEmailRecovery_TextChanged;
+                    _EntryEmailRecovery.Completed += EntryEmailRecovery_Completed;
 
                 }
                 return _EntryEmailRecovery;
@@ -268,6 +257,12 @@ namespace EVSlideShow.Core.Views {
 
         private void ValidateLogin() {
             Console.WriteLine($"Username: {this.TextUsername} Password: {this.TextPassword}");
+            DisplayAlert("Login", $"Username: {this.TextUsername}, Password: {this.TextPassword}", "OK");
+
+        }
+
+        private void RecoverEmail() {
+            DisplayAlert("Recover Email", $"Recover Email for:{this.TextEmail}", "OK");
         }
 
         #region EventHandlers
@@ -286,8 +281,17 @@ namespace EVSlideShow.Core.Views {
             this.EntryEmailRecovery.Focus();
         }
 
+        void EntryEmailRecovery_TextChanged(object sender, EventArgs e) {
+            Entry entry = (Entry)sender;
+            this.TextEmail = entry.Text;
+        }
+        void EntryEmailRecovery_Completed(object sender, EventArgs e) {
+            Entry entry = (Entry)sender;
+            this.RecoverEmail();
+        }
 
         #endregion
+
         #endregion
 
         #region Public API
@@ -305,7 +309,7 @@ namespace EVSlideShow.Core.Views {
         }
 
         void IInputTitle.Input_DidPressReturn(string text, InputTextContentView inputText) {
-            if (this.InputUsername.Identifier == InputTextIdentifierUsername) {
+            if (inputText.Identifier == InputTextIdentifierUsername) {
                 this.InputPassword.EntryItem.Focus();
             } else {
                 this.ValidateLogin();
