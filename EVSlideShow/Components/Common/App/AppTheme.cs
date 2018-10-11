@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Plugin.Share.Abstractions;
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
 //using Plugin.Share.Abstractions;
@@ -31,7 +32,9 @@ namespace EVSlideShow.Core.Common {
 
 
         #region Public API
-
+        public static ShareColor ShareColorMain() {
+            return new ShareColor(42,52,68, 255);
+        }
         public static string DefaultTextColor() {
             return "#ffffff";
         }

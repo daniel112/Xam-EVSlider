@@ -140,7 +140,7 @@ namespace EVSlideShow.Core.Views {
             get {
                 if (_ButtonCreateAccount == null) {
                     _ButtonCreateAccount = new Button {
-                        Text = "Create an Account",
+                        Text = "Create Account",
                         FontSize = 18,
                         TextColor = Color.White,
                         BackgroundColor = Color.FromHex("618ec6"),

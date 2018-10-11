@@ -5,15 +5,13 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(BorderlessEntry), typeof(BorderlessEntryCustomRenderer))]
+[assembly: ExportRenderer(typeof(PickerBorderless), typeof(PickerBorderlessCustomRenderer))]
 namespace EVSlideShow.iOS.CustomRenderers {
-    public class BorderlessEntryCustomRenderer : EntryRenderer {
-
-        public BorderlessEntryCustomRenderer() {
-
+    public class PickerBorderlessCustomRenderer : PickerRenderer {
+        public PickerBorderlessCustomRenderer() {
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e) {
+        protected override void OnElementChanged(ElementChangedEventArgs<Picker> e) {
             base.OnElementChanged(e);
             Control.Layer.BorderWidth = 0;
             Control.BorderStyle = UITextBorderStyle.None;

@@ -7,7 +7,7 @@ using EVSlideShow.Droid.CustomRenderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(BorderlessEntry), typeof(BorderlessEntryCustomRenderer))]
+[assembly: ExportRenderer(typeof(EntryBorderless), typeof(BorderlessEntryCustomRenderer))]
 namespace EVSlideShow.Droid.CustomRenderers {
     public class BorderlessEntryCustomRenderer : EntryRenderer {
 

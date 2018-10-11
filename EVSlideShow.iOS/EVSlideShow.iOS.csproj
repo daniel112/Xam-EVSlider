@@ -28,7 +28,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Daniel Yo (ASP6Y3Y92A)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -39,6 +39,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer: Daniel Yo (N34T435J6U)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,8 +63,9 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Daniel Yo (ASP6Y3Y92A)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>EVSlideShow Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -99,7 +101,8 @@
     <None Include="Common\.DS_Store" />
     <Compile Include="Common\DeviceOrientation.cs" />
     <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
-    <Compile Include="CustomRenderers\BorderlessEntryCustomRenderer.cs" />
+    <Compile Include="CustomRenderers\EntryBorderlessCustomRenderer.cs" />
+    <Compile Include="CustomRenderers\PickerBorderlessCustomRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -133,6 +136,12 @@
     <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_username.imageset\Name 96x96.png" />
     <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\Password 96x96.png" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\input_email.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -161,6 +170,8 @@
     <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_username.imageset\" />
     <Folder Include="CustomRenderers\" />
     <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\" />
+    <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Fonts\phagspa.ttf">

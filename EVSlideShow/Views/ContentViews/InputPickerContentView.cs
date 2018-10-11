@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
@@ -6,80 +7,52 @@ using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views.ContentViews {
 
-    public interface IInputTextDelegate {
-        void Input_TextChanged(string text, InputTextContentView inputText);
-        void Input_DidPressReturn(string text, InputTextContentView inputText);
+    public interface IInputPickerDelegate {
+        void InputPicker_SelectedIndexChanged(object selectedItem, InputPickerContentView input);
+        void InputPicker_DidPressReturn(string text, InputPickerContentView input);
 
     }
-    public class InputTextContentView : ContentView {
-        #region Variables
+    public class InputPickerContentView : ContentView {
 
-        public IInputTextDelegate Delegate;
-        public float CornerRadius {
-            set {
-                this.FrameWrapper.CornerRadius = value;
-            }
-        }
+        #region Variables
+        public IInputPickerDelegate Delegate;
         public string Identifier;
-        public string InputTitle {
-            set {
-                this.LabelTitle.Text = value;
-            }
-        }
-        public string InputPlaceholder {
-            set {
-                this.EntryItem.Placeholder = value;
-            }
-        }
-        public bool IsPassword {
-            set {
-                this.EntryItem.IsPassword = value;
-            }
-        }
-        public string ImageName {
-            set {
-                this.ImageLogo.Source = value;
-            }
-        }
+
         public double TitleFontSize {
             set {
                 this.LabelTitle.FontSize = value;
             }
         }
-        private Image _ImageLogo;
-        private Image ImageLogo {
+        public string InputTitle {
+            set {
+                this.LabelTitle.Text = value;
+            }
+        }
+        public List<string>PickerItems {
             get {
-                if (_ImageLogo == null) {
-                    _ImageLogo = new Image {
+                return (List<string>)this.PickerEVType.Items;
+            }
+            set {
+                this.PickerEVType.ItemsSource = value;
+            }
+        }
+
+
+        private Image _ImageIndicator;
+        private Image ImageIndicator {
+            get {
+                if (_ImageIndicator == null) {
+                    _ImageIndicator = new Image {
+                        Source = "nav_down_arrow",
                         Aspect = Aspect.AspectFit,
-                        WidthRequest = 24,
-                        HeightRequest = 24,
-                        Margin = new Thickness(15, 0,0,0),
+                        WidthRequest = 36,
+                        HeightRequest = 36,
+                        Margin = new Thickness(0, 0, 10, 0),
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
                     };
                 }
-                return _ImageLogo;
-            }
-        }
-        private EntryBorderless _EntryItem;
-        public EntryBorderless EntryItem {
-            get {
-                if (_EntryItem == null) {
-                    _EntryItem = new EntryBorderless {
-                        TextColor = Color.White,
-                        PlaceholderColor = Color.White.MultiplyAlpha(0.3),
-                        HeightRequest = 50,
-                        BackgroundColor = Color.Transparent,
-                        HorizontalOptions = LayoutOptions.FillAndExpand,
-                        VerticalOptions = LayoutOptions.Center,
-                        Margin = new Thickness(0, 0, 10, 0)
-                    };
-                    _EntryItem.TextChanged += EntryItem_TextChanged;
-                    _EntryItem.Completed += EntryItem_Completed;
-
-                }
-                return _EntryItem;
+                return _ImageIndicator;
             }
         }
 
@@ -144,31 +117,54 @@ namespace EVSlideShow.Core.Views.ContentViews {
                 return _StackLayoutVertical;
             }
         }
+
+        private PickerBorderless _PickerEVType;
+        private PickerBorderless PickerEVType {
+            get {
+                if (_PickerEVType == null) {
+                    _PickerEVType = new PickerBorderless {
+                        TextColor = Color.White,
+                        BackgroundColor = Color.Transparent,
+                        FontSize = 16,
+                        HeightRequest = 50,
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        VerticalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(10, 0, 0, 0),
+
+                    };
+                    _PickerEVType.SelectedIndexChanged += PickerEVType_SelectedIndexChanged;
+                }
+                return _PickerEVType;
+            }
+        }
         #endregion
 
-
-        public InputTextContentView() {
+        #region Initialization
+        public InputPickerContentView() {
         }
 
-        public InputTextContentView(string identifier, string title, string placeholder, bool isPasswordType, string imageLogo, IInputTextDelegate inputDelegate) {
+        public InputPickerContentView(string identifier, string title, List<string>items, IInputPickerDelegate inputDelegate) {
             this.Identifier = identifier;
             this.InputTitle = title;
-            this.InputPlaceholder = placeholder;
-            this.IsPassword = isPasswordType;
-            this.ImageName = imageLogo;
             this.Delegate = inputDelegate;
+
+            this.PickerItems = items;
+            this.PickerEVType.SelectedItem = items[0];
+
             this.Setup();
         }
+        #endregion
 
         #region Private API
+
         private void Setup() {
 
             // wrapper
             this.FrameWrapper.Content = this.StackLayoutHorizontal;
 
             // horizontal stack
-            this.StackLayoutHorizontal.Children.Add(this.ImageLogo);
-            this.StackLayoutHorizontal.Children.Add(this.EntryItem);
+            this.StackLayoutHorizontal.Children.Add(this.PickerEVType);
+            this.StackLayoutHorizontal.Children.Add(this.ImageIndicator);
 
             // vertical stack
             this.StackLayoutVertical.Children.Add(this.LabelTitle);
@@ -176,22 +172,30 @@ namespace EVSlideShow.Core.Views.ContentViews {
 
             this.Content = this.StackLayoutVertical;
 
+            // gestures
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
+            this.GestureRecognizers.Add(tapGestureRecognizer);
         }
 
-        #region EventHandlers
 
-        void EntryItem_TextChanged(object sender, EventArgs e) {
-            EntryBorderless entry = (EntryBorderless)sender;
-            this.Delegate.Input_TextChanged(entry.Text, this);
-        }
-        void EntryItem_Completed(object sender, EventArgs e) {
-            EntryBorderless entry = (EntryBorderless)sender;
-            this.Delegate.Input_DidPressReturn(entry.Text, this);
-
+        // UIResponder
+        void PickerEVType_SelectedIndexChanged(object sender, EventArgs e) {
+            Picker picker = (Picker)sender;
+            this.Delegate.InputPicker_SelectedIndexChanged(picker.SelectedItem, this);
         }
 
+        void TapGestureRecognizer_Tapped(object sender, EventArgs e) {
+            this.PickerEVType.Focus();
+        }
+        #endregion
+
+        #region Public API
 
         #endregion
+
+        #region Delegates
+
         #endregion
     }
 }

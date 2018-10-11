@@ -8,7 +8,7 @@ using EVSlideShow.Core.Views.ContentViews;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
-    public class LoginContentPage : BaseContentPage<LoginViewModel>, IInputTitle {
+    public class LoginContentPage : BaseContentPage<LoginViewModel>, IInputTextDelegate {
 
         #region Variables
         private const string InputTextIdentifierUsername = "username";
@@ -182,11 +182,11 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        private BorderlessEntry _EntryEmailRecovery;
-        public BorderlessEntry EntryEmailRecovery {
+        private EntryBorderless _EntryEmailRecovery;
+        public EntryBorderless EntryEmailRecovery {
             get {
                 if (_EntryEmailRecovery == null) {
-                    _EntryEmailRecovery = new BorderlessEntry {
+                    _EntryEmailRecovery = new EntryBorderless {
                         TextColor = Color.Black,
                         PlaceholderColor = Color.White.MultiplyAlpha(0.3),
                         HeightRequest = 50,
@@ -300,7 +300,7 @@ namespace EVSlideShow.Core.Views {
 
         #region Delegates
 
-        void IInputTitle.Input_TextChanged(string text, InputTextContentView inputText) {
+        void IInputTextDelegate.Input_TextChanged(string text, InputTextContentView inputText) {
             if (inputText.Identifier == InputTextIdentifierUsername) {
                 this.TextUsername = text;
             } else {
@@ -308,7 +308,7 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        void IInputTitle.Input_DidPressReturn(string text, InputTextContentView inputText) {
+        void IInputTextDelegate.Input_DidPressReturn(string text, InputTextContentView inputText) {
             if (inputText.Identifier == InputTextIdentifierUsername) {
                 this.InputPassword.EntryItem.Focus();
             } else {

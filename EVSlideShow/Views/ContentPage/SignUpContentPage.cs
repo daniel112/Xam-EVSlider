@@ -6,10 +6,12 @@ using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.ViewModels.Base;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
+using Plugin.Share;
+using Plugin.Share.Abstractions;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
-    public class SignUpContentPage : BaseContentPage<SignUpViewModel>, IInputTitle {
+    public class SignUpContentPage : BaseContentPage<SignUpViewModel>, IInputTextDelegate, IInputPickerDelegate {
 
         #region Variables
         private const string InputTextIdentifierEVType = "evtype";
@@ -165,7 +167,7 @@ namespace EVSlideShow.Core.Views {
                         BackgroundColor = Color.FromHex("618ec6"),
                         CornerRadius = 8,
                         HeightRequest = 50,
-                        Margin = new Thickness(30, 30, 30, 0)
+                        Margin = new Thickness(30, 10, 30, 0)
 
                     };
                     _ButtonSignUp.Clicked += ButtonSignUp_Clicked;
@@ -186,8 +188,8 @@ namespace EVSlideShow.Core.Views {
                         FontSize = 16,
                         TextColor = Color.White,
                         BackgroundColor = Color.Transparent,
-                        Margin = new Thickness(30, 10, 30, 30),
-                        HorizontalOptions = LayoutOptions.End,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(0, 10, 0, 20)
                     };
                     _LabelViewTermsOfUse.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
                     var tapGestureRecognizer = new TapGestureRecognizer();
@@ -196,6 +198,82 @@ namespace EVSlideShow.Core.Views {
                 }
 
                 return _LabelViewTermsOfUse;
+            }
+        }
+
+        private Label _LabelCheckCircle;
+        private Label LabelCheckCircle {
+            get {
+                if (_LabelCheckCircle == null) {
+                    _LabelCheckCircle = new Label {
+                        Text = "Check circle to agree to terms",
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        FontSize = 16,
+                        TextColor = Color.White,
+                        BackgroundColor = Color.Transparent,
+                        HorizontalOptions = LayoutOptions.EndAndExpand,
+                        VerticalOptions = LayoutOptions.Center
+                    };
+                    _LabelCheckCircle.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+                    var tapGestureRecognizer = new TapGestureRecognizer();
+
+                }
+
+                return _LabelCheckCircle;
+            }
+        }
+
+        private StackLayout _StackLayoutCheckHorizontal;
+        private StackLayout StackLayoutCheckHorizontal {
+            get {
+                if (_StackLayoutCheckHorizontal == null) {
+                    _StackLayoutCheckHorizontal = new StackLayout {
+                        BackgroundColor = Color.Transparent,
+                        Orientation = StackOrientation.Horizontal,
+                        Margin = new Thickness(30, 10, 30, 0),
+                        HorizontalOptions = LayoutOptions.End,
+                        VerticalOptions = LayoutOptions.Center,
+                        Spacing = 10
+                    };
+
+                }
+                return _StackLayoutCheckHorizontal;
+            }
+        }
+
+        private Button _ButtonCheckCircle;
+        private Button ButtonCheckCircle {
+            get {
+                if (_ButtonCheckCircle == null) {
+                    _ButtonCheckCircle = new Button {
+                        BackgroundColor = Color.Transparent, // Color.FromHex("618ec6")
+                        CornerRadius = 20/2,
+                        HeightRequest = 20,
+                        WidthRequest = 20,
+                        BorderColor = Color.White,
+                        BorderWidth = 2,
+                        HorizontalOptions = LayoutOptions.StartAndExpand,
+                        VerticalOptions = LayoutOptions.Center,
+
+                    };
+                    _ButtonCheckCircle.Clicked += ButtonCheckCircle_Clicked;
+                    _ButtonCheckCircle.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+
+                }
+                return _ButtonCheckCircle;
+            }
+        }
+
+        private InputPickerContentView _PickerEVType;
+        private InputPickerContentView PickerEVType {
+            get {
+                if (_PickerEVType == null) {
+                    _PickerEVType = new InputPickerContentView(InputTextIdentifierEVType, "Select EV Type", this.ViewModel.PickerItems, this) {
+                        Margin = new Thickness(30, 10, 30, 10),
+                        TitleFontSize = 16
+                    };
+                }
+                return _PickerEVType;
             }
         }
         #endregion
@@ -222,12 +300,18 @@ namespace EVSlideShow.Core.Views {
             // scrollview
             this.ScrollViewContent.Content = this.FlexLayoutContent;
 
+            // stacklayout for checkbox
+            this.StackLayoutCheckHorizontal.Children.Add(this.LabelCheckCircle);
+            this.StackLayoutCheckHorizontal.Children.Add(this.ButtonCheckCircle);
+
             // flexlayout
             this.FlexLayoutContent.Children.Add(this.ContentViewImage);
+            this.FlexLayoutContent.Children.Add(this.PickerEVType);
             this.FlexLayoutContent.Children.Add(this.InputUsername);
             this.FlexLayoutContent.Children.Add(this.InputEmail);
             this.FlexLayoutContent.Children.Add(this.InputEmailRepeat);
             this.FlexLayoutContent.Children.Add(this.InputPassword);
+            this.FlexLayoutContent.Children.Add(this.StackLayoutCheckHorizontal);
             this.FlexLayoutContent.Children.Add(this.ButtonSignUp);
             this.FlexLayoutContent.Children.Add(this.LabelViewTermsOfUse);
 
@@ -236,9 +320,24 @@ namespace EVSlideShow.Core.Views {
         }
 
         private void RegisterAccount() {
-            DisplayAlert("Register Account", $"Registered account {this.ViewModel.Username}", "OK");
+            DisplayAlert("Register Account", $"Registered account placeholder", "OK");
 
         }
+
+        private void OpenWebView(string url) {
+            BrowserOptions options = new BrowserOptions {
+                ChromeShowTitle = false,
+                ChromeToolbarColor = AppTheme.ShareColorMain(),
+                SafariBarTintColor = AppTheme.ShareColorMain(),
+                UseSafariReaderMode = true,
+                UseSafariWebViewController = true
+            };
+
+            // Android: opens in chrome custom tab if available
+            // iOS open in SafariVC if available
+            CrossShare.Current.OpenBrowser(url, options);
+        }
+
         #region EventHandlers
         // Buttons
         void ButtonClose_Clicked(object sender, EventArgs e) {
@@ -247,9 +346,19 @@ namespace EVSlideShow.Core.Views {
         void ButtonSignUp_Clicked(object sender, EventArgs e) {
             this.RegisterAccount();
         }
+        void ButtonCheckCircle_Clicked(object sender, EventArgs e) {
+            if (this.ViewModel.DidViewTermsOfUse) {
+                this.ViewModel.DidAcceptTermsOfUse = true;
+                this.ButtonCheckCircle.BackgroundColor = Color.FromHex("618ec6");
+            } else {
+                DisplayAlert("Terms Of Use", $"Please view the Terms Of Use first", "OK");
+            }
+        }
+
         // GestureRecognizers
         void LabelViewTermsOfUse_Tapped(object sender, EventArgs e) {
-            DisplayAlert("Terms of Use", $"Display a web view to terms of use", "OK");
+            this.ViewModel.DidViewTermsOfUse = true;
+            this.OpenWebView("http://evslideshowfortesla.com/termsofuse.pdf");
         }
 
         #endregion
@@ -261,7 +370,7 @@ namespace EVSlideShow.Core.Views {
         #endregion
 
         #region Delegates
-        void IInputTitle.Input_TextChanged(string text, InputTextContentView inputText) {
+        void IInputTextDelegate.Input_TextChanged(string text, InputTextContentView inputText) {
             switch (inputText.Identifier) {
                 case InputTextIdentifierUsername:
                     this.ViewModel.Username = text;
@@ -278,7 +387,7 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-        void IInputTitle.Input_DidPressReturn(string text, InputTextContentView inputText) {
+        void IInputTextDelegate.Input_DidPressReturn(string text, InputTextContentView inputText) {
             switch (inputText.Identifier) {
                 case InputTextIdentifierUsername:
                     this.InputEmail.EntryItem.Focus();
@@ -293,6 +402,13 @@ namespace EVSlideShow.Core.Views {
                     this.RegisterAccount();
                     break;
             }
+        }
+
+        public void InputPicker_SelectedIndexChanged(object selectedItem, InputPickerContentView input) {
+            Console.WriteLine(selectedItem);
+        }
+
+        public void InputPicker_DidPressReturn(string text, InputPickerContentView input) {
         }
         #endregion
     }
