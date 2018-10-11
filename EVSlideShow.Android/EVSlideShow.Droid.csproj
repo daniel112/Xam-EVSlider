@@ -119,6 +119,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\input_email.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\input_email.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\nav_down_arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
