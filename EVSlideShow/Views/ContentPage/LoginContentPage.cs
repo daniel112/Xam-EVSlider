@@ -2,6 +2,7 @@
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
+using EVSlideShow.Core.Network;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
@@ -255,9 +256,10 @@ namespace EVSlideShow.Core.Views {
             Content = stacklayout;
         }
 
-        private void ValidateLogin() {
-            Console.WriteLine($"Username: {this.TextUsername} Password: {this.TextPassword}");
-            DisplayAlert("Login", $"Username: {this.TextUsername}, Password: {this.TextPassword}", "OK");
+        private async void ValidateLoginAsync() {
+            EVClient client = new EVClient();
+            bool success = await client.LoginAsync("testdaniel", "hello123");
+            //DisplayAlert("Login", $"Username: {this.TextUsername}, Password: {this.TextPassword}", "OK");
 
         }
 
@@ -268,7 +270,7 @@ namespace EVSlideShow.Core.Views {
         #region EventHandlers
         // Buttons
         void ButtonLogin_Clicked(object sender, EventArgs e) {
-            this.ValidateLogin();
+            this.ValidateLoginAsync();
         }
 
         void ButtonClose_Clicked(object sender, EventArgs e) {
@@ -312,7 +314,7 @@ namespace EVSlideShow.Core.Views {
             if (inputText.Identifier == InputTextIdentifierUsername) {
                 this.InputPassword.EntryItem.Focus();
             } else {
-                this.ValidateLogin();
+                this.ValidateLoginAsync();
             }
         }
         #endregion
