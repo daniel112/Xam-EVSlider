@@ -99,10 +99,11 @@
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Common\.DS_Store" />
-    <Compile Include="Common\DeviceOrientation.cs" />
     <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
     <Compile Include="CustomRenderers\EntryBorderlessCustomRenderer.cs" />
     <Compile Include="CustomRenderers\PickerBorderlessCustomRenderer.cs" />
+    <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
+    <Compile Include="Common\DependencyImplementations\MediaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -142,6 +143,11 @@
     <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_1x.png" />
     <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_2x.png" />
     <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_3x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_photo.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 80x80.png" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 120x120.png" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 160x160.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -153,6 +159,9 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
       <Version>3.2.0.871581</Version>
+    </PackageReference>
+    <PackageReference Include="GMImagePicker.Xamarin">
+      <Version>2.3.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +181,9 @@
     <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\" />
     <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\" />
     <Folder Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\" />
+    <Folder Include="Assets.xcassets\icon_photo.imageset\" />
+    <Folder Include="Assets.xcassets\icon_manage.imageset\" />
+    <Folder Include="Common\DependencyImplementations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Fonts\phagspa.ttf">

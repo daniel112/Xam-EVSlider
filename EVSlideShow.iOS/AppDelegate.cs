@@ -18,10 +18,11 @@ namespace EVSlideShow.iOS {
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
+
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions) {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
-
+            UINavigationBar.Appearance.Translucent = false;
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }

@@ -259,7 +259,10 @@ namespace EVSlideShow.Core.Views {
         private async void ValidateLoginAsync() {
             EVClient client = new EVClient();
             bool success = await client.LoginAsync("testdaniel", "hello123");
-            //DisplayAlert("Login", $"Username: {this.TextUsername}, Password: {this.TextPassword}", "OK");
+            if (success) {
+                Application.Current.MainPage = new ManageImageFileContentPage();//new NavigationPage(new ManageImageFileContentPage()); 
+            }
+
 
         }
 
