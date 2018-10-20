@@ -12,7 +12,9 @@ namespace EVSlideShow.Core.Network {
                     _Client = new HttpClient {
                         MaxResponseContentBufferSize = 256000,
                     };
-                    //_Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    _Client.DefaultRequestHeaders
+                           .Accept
+                          .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
                 }
                 return _Client;

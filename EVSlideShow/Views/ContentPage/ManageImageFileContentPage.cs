@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
 using EVSlideShow.Core.Constants;
@@ -112,10 +113,20 @@ namespace EVSlideShow.Core.Views {
         #region Initialization
         public ManageImageFileContentPage() {
             this.Setup();
+            MessagingCenterSubscribe();
         }
 
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
         }
+
+        protected override void OnAppearing() {
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing() {
+            base.OnDisappearing();
+        }
+
         #endregion
 
         #region Private API
@@ -142,11 +153,34 @@ namespace EVSlideShow.Core.Views {
 
         }
 
-        // Buttons
-        void ButtonUploadPhotos_Clicked(object sender, EventArgs e) {
-            var mediaServie = DependencyService.Get<IMediaService>();
+        #region MessagingCenter
+               
+        private void MessagingCenterSubscribe() {
+            MessagingCenter.Subscribe<List<string>>(this, MessagingKeys.DidFinishSelectingImages, MessagingCenter_SendToCropView);
 
         }
+        private void MessagingCenterUnsubscribe() {
+            // TODO: havent found a good place to unsubscribe, but it shouldnt matter in this app
+            MessagingCenter.Unsubscribe<List<string>>(this, MessagingKeys.DidFinishSelectingImages);
+        }
+
+        void MessagingCenter_SendToCropView(object obj) {
+            List<string> encodedImages = (List<string>)obj;
+            Console.WriteLine($"{encodedImages.Count} images to crop");
+            this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages));
+
+        }
+        #endregion
+
+        #region Buttons
+        void ButtonUploadPhotos_Clicked(object sender, EventArgs e) {
+            // TODO: CLEANUP
+            var mediaServie = DependencyService.Get<IMediaService>();
+            mediaServie.OpenGallery();
+
+        }
+        #endregion
+
         #endregion
 
         #region Public API

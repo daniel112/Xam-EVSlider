@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreGraphics;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
+using EVSlideShow.Core.Constants;
 using EVSlideShow.iOS.Common.DependencyImplementations;
 using Foundation;
 using GMImagePicker;
 using Photos;
 using UIKit;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MediaService))]
 namespace EVSlideShow.iOS.Common.DependencyImplementations {
@@ -49,30 +52,38 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
         }
 
         public void OpenGallery() {
-
+            _PickerController = null;
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(PickerController, true, null);
 
         }
 
         #region Delegates
         void PickerController_ShouldSelectAsset(object sender, CancellableAssetEventArgs args) {
+
             var controller = (GMImagePickerController)sender;
             args.Cancel = controller.SelectedAssets.Count >= 5;
 
         }
         void PickerController_FinishedPickingAssets(object sender, MultiAssetEventArgs args) {
-
+            List<string> encodedImages = new List<string>();
             foreach (var asset in args.Assets) {
                 PHImageManager imageManager = new PHImageManager();
+
+                // we make sure the image are saved in the same quality with this option
+                PHImageRequestOptions options = new PHImageRequestOptions {
+                    NetworkAccessAllowed = true,
+                    DeliveryMode = PHImageRequestOptionsDeliveryMode.HighQualityFormat,
+                    Synchronous = true
+                };
                 imageManager.RequestImageForAsset(asset,
-                    new CGSize(asset.PixelWidth, asset.PixelHeight),
-                    PHImageContentMode.Default,
-                    null,
+                    new CGSize(asset.PixelWidth, asset.PixelHeight),PHImageContentMode.Default, options,
                     (image, info) => {
-                    // TODO: convert to something and pass to forms to upload
-                        var imageToSend = image.AsJPEG().GetBase64EncodedString(NSDataBase64EncodingOptions.None);
+                        // TODO: convert to something and pass to forms to upload
+                        encodedImages.Add(image.AsJPEG().GetBase64EncodedString(NSDataBase64EncodingOptions.None));
                     });
             }
+            // post the message with the list attached
+            MessagingCenter.Send(encodedImages, MessagingKeys.DidFinishSelectingImages);
 
         }
 

@@ -2,6 +2,7 @@
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
+using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
@@ -257,11 +258,14 @@ namespace EVSlideShow.Core.Views {
         }
 
         private async void ValidateLoginAsync() {
+            Application.Current.MainPage = new NavigationPage(new ManageImageFileContentPage());
             EVClient client = new EVClient();
-            bool success = await client.LoginAsync("testdaniel", "hello123");
-            if (success) {
-                Application.Current.MainPage = new ManageImageFileContentPage();//new NavigationPage(new ManageImageFileContentPage()); 
-            }
+            //User user = await client.LoginAsync("testDaniel", "hello13");
+            //if (user.Success && user.Message != "") {
+            //    Application.Current.MainPage = new ManageImageFileContentPage();//new NavigationPage(new ManageImageFileContentPage()); 
+            //} else {
+            //    await DisplayAlert("Invalid Login", $"{user.Message}", "OK");
+            //}
 
 
         }
