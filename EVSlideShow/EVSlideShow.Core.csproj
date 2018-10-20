@@ -13,6 +13,7 @@
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
     <PackageReference Include="Plugin.Share" Version="7.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Syncfusion.Xamarin.SfImageEditor" Version="16.3.0.21" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />

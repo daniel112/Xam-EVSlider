@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Foundation;
 using UIKit;
 
@@ -23,6 +22,9 @@ namespace EVSlideShow.iOS {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
             UINavigationBar.Appearance.Translucent = false;
+
+            Syncfusion.SfImageEditor.XForms.iOS.SfImageEditorRenderer.Init();
+
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }
