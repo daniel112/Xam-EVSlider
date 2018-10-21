@@ -47,17 +47,18 @@ namespace EVSlideShow.Core.Network {
             } else {
                 var jsonResult = await response.Content.ReadAsStringAsync();
                 user = JsonConvert.DeserializeObject<User>(jsonResult);
+                user.Message = "Network error, please try again later";
                 user.Success = false;
             }
 
 
 
             // TODO: TESTING GET
-            var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
-            if (getResponse.IsSuccessStatusCode) {
-                var jsonResult = await getResponse.Content.ReadAsStringAsync();
-                var users = JsonConvert.DeserializeObject<List<User>>(jsonResult);
-            }
+            //var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
+            //if (getResponse.IsSuccessStatusCode) {
+            //    var jsonResult = await getResponse.Content.ReadAsStringAsync();
+            //    var users = JsonConvert.DeserializeObject<List<User>>(jsonResult);
+            //}
 
             return user;
         }

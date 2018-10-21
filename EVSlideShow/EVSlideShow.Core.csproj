@@ -28,5 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="name.png" />
+    <None Remove="testImage.png" />
+    <None Remove="test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="test.png" />
   </ItemGroup>
 </Project>

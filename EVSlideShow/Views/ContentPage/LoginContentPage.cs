@@ -7,6 +7,7 @@ using EVSlideShow.Core.Network;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
+using EVSlideShow.Views;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
@@ -258,14 +259,19 @@ namespace EVSlideShow.Core.Views {
         }
 
         private async void ValidateLoginAsync() {
-            Application.Current.MainPage = new NavigationPage(new ManageImageFileContentPage());
-            EVClient client = new EVClient();
-            //User user = await client.LoginAsync("testDaniel", "hello13");
-            //if (user.Success && user.Message != "") {
-            //    Application.Current.MainPage = new ManageImageFileContentPage();//new NavigationPage(new ManageImageFileContentPage()); 
+            Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage());
+            //if (!String.IsNullOrEmpty(this.TextUsername) && !String.IsNullOrEmpty(this.TextPassword)) {
+            //    EVClient client = new EVClient();
+            //    User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
+            //    if (user.Success && String.IsNullOrEmpty(user.Message)) {
+            //        Application.Current.MainPage = new NavigationPage(new ManageImageFileContentPage());
+            //    } else {
+            //        await DisplayAlert("Error", $"{user.Message}", "OK");
+            //    }
             //} else {
-            //    await DisplayAlert("Invalid Login", $"{user.Message}", "OK");
+            //    await DisplayAlert("Error", $"Username and password is required.", "OK");
             //}
+
 
 
         }
