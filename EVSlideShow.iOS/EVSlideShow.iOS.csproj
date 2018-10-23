@@ -156,6 +156,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Syncfusion.SfImageEditor.XForms">
+      <HintPath>..\lib\ios-unified\Syncfusion.SfImageEditor.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfImageEditor.XForms.iOS">
+      <HintPath>..\lib\ios-unified\Syncfusion.SfImageEditor.XForms.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

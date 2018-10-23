@@ -17,7 +17,7 @@ namespace EVSlideShow {
         public App() {
             InitializeComponent();
             //Register Syncfusion license
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU5OTRAMzEzNjJlMzMyZTMwbXdMRUxWYmhnVFR2QUpiMjdJWWJCNmFqSEcxOGc2R1BLbzI2ZG8rZkF5TT0=");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU5OTRAMzEzNjJlMzMyZTMwbXdMRUxWYmhnVFR2QUpiMjdJWWJCNmFqSEcxOGc2R1BLbzI2ZG8rZkF5TT0=");
             MainPage = new SplashContentPage();
         }
 

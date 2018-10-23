@@ -48,6 +48,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="Syncfusion.SfImageEditor.XForms.Android">
+      <HintPath>..\lib\android\Syncfusion.SfImageEditor.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfImageEditor.XForms">
+      <HintPath>..\lib\android\Syncfusion.SfImageEditor.XForms.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />

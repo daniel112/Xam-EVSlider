@@ -39,37 +39,39 @@ namespace EVSlideShow.Core.Views {
                 return _ButtonReset;
             }
         }
+        private Button _ButtonCropSave;
+        private Button ButtonCropSave {
+            get {
+                if (_ButtonCropSave == null) {
+                    _ButtonCropSave = new Button {
+                        Text = "Crop",
+                        FontSize = 18,
+                        TextColor = Color.FromHex("618ec6"),
+                        BackgroundColor = Color.White,
+                        CornerRadius = 8,
+                        HeightRequest = 50,
+                        WidthRequest = 100,
+                        VerticalOptions = LayoutOptions.Start,
+                        HorizontalOptions = LayoutOptions.Center
+
+                    };
+                    _ButtonCropSave.Clicked += ButtonCropSave_Pressed;
+                    _ButtonCropSave.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+
+                }
+                return _ButtonCropSave;
+            }
+        }
         private SfImageEditor _Editor;
         private SfImageEditor Editor {
             get {
                 if (_Editor == null) {
                     _Editor = new SfImageEditor();
-                    //_Editor.SetToolbarItemVisibility("Back, Text, Add, TextColor, FontFamily, Arial, Noteworthy, Marker Felt, Bradley Hand, SignPainter, Opacity, Path, StrokeThickness, Colors, " +
-                    //"Opacity, Shape, Rectangle, StrokeThickness, Circle, Arrow, Transform, Crop, free, original, square, 3:1, 3:2, 4:3, 5:4, 16:9, Rotate, Flip, Undo, Redo,Save", false);
-                    _Editor.ToolbarSettings.ToolbarItemSelected += ToolbarSettings_ToolbarItemSelected;
                     _Editor.ImageLoaded += Editor_ImageLoaded;
-                    _Editor.ItemSelected += Editor_ItemSelected;
                     _Editor.EndReset += Editor_EndReset;
                     _Editor.ToolbarSettings.IsVisible = false;
-
-
                 }
-
                 return _Editor;
-            }
-
-
-
-
-        }
-
-        private xamToolBarItem _ToolbarCropSave;
-        private xamToolBarItem ToolbarCropSave {
-            get {
-                if (_ToolbarCropSave == null) {
-                    _ToolbarCropSave = new xamToolBarItem("Crop", "", ToolbarCropSave_Pressed);
-                }
-                return _ToolbarCropSave;
             }
         }
 
@@ -87,6 +89,7 @@ namespace EVSlideShow.Core.Views {
         }
 
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
+            // TODO: Possibly look into disabling orientation on this page
         }
         #endregion
 
@@ -96,8 +99,6 @@ namespace EVSlideShow.Core.Views {
             this.Title = "Crop Image";
             Editor.Source = ImageFromBase64(testImagebase64).Source;
 
-            // toolbar item save
-            ToolbarItems.Add(ToolbarCropSave);
 
             Grid grid = new Grid {
                 VerticalOptions = LayoutOptions.FillAndExpand,
@@ -117,8 +118,8 @@ namespace EVSlideShow.Core.Views {
 
             // grid.Children.Add(item ,col, col+colSpan, row, row+rowspan)
             grid.Children.Add(Editor, 0, 2, 0, 1);
-            grid.Children.Add(ButtonReset, 0, 2, 1, 2);
-            // TODO: ADD THE CROP/SAVE AS BUTTON
+            grid.Children.Add(ButtonReset, 0, 1, 1, 2);
+            grid.Children.Add(ButtonCropSave, 1, 2, 1, 2);
 
             this.Content = grid;
 
@@ -134,34 +135,24 @@ namespace EVSlideShow.Core.Views {
             Editor.Reset();
         }
 
-        void ToolbarCropSave_Pressed() {
-            if (this.ToolbarCropSave.Text == "Crop") {
+        void ButtonCropSave_Pressed(object sender, EventArgs e) {
+            if (this.ButtonCropSave.Text == "Crop") {
                 Editor.Crop();
-                this.ToolbarCropSave.Text = "Save";
-            } else if (this.ToolbarCropSave.Text == "Save") {
+                this.ButtonCropSave.Text = "Save";
+            } else if (this.ButtonCropSave.Text == "Save") {
                 DisplayAlert("Alert", "Save now", "ok");
             }
         }
 
 
         void Editor_EndReset(object sender, EndResetEventArgs args) {
-            this.ToolbarCropSave.Text = "Crop";
+            this.ButtonCropSave.Text = "Crop";
             Editor.ToggleCropping(12, 7);
         }
         private void Editor_ImageLoaded(object sender, ImageLoadedEventArgs args) {
             Editor.ToggleCropping(12, 7);
         }
 
-        private void ToolbarSettings_ToolbarItemSelected(object sender, ToolbarItemSelectedEventArgs e) {
-            var item = e.ToolbarItem as Syncfusion.SfImageEditor.XForms.ToolbarItem;
-            Console.WriteLine("Selected ToolbarItem is  " + e.ToolbarItem.Name);
-        }
-
-        private void Editor_ItemSelected(object sender, ItemSelectedEventArgs args) {
-            var Settings = args.Settings;
-
-
-        }
         #endregion
 
         #endregion
