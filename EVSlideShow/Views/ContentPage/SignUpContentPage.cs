@@ -320,7 +320,11 @@ namespace EVSlideShow.Core.Views {
         }
 
         private void RegisterAccount() {
-            DisplayAlert("Register Account", $"Registered account placeholder", "OK");
+            if (this.ViewModel.AllInputFilled()) {
+
+            } else {
+                DisplayAlert("Register Account Error", $"Please fill out all inputs and accept terms of use.", "OK");
+            }
 
         }
 
@@ -377,9 +381,19 @@ namespace EVSlideShow.Core.Views {
                     break;
                 case InputTextIdentifierEmail:
                     this.ViewModel.Email = text;
+                    if (this.ViewModel.EmailRepeat != this.ViewModel.Email) {
+                        this.InputEmailRepeat.UpdateBorderColorError(true);
+                    } else {
+                        this.InputEmailRepeat.UpdateBorderColorError(false);
+                    }
                     break;
                 case InputTextIdentifierEmailRepeat:
                     this.ViewModel.EmailRepeat = text;
+                    if (this.ViewModel.EmailRepeat != this.ViewModel.Email) {
+                        this.InputEmailRepeat.UpdateBorderColorError(true);
+                    } else {
+                        this.InputEmailRepeat.UpdateBorderColorError(false);
+                    }
                     break;
                 case InputTextIdentifierPassword:
                     this.ViewModel.Password = text;

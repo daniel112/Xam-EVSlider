@@ -28,16 +28,14 @@
   <ItemGroup>
     <None Remove="name.png" />
     <None Remove="testImage.png" />
-    <None Remove="test.png" />
     <None Remove="image.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="test.png" />
-    <EmbeddedResource Include="image.jpeg" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.SfImageEditor.XForms">
       <HintPath>..\lib\ios-unified\Syncfusion.SfImageEditor.XForms.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Views\ContentPage\TestContentPage.cs" />
   </ItemGroup>
 </Project>

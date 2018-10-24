@@ -46,6 +46,7 @@ namespace EVSlideShow.Core.Views.ContentViews {
                 this.LabelTitle.FontSize = value;
             }
         }
+
         private Image _ImageLogo;
         private Image ImageLogo {
             get {
@@ -54,7 +55,7 @@ namespace EVSlideShow.Core.Views.ContentViews {
                         Aspect = Aspect.AspectFit,
                         WidthRequest = 24,
                         HeightRequest = 24,
-                        Margin = new Thickness(15, 0,0,0),
+                        Margin = new Thickness(15, 0, 0, 0),
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
                     };
@@ -192,6 +193,16 @@ namespace EVSlideShow.Core.Views.ContentViews {
 
 
         #endregion
+        #endregion
+
+        #region Public API
+        public void UpdateBorderColorError(bool hasError) {
+            if (hasError) {
+                this.FrameWrapper.BorderColor = Color.Red.MultiplyAlpha(0.5);
+            } else {
+                this.FrameWrapper.BorderColor = Color.White.MultiplyAlpha(0.5);
+            }
+        }
         #endregion
     }
 }

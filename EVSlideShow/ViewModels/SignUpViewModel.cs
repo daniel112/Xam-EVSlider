@@ -10,7 +10,7 @@ namespace EVSlideShow.Core.ViewModels {
         internal string Email = "";
         internal string EmailRepeat = "";
         internal string Password = "";
-        internal string EVType ="";
+        internal string EVType = "";
         internal bool DidViewTermsOfUse = false;
         internal bool DidAcceptTermsOfUse = false;
 
@@ -31,5 +31,15 @@ namespace EVSlideShow.Core.ViewModels {
         #endregion
         public SignUpViewModel() {
         }
+
+        #region Public API
+        public bool AllInputFilled() {
+            if (Username.Trim() != "" && Email.Trim() != "" && EmailRepeat.Trim() == Email && Password.Trim() != "" && EVType.Trim() != "" && DidAcceptTermsOfUse) {
+                Console.WriteLine($"Username:{Username} \n Email:{Email} \n EVType:{EVType} \n Password: {Password}");
+                return true;
+            }
+            return false;
+        }
+        #endregion
     }
 }

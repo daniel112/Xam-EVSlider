@@ -150,6 +150,7 @@
     <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 160x160.png" />
     <ImageAsset Include="Assets.xcassets\crop_box.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\crop_box.imageset\New Piskel.png" />
+    <ImageAsset Include="Assets.xcassets\icon_photo.imageset\photo.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
