@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EVSlideShow.Core.Models;
@@ -23,6 +26,36 @@ namespace EVSlideShow.Core.Network {
         #endregion
 
         #region Public API
+
+        public async Task<User> RegisterUser(User user) {
+            User output = new User();
+            var method = "users";
+            var uri = new Uri(string.Format(baseURL + method, string.Empty));
+            var values = new Dictionary<string, string>
+            {
+                { "password",user.Password },
+                { "username", user.Username },
+                { "email", user.Email },
+                { "ev_type", user.EVType },
+
+            };
+            // serialize dict into json string
+            string json = JsonConvert.SerializeObject(values);
+
+
+            var response = await Client.PostAsync(uri, new StringContent(json));
+            if (response.IsSuccessStatusCode) {
+                var jsonResult = await response.Content.ReadAsStringAsync();
+                output = JsonConvert.DeserializeObject<User>(jsonResult);
+                Console.WriteLine("");
+            } else if (response.StatusCode == (HttpStatusCode)422) {
+                var test = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(test);
+            }
+
+            return output;
+        }
+
         public async Task<User> LoginAsync(string username, string password) {
             User user = new User();
             var method = "authentication";
@@ -36,8 +69,6 @@ namespace EVSlideShow.Core.Network {
 
             // serialize dict into json string
             string json = JsonConvert.SerializeObject(values);
-
-           // var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(uri, new StringContent(json));
 
             if (response.IsSuccessStatusCode) {
@@ -51,16 +82,23 @@ namespace EVSlideShow.Core.Network {
                 user.Success = false;
             }
 
-
-
-            // TODO: TESTING GET
-            //var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
-            //if (getResponse.IsSuccessStatusCode) {
-            //    var jsonResult = await getResponse.Content.ReadAsStringAsync();
-            //    var users = JsonConvert.DeserializeObject<List<User>>(jsonResult);
-            //}
-
             return user;
+        }
+
+        public async Task<List<User>> GetAllUsers() {
+            var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
+            var users = new List<User>();
+            if (getResponse.IsSuccessStatusCode) {
+                var jsonResult = await getResponse.Content.ReadAsStringAsync();
+                users = JsonConvert.DeserializeObject<List<User>>(jsonResult);
+            }
+            return users;
+        }
+
+        public async Task<bool> SendEmailForRecovery(string email) {
+            // /password_recovery?email=
+            var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + $"password_recovery?email={email}", string.Empty)));
+            return getResponse.IsSuccessStatusCode;
         }
         #endregion
 

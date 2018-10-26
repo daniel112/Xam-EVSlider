@@ -23,15 +23,14 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                         GridSortOrder = SortOrder.Descending,
                         Title = "Select Up To 5 Images",
                         DisplaySelectionInfoToolbar = true,
-                        //NavigationBarBackgroundColor = UIColor.FromRGB(42, 52, 68),
-                        NavigationBarTextColor = UIColor.White,
-                        NavigationBarTintColor = UIColor.White,
-                        PickerTextColor = UIColor.White,
-                        ToolbarBarTintColor = UIColor.DarkGray,
-                        ToolbarTextColor = UIColor.White,
-                        ToolbarTintColor = UIColor.Red,
-                        PickerStatusBarStyle = UIStatusBarStyle.LightContent,
-                        PickerBackgroundColor = UIColor.FromRGB(42, 52, 68),
+                        //NavigationBarBackgroundColor = UIColor.Blue,
+                        //NavigationBarTextColor = UIColor.White,
+                        //NavigationBarTintColor = UIColor.White,
+                        //PickerTextColor = UIColor.White,
+                        //ToolbarTextColor = UIColor.White,
+                        //ToolbarTintColor = UIColor.Red,
+                        //PickerStatusBarStyle = UIStatusBarStyle.LightContent,
+                        //PickerBackgroundColor = UIColor.FromRGB(42, 52, 68),
 
                     };
                 }
@@ -78,7 +77,6 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                 imageManager.RequestImageForAsset(asset,
                     new CGSize(asset.PixelWidth, asset.PixelHeight),PHImageContentMode.Default, options,
                     (image, info) => {
-                        // TODO: convert to something and pass to forms to upload
                         encodedImages.Add(image.AsJPEG().GetBase64EncodedString(NSDataBase64EncodingOptions.None));
                     });
             }

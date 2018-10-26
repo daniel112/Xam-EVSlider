@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels.Base;
 
 namespace EVSlideShow.Core.ViewModels {
@@ -39,6 +40,16 @@ namespace EVSlideShow.Core.ViewModels {
                 return true;
             }
             return false;
+        }
+
+        public User GenerateUserFromInput() {
+            var user = new User();
+            user.Username = this.Username.ToLower();
+            user.Email = this.Email.ToLower();
+            user.Password = this.Password;
+            user.EVType = this.EVType;
+
+            return user;
         }
         #endregion
     }

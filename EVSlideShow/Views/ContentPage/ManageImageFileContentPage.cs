@@ -71,7 +71,6 @@ namespace EVSlideShow.Core.Views {
             get {
                 if (_ContentViewImage == null) {
                     _ContentViewImage = new ContentView {
-                        //Margin = new Thickness(0, 0, 0, 30),
                     };
                 }
                 return _ContentViewImage;

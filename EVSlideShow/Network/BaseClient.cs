@@ -17,6 +17,7 @@ namespace EVSlideShow.Core.Network {
                           .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
                 }
+
                 return _Client;
             }
         }

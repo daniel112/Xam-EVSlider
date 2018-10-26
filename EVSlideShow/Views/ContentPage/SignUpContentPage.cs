@@ -2,6 +2,8 @@
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
+using EVSlideShow.Core.Models;
+using EVSlideShow.Core.Network;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.ViewModels.Base;
 using EVSlideShow.Core.Views.Base;
@@ -319,11 +321,17 @@ namespace EVSlideShow.Core.Views {
 
         }
 
-        private void RegisterAccount() {
+        private async void RegisterAccountAsync() {
             if (this.ViewModel.AllInputFilled()) {
+                EVClient client = new EVClient();
+                User user = await client.RegisterUser(this.ViewModel.GenerateUserFromInput());
+                if (user.Success) {
 
+                } else {
+
+                }
             } else {
-                DisplayAlert("Register Account Error", $"Please fill out all inputs and accept terms of use.", "OK");
+                await DisplayAlert("Register Account Error", $"Please fill out all inputs correctly and accept terms of use.", "OK");
             }
 
         }
@@ -348,7 +356,7 @@ namespace EVSlideShow.Core.Views {
             this.Navigation.PopModalAsync(true);
         }
         void ButtonSignUp_Clicked(object sender, EventArgs e) {
-            this.RegisterAccount();
+            this.RegisterAccountAsync();
         }
         void ButtonCheckCircle_Clicked(object sender, EventArgs e) {
             if (this.ViewModel.DidViewTermsOfUse) {
@@ -413,7 +421,7 @@ namespace EVSlideShow.Core.Views {
                     this.InputPassword.EntryItem.Focus();
                     break;
                 case InputTextIdentifierPassword:
-                    this.RegisterAccount();
+                    this.RegisterAccountAsync();
                     break;
             }
         }

@@ -15,7 +15,6 @@ namespace EVSlideShow.Core.Views {
 
 
         #region Variables
-        private string testImagebase64;
         private Button _ButtonReset;
         private Button ButtonReset {
             get {
@@ -70,6 +69,8 @@ namespace EVSlideShow.Core.Views {
                     _Editor.ImageLoaded += Editor_ImageLoaded;
                     _Editor.EndReset += Editor_EndReset;
                     _Editor.ToolbarSettings.IsVisible = false;
+                    _Editor.ImageSaving += Editor_ImageSaving;
+
                 }
                 return _Editor;
             }
@@ -84,7 +85,7 @@ namespace EVSlideShow.Core.Views {
 
         }
         public ImageCroppingContentPage(List<string> encodedImages) {
-            this.testImagebase64 = encodedImages[0];
+            this.ViewModel.EncodedImages = encodedImages;
             this.Setup();
         }
 
@@ -97,7 +98,7 @@ namespace EVSlideShow.Core.Views {
         private void Setup() {
 
             this.Title = "Crop Image";
-            Editor.Source = ImageFromBase64(testImagebase64).Source;
+            Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
 
 
             Grid grid = new Grid {
@@ -125,11 +126,29 @@ namespace EVSlideShow.Core.Views {
 
         }
 
-        public static Image ImageFromBase64(string base64picture) {
-            byte[] imageBytes = Convert.FromBase64String(base64picture); return new Image { Source = ImageSource.FromStream(() => new MemoryStream(imageBytes)) };
+        private void LoadNextImage() {
+            Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
         }
 
+
         #region Events
+        private void Editor_ImageSaving(object sender, ImageSavingEventArgs args) {
+            var stream = args.Stream;
+            // convert to byte[]
+            using (var memoryStream = new MemoryStream()) {
+                stream.CopyTo(memoryStream);
+                var bytes = memoryStream.ToArray();
+
+                // convert bytes to base64
+                string base64 = Convert.ToBase64String(bytes);
+                Console.WriteLine(base64);
+                // add to list
+                this.ViewModel.UpdatedEncodedImages.Add(base64);
+            }
+
+            args.Cancel = true;
+        }
+
         void ButtonReset_Clicked(object sender, EventArgs e) {
             Console.WriteLine("RESET");
             Editor.Reset();
@@ -140,7 +159,20 @@ namespace EVSlideShow.Core.Views {
                 Editor.Crop();
                 this.ButtonCropSave.Text = "Save";
             } else if (this.ButtonCropSave.Text == "Save") {
-                DisplayAlert("Alert", "Save now", "ok");
+                Editor.Save();
+                if (this.ViewModel.CanLoadNextImage()) {
+                    LoadNextImage();
+                } else {
+                    DisplayAlert("Finished", "finished cropping all images", "ok");
+
+                    // TODO: do activity indicator as its sending
+                    Console.WriteLine(this.ViewModel.UpdatedEncodedImages.Count);
+                    if (this.ViewModel.SendImagesToServer()) {
+                        // successfully sent to server
+                    } else {
+                        // error sending to server
+                    }
+                }
             }
         }
 
@@ -151,6 +183,7 @@ namespace EVSlideShow.Core.Views {
         }
         private void Editor_ImageLoaded(object sender, ImageLoadedEventArgs args) {
             Editor.ToggleCropping(12, 7);
+            this.ButtonCropSave.Text = "Crop";
         }
 
         #endregion

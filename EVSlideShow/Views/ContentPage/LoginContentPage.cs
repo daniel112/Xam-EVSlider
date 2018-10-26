@@ -276,8 +276,18 @@ namespace EVSlideShow.Core.Views {
 
         }
 
-        private void RecoverEmail() {
-            DisplayAlert("Recover Email", $"Recover Email for:{this.TextEmail}", "OK");
+        private async void RecoverEmailAsync() {
+            if (this.TextEmail.Trim() != "") {
+                EVClient client = new EVClient();
+                bool success = await client.SendEmailForRecovery(this.TextEmail.Trim());
+                if (success) {
+                    await DisplayAlert("Password Recovery", $"If an account exists with that email, you will receive an email within a few minutes", "OK");
+                } else {
+                    await DisplayAlert("Network Error", $"There was an issue with the network. Please try again later", "OK");
+                }
+            } else {
+                await DisplayAlert("Error", $"Please fill out the form before submitting", "OK");
+            }
         }
 
         #region EventHandlers
@@ -302,7 +312,7 @@ namespace EVSlideShow.Core.Views {
         }
         void EntryEmailRecovery_Completed(object sender, EventArgs e) {
             Entry entry = (Entry)sender;
-            this.RecoverEmail();
+            this.RecoverEmailAsync();
         }
 
         #endregion
