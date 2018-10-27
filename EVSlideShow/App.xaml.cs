@@ -19,6 +19,7 @@ namespace EVSlideShow {
             //Register Syncfusion license
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU5OTRAMzEzNjJlMzMyZTMwbXdMRUxWYmhnVFR2QUpiMjdJWWJCNmFqSEcxOGc2R1BLbzI2ZG8rZkF5TT0=");
             MainPage = new SplashContentPage();
+
         }
 
         protected override void OnStart() {

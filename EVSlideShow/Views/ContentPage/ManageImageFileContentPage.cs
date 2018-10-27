@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
+using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
@@ -289,6 +291,8 @@ namespace EVSlideShow.Core.Views {
             Console.WriteLine($"{encodedImages.Count} images to crop");
             this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages));
 
+
+
         }
         #endregion
 
@@ -312,8 +316,14 @@ namespace EVSlideShow.Core.Views {
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
             if (buttonText == "Upload") {
                 // TODO: CLEANUP
-                var mediaServie = DependencyService.Get<IMediaService>();
-                mediaServie.OpenGallery();
+                var status = await PermissionHelper.GetPermissionStatusForPhotoLibraryAsync();
+                if (status == PermissionStatus.Granted) {
+                    var mediaServie = DependencyService.Get<IMediaService>();
+                    mediaServie.OpenGallery();
+                } else {
+                    await DisplayAlert("Permission Status", "Please enable access to photo library by going to your app settings.", "ok");
+                }
+
             } else {
                 var action = await DisplayActionSheet("Delete Photos", "Cancel", "Delete All", "Delete by #");
                 Console.WriteLine("Action: " + action);

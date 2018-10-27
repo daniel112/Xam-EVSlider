@@ -54,6 +54,9 @@
     <Reference Include="Syncfusion.SfImageEditor.XForms">
       <HintPath>..\lib\android\Syncfusion.SfImageEditor.XForms.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.CurrentActivity">
+      <HintPath>..\lib\android\Plugin.CurrentActivity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
@@ -66,11 +69,13 @@
   <ItemGroup>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\DeviceOrientation.cs" />
     <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
     <Compile Include="CustomRenderers\BorderlessEntryCustomRenderer.cs" />
     <Compile Include="Activities\MainActivity.cs" />
     <Compile Include="Activities\LaunchActivity.cs" />
+    <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
+    <Compile Include="Common\DependencyImplementations\MediaService.cs" />
+    <Compile Include="Properties\MainApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -145,6 +150,8 @@
     <Folder Include="Resources\mipmap-xxhdpi\" />
     <Folder Include="Resources\mipmap-xxxhdpi\" />
     <Folder Include="Activities\" />
+    <Folder Include="Common\DependencyImplementations\" />
+    <Folder Include="Common\Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\Fonts\phagspa.ttf" />

@@ -66,6 +66,7 @@ namespace EVSlideShow.Core.Views {
             get {
                 if (_Editor == null) {
                     _Editor = new SfImageEditor();
+                    _Editor.BackgroundColor = Color.Transparent;
                     _Editor.ImageLoaded += Editor_ImageLoaded;
                     _Editor.EndReset += Editor_EndReset;
                     _Editor.ToolbarSettings.IsVisible = false;

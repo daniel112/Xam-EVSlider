@@ -23,15 +23,6 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                         GridSortOrder = SortOrder.Descending,
                         Title = "Select Up To 5 Images",
                         DisplaySelectionInfoToolbar = true,
-                        //NavigationBarBackgroundColor = UIColor.Blue,
-                        //NavigationBarTextColor = UIColor.White,
-                        //NavigationBarTintColor = UIColor.White,
-                        //PickerTextColor = UIColor.White,
-                        //ToolbarTextColor = UIColor.White,
-                        //ToolbarTintColor = UIColor.Red,
-                        //PickerStatusBarStyle = UIStatusBarStyle.LightContent,
-                        //PickerBackgroundColor = UIColor.FromRGB(42, 52, 68),
-
                     };
                 }
                 _PickerController.ShouldSelectAsset += PickerController_ShouldSelectAsset;
