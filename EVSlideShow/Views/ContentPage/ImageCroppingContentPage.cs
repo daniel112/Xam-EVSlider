@@ -4,8 +4,10 @@ using System.IO;
 using System.Reflection;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Constants;
+using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
+using EVSlideShow.Core.Views.ContentViews;
 using Syncfusion.SfImageEditor.XForms;
 using Xamarin.Forms;
 using xamToolBarItem = Xamarin.Forms.ToolbarItem;
@@ -54,7 +56,7 @@ namespace EVSlideShow.Core.Views {
                         HorizontalOptions = LayoutOptions.Center
 
                     };
-                    _ButtonCropSave.Clicked += ButtonCropSave_Pressed;
+                    _ButtonCropSave.Clicked += ButtonCropSave_PressedAsync;
                     _ButtonCropSave.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
 
                 }
@@ -77,7 +79,15 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
-
+        private DimActivityIndicatorContentView _CustomActivityIndicator;
+        private DimActivityIndicatorContentView CustomActivityIndicator {
+            get {
+                if (_CustomActivityIndicator == null) {
+                    _CustomActivityIndicator = new DimActivityIndicatorContentView();
+                }
+                return _CustomActivityIndicator;
+            }
+        }
         #endregion
 
         #region Initialization
@@ -85,8 +95,10 @@ namespace EVSlideShow.Core.Views {
             this.Setup();
 
         }
-        public ImageCroppingContentPage(List<string> encodedImages) {
+        public ImageCroppingContentPage(List<string> encodedImages, User user, int slideshowNumber) {
             this.ViewModel.EncodedImages = encodedImages;
+            this.ViewModel.SlideShowNumber = slideshowNumber;
+            this.ViewModel.User = user;
             this.Setup();
         }
 
@@ -104,6 +116,7 @@ namespace EVSlideShow.Core.Views {
 
             Grid grid = new Grid {
                 VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 RowDefinitions =
                 {
                     new RowDefinition { Height = GridLength.Star }, // row 0
@@ -123,7 +136,24 @@ namespace EVSlideShow.Core.Views {
             grid.Children.Add(ButtonReset, 0, 1, 1, 2);
             grid.Children.Add(ButtonCropSave, 1, 2, 1, 2);
 
-            this.Content = grid;
+            RelativeLayout layout = new RelativeLayout();
+
+            layout.Children.Add(grid, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            layout.Children.Add(CustomActivityIndicator, Constraint.Constant(0),Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+
+            this.Content = layout;
 
         }
 
@@ -155,7 +185,7 @@ namespace EVSlideShow.Core.Views {
             Editor.Reset();
         }
 
-        void ButtonCropSave_Pressed(object sender, EventArgs e) {
+        async void ButtonCropSave_PressedAsync(object sender, EventArgs e) {
             if (this.ButtonCropSave.Text == "Crop") {
                 Editor.Crop();
                 this.ButtonCropSave.Text = "Save";
@@ -164,14 +194,20 @@ namespace EVSlideShow.Core.Views {
                 if (this.ViewModel.CanLoadNextImage()) {
                     LoadNextImage();
                 } else {
-                    DisplayAlert("Finished", "finished cropping all images", "ok");
-
-                    // TODO: do activity indicator as its sending
+                    this.CustomActivityIndicator.IsRunning = true;
                     Console.WriteLine(this.ViewModel.UpdatedEncodedImages.Count);
-                    if (this.ViewModel.SendImagesToServer()) {
+                    if (await this.ViewModel.SendImagesToServerAsync()) {
                         // successfully sent to server
+                        this.CustomActivityIndicator.IsRunning = false;
+                        await DisplayAlert("Success", "Your image(s) have been successfully uploaded.", "Ok");
+                        await this.Navigation.PopAsync();
+
                     } else {
                         // error sending to server
+                        this.CustomActivityIndicator.IsRunning = false;
+                        await DisplayAlert("Error", "Oops, something went wrong. Please try again later.", "Ok");
+                        await this.Navigation.PopAsync();
+
                     }
                 }
             }

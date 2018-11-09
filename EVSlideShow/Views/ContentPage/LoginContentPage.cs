@@ -1,6 +1,7 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
+using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
@@ -259,18 +260,21 @@ namespace EVSlideShow.Core.Views {
         }
 
         private async void ValidateLoginAsync() {
-            Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage());
-            //if (!String.IsNullOrEmpty(this.TextUsername) && !String.IsNullOrEmpty(this.TextPassword)) {
-            //    EVClient client = new EVClient();
-            //    User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
-            //    if (user.Success && String.IsNullOrEmpty(user.Message)) {
-            //        Application.Current.MainPage = new NavigationPage(new ManageImageFileContentPage());
-            //    } else {
-            //        await DisplayAlert("Error", $"{user.Message}", "OK");
-            //    }
-            //} else {
-            //    await DisplayAlert("Error", $"Username and password is required.", "OK");
-            //}
+            //Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage());
+            if (!String.IsNullOrEmpty(this.TextUsername) && !String.IsNullOrEmpty(this.TextPassword)) {
+                EVClient client = new EVClient();
+                User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
+                if (user.Success && String.IsNullOrEmpty(user.Message)) {
+                    // save user login data to app data
+                    Application.Current.Properties.Add("User", ObjectSerializerHelper.ConvertObjectToBase64(user));
+                    await Application.Current.SavePropertiesAsync();
+                    Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage(user));
+                } else {
+                    await DisplayAlert("Error", $"{user.Message}", "OK");
+                }
+            } else {
+                await DisplayAlert("Error", $"Username and password is required.", "OK");
+            }
 
 
 

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 
 namespace EVSlideShow.Core.Models {
+    [Serializable]
     public class User : BaseModel {
 
         #region Variables

@@ -148,9 +148,12 @@
     <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 80x80.png" />
     <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 120x120.png" />
     <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 160x160.png" />
-    <ImageAsset Include="Assets.xcassets\crop_box.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\crop_box.imageset\New Piskel.png" />
     <ImageAsset Include="Assets.xcassets\icon_photo.imageset\photo.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\New Piskel.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_3x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -193,7 +196,7 @@
     <Folder Include="Assets.xcassets\icon_photo.imageset\" />
     <Folder Include="Assets.xcassets\icon_manage.imageset\" />
     <Folder Include="Common\DependencyImplementations\" />
-    <Folder Include="Assets.xcassets\crop_box.imageset\" />
+    <Folder Include="Assets.xcassets\icon_user.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Fonts\phagspa.ttf">

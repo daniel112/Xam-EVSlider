@@ -4,6 +4,7 @@ using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
 using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
+using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
@@ -213,14 +214,31 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
+        private ToolbarItem _ToolbarUser;
+        private ToolbarItem ToolbarUser {
+            get {
+                if (_ToolbarUser == null) {
+                    _ToolbarUser = new ToolbarItem {
+                        Icon = "icon_user"
+                    };
+                    _ToolbarUser.Clicked += ToolbarUser_ClickedAsync;
+                }
+
+                return _ToolbarUser;
+            }
+        }
+        
         #endregion
 
         #region Initialization
         public ManageImageFileContentPage() {
-            this.Setup();
-            MessagingCenterSubscribe();
         }
 
+        public ManageImageFileContentPage(User user) {
+            this.Setup();
+            this.ViewModel.User = user;
+            MessagingCenterSubscribe();
+        }
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
         }
 
@@ -237,9 +255,14 @@ namespace EVSlideShow.Core.Views {
         #region Private API
         private void Setup() {
 
-            Title = "Manage Image Files";
+            Title = "Manage Image Files(#1)";
             // image
             this.ContentViewImage.Content = this.ImageContentManage;
+
+
+            // Toolbar items
+            this.ToolbarItems.Add(ToolbarUser);
+
 
             // GridButtons
             // grid.Children.Add(item ,col, col+colSpan, row, row+rowspan)
@@ -289,7 +312,7 @@ namespace EVSlideShow.Core.Views {
         void MessagingCenter_SendToCropView(object obj) {
             List<string> encodedImages = (List<string>)obj;
             Console.WriteLine($"{encodedImages.Count} images to crop");
-            this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages));
+            this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
 
 
 
@@ -303,7 +326,28 @@ namespace EVSlideShow.Core.Views {
 
         }
 
+        async void ToolbarUser_ClickedAsync(object sender, EventArgs e) {
 
+            var option = await DisplayActionSheet("Select Slideshow", "Cancel", null, "Slideshow #1", "Slideshow #2", "Slideshow #3", "Logout");
+            switch (option) {
+                case "Slideshow #1":
+                    this.ViewModel.SlideShowNumber = 1;
+                    Title = "Manage Image Files(#1)";
+                    break;
+                case "Slideshow #2":
+                    this.ViewModel.SlideShowNumber = 2;
+                    Title = "Manage Image Files(#2)";
+                    break;
+                case "Slideshow #3":
+                    this.ViewModel.SlideShowNumber = 3;
+                    Title = "Manage Image Files(#3)";
+                    break;
+                case "Logout":
+                    Application.Current.MainPage = new IntroContentPage();
+                    break;
+            }
+
+        }
         #endregion
 
         #endregion
@@ -315,13 +359,12 @@ namespace EVSlideShow.Core.Views {
         #region Delegates
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
             if (buttonText == "Upload") {
-                // TODO: CLEANUP
                 var status = await PermissionHelper.GetPermissionStatusForPhotoLibraryAsync();
                 if (status == PermissionStatus.Granted) {
                     var mediaServie = DependencyService.Get<IMediaService>();
                     mediaServie.OpenGallery();
                 } else {
-                    await DisplayAlert("Permission Status", "Please enable access to photo library by going to your app settings.", "ok");
+                    await DisplayAlert("Permission Status", "Please enable access to photo library by going to your app settings.", "Ok");
                 }
 
             } else {
