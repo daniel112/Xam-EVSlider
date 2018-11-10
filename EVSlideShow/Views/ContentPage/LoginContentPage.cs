@@ -266,7 +266,7 @@ namespace EVSlideShow.Core.Views {
                 User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
                 if (user.Success && String.IsNullOrEmpty(user.Message)) {
                     // save user login data to app data
-                    Application.Current.Properties.Add("User", ObjectSerializerHelper.ConvertObjectToBase64(user));
+                    Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(user);
                     await Application.Current.SavePropertiesAsync();
                     Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage(user));
                 } else {

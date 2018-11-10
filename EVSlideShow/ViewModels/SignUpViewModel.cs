@@ -34,8 +34,8 @@ namespace EVSlideShow.Core.ViewModels {
         }
 
         #region Public API
-        public bool AllInputFilled() {
-            if (Username.Trim() != "" && Email.Trim() != "" && EmailRepeat.Trim() == Email && Password.Trim() != "" && EVType.Trim() != "" && DidAcceptTermsOfUse) {
+        public bool AllInputFilledOut() {
+            if (Username.Trim() != "" && Email.Trim() != "" && EmailRepeat.Trim() == Email.Trim() && Password.Trim() != "" && EVType.Trim() != "" && DidAcceptTermsOfUse) {
                 Console.WriteLine($"Username:{Username} \n Email:{Email} \n EVType:{EVType} \n Password: {Password}");
                 return true;
             }
@@ -44,12 +44,20 @@ namespace EVSlideShow.Core.ViewModels {
 
         public User GenerateUserFromInput() {
             var user = new User();
-            user.Username = this.Username.ToLower();
-            user.Email = this.Email.ToLower();
+            user.Username = this.Username.ToLower().Trim();
+            user.Email = this.Email.ToLower().Trim();
             user.Password = this.Password;
             user.EVType = this.EVType;
 
             return user;
+        }
+
+        public string ValidateInput() {
+            string message = "";
+            if (this.Password.Length < 5) {
+                message += "Password is too short (minimum is 5 characters)";
+            }
+            return message;
         }
         #endregion
     }

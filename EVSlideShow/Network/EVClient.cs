@@ -50,8 +50,8 @@ namespace EVSlideShow.Core.Network {
                 output = JsonConvert.DeserializeObject<User>(jsonResult);
                 Console.WriteLine("");
             } else if (response.StatusCode == (HttpStatusCode)422) {
-                var test = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(test);
+                var rawResponse = await response.Content.ReadAsStringAsync();
+                output.Message = rawResponse;
             }
 
             return output;

@@ -359,6 +359,10 @@ namespace EVSlideShow.Core.Views {
         #region Delegates
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
             if (buttonText == "Upload") {
+                if (!this.ViewModel.User.IsSubscribed) {
+                    await DisplayAlert("No Subscription Found", "Your account is not currently subscribed. Only subscribers have access to photo uploads. You can subscribe by hitting the 'Subscribe' button", "Ok");
+                    return;
+                }
                 var status = await PermissionHelper.GetPermissionStatusForPhotoLibraryAsync();
                 if (status == PermissionStatus.Granted) {
                     var mediaServie = DependencyService.Get<IMediaService>();

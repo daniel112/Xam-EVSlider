@@ -15,11 +15,11 @@ using System.IO;
 using Android.Graphics;
 using Xamarin.Forms;
 using EVSlideShow.Core.Constants;
+using Android.Media;
+using EVSlideShow.Droid.Common.Helpers;
 
 namespace EVSlideShow.Droid {
-    [Activity(
-              Theme = "@style/MainTheme", MainLauncher = false,
-              ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
 
         public static int OPENGALLERYCODE = 100;
@@ -49,7 +49,7 @@ namespace EVSlideShow.Droid {
             if (requestCode == OPENGALLERYCODE && resultCode == Result.Ok) {
 
                 List<string> images = new List<string>();
-  
+
                 if (data != null) {
 
                     ClipData clipData = data.ClipData;
@@ -60,8 +60,9 @@ namespace EVSlideShow.Droid {
                             try {
                                 ClipData.Item item = clipData.GetItemAt(i);
                                 var uri = item.Uri;
-                                Stream stream = ContentResolver.OpenInputStream(uri);
+                                System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
                                 Bitmap bitmap = BitmapFactory.DecodeStream(stream);
+                                bitmap = PhotoUtilHelper.ChangeOrientation(PhotoUtilHelper.GetActualPathFromURI(uri, this), bitmap);
 
                                 MemoryStream memStream = new MemoryStream();
                                 bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
@@ -77,8 +78,9 @@ namespace EVSlideShow.Droid {
 
                         try {
                             var uri = data.Data;
-                            Stream stream = ContentResolver.OpenInputStream(uri);
+                            System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
                             Bitmap bitmap = BitmapFactory.DecodeStream(stream);
+                            bitmap = PhotoUtilHelper.ChangeOrientation(PhotoUtilHelper.GetActualPathFromURI(uri, this), bitmap);
 
                             MemoryStream memStream = new MemoryStream();
                             bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
@@ -91,7 +93,6 @@ namespace EVSlideShow.Droid {
 
                     }
 
-
                     // post the message with the list attached
                     MessagingCenter.Send(images, MessagingKeys.DidFinishSelectingImages);
                 }
@@ -102,7 +103,8 @@ namespace EVSlideShow.Droid {
         #endregion
 
         #region Private API
-
+        
+       
         #endregion
 
 

@@ -57,6 +57,9 @@
     <Reference Include="Plugin.CurrentActivity">
       <HintPath>..\lib\android\Plugin.CurrentActivity.dll</HintPath>
     </Reference>
+    <Reference Include="Xamarin.Android.Support.Exif">
+      <HintPath>..\lib\android\Xamarin.Android.Support.Exif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
@@ -76,6 +79,7 @@
     <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
     <Compile Include="Common\DependencyImplementations\MediaService.cs" />
     <Compile Include="Properties\MainApplication.cs" />
+    <Compile Include="Common\Helpers\PhotoUtilHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -135,6 +139,13 @@
     <AndroidResource Include="Resources\drawable-xhdpi\nav_down_arrow.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\nav_down_arrow.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable\icon_manage.png" />
+    <AndroidResource Include="Resources\drawable\icon_photo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

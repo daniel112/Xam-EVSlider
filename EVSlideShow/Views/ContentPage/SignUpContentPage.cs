@@ -1,6 +1,7 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.CustomRenderers;
+using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
@@ -8,6 +9,7 @@ using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.ViewModels.Base;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
+using EVSlideShow.Views;
 using Plugin.Share;
 using Plugin.Share.Abstractions;
 using Xamarin.Forms;
@@ -322,13 +324,17 @@ namespace EVSlideShow.Core.Views {
         }
 
         private async void RegisterAccountAsync() {
-            if (this.ViewModel.AllInputFilled()) {
+            if (this.ViewModel.AllInputFilledOut()) {
                 EVClient client = new EVClient();
                 User user = await client.RegisterUser(this.ViewModel.GenerateUserFromInput());
                 if (user.Success) {
-
+                    await DisplayAlert("Success", $"Your account has been created", "Continue");
+                    // save user login data to app data
+                    Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(user);
+                    await Application.Current.SavePropertiesAsync();
+                    Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage(user));
                 } else {
-
+                    await DisplayAlert("Register Account Error", $"{user.Message}", "OK");
                 }
             } else {
                 await DisplayAlert("Register Account Error", $"Please fill out all inputs correctly and accept terms of use.", "OK");
@@ -356,7 +362,12 @@ namespace EVSlideShow.Core.Views {
             this.Navigation.PopModalAsync(true);
         }
         void ButtonSignUp_Clicked(object sender, EventArgs e) {
-            this.RegisterAccountAsync();
+            string message = this.ViewModel.ValidateInput();
+            if (string.IsNullOrEmpty(message)) 
+                this.RegisterAccountAsync();
+            else {
+                DisplayAlert("Register Account Error", $"{message}", "OK");
+            }
         }
         void ButtonCheckCircle_Clicked(object sender, EventArgs e) {
             if (this.ViewModel.DidViewTermsOfUse) {
@@ -389,7 +400,7 @@ namespace EVSlideShow.Core.Views {
                     break;
                 case InputTextIdentifierEmail:
                     this.ViewModel.Email = text;
-                    if (this.ViewModel.EmailRepeat != this.ViewModel.Email) {
+                    if (this.ViewModel.EmailRepeat.Trim() != this.ViewModel.Email.Trim()) {
                         this.InputEmailRepeat.UpdateBorderColorError(true);
                     } else {
                         this.InputEmailRepeat.UpdateBorderColorError(false);
@@ -397,7 +408,7 @@ namespace EVSlideShow.Core.Views {
                     break;
                 case InputTextIdentifierEmailRepeat:
                     this.ViewModel.EmailRepeat = text;
-                    if (this.ViewModel.EmailRepeat != this.ViewModel.Email) {
+                    if (this.ViewModel.EmailRepeat.Trim() != this.ViewModel.Email.Trim()) {
                         this.InputEmailRepeat.UpdateBorderColorError(true);
                     } else {
                         this.InputEmailRepeat.UpdateBorderColorError(false);
