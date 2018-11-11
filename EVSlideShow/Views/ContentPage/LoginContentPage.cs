@@ -197,12 +197,22 @@ namespace EVSlideShow.Core.Views {
                         BackgroundColor = Color.White,
                         HorizontalOptions = LayoutOptions.FillAndExpand,
                         Margin = new Thickness(0, 0, 0, 0)
-                    }; 
+                    };
                     _EntryEmailRecovery.TextChanged += EntryEmailRecovery_TextChanged;
                     _EntryEmailRecovery.Completed += EntryEmailRecovery_Completed;
 
                 }
                 return _EntryEmailRecovery;
+            }
+        }
+
+        private DimActivityIndicatorContentView _CustomActivityIndicator;
+        private DimActivityIndicatorContentView CustomActivityIndicator {
+            get {
+                if (_CustomActivityIndicator == null) {
+                    _CustomActivityIndicator = new DimActivityIndicatorContentView();
+                }
+                return _CustomActivityIndicator;
             }
         }
 
@@ -256,13 +266,35 @@ namespace EVSlideShow.Core.Views {
                     this.ScrollViewContent
                 }
             };
-            Content = stacklayout;
+
+            RelativeLayout relativelayout = new RelativeLayout();
+
+            // stack
+            relativelayout.Children.Add(stacklayout, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            // loading
+            relativelayout.Children.Add(CustomActivityIndicator, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+
+            Content = relativelayout;
         }
 
         private async void ValidateLoginAsync() {
             //Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage());
             if (!String.IsNullOrEmpty(this.TextUsername) && !String.IsNullOrEmpty(this.TextPassword)) {
                 EVClient client = new EVClient();
+
+                this.CustomActivityIndicator.IsRunning = true;
                 User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
                 if (user.Success && String.IsNullOrEmpty(user.Message)) {
                     // save user login data to app data
@@ -272,6 +304,8 @@ namespace EVSlideShow.Core.Views {
                 } else {
                     await DisplayAlert("Error", $"{user.Message}", "OK");
                 }
+                this.CustomActivityIndicator.IsRunning = false;
+
             } else {
                 await DisplayAlert("Error", $"Username and password is required.", "OK");
             }
@@ -283,12 +317,15 @@ namespace EVSlideShow.Core.Views {
         private async void RecoverEmailAsync() {
             if (this.TextEmail.Trim() != "") {
                 EVClient client = new EVClient();
+                this.CustomActivityIndicator.IsRunning = true;
                 bool success = await client.SendEmailForRecovery(this.TextEmail.Trim());
                 if (success) {
                     await DisplayAlert("Password Recovery", $"If an account exists with that email, you will receive an email within a few minutes", "OK");
                 } else {
                     await DisplayAlert("Network Error", $"There was an issue with the network. Please try again later", "OK");
                 }
+                this.CustomActivityIndicator.IsRunning = false;
+
             } else {
                 await DisplayAlert("Error", $"Please fill out the form before submitting", "OK");
             }

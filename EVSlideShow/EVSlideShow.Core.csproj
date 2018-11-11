@@ -26,6 +26,7 @@
     <Folder Include="Views\ContentViews\" />
     <Folder Include="Components\CustomRenderers\" />
     <Folder Include="Components\Helpers\" />
+    <Folder Include="Components\Common\DependencyInterface\Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="name.png" />

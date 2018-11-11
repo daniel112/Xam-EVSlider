@@ -343,6 +343,8 @@ namespace EVSlideShow.Core.Views {
                     Title = "Manage Image Files(#3)";
                     break;
                 case "Logout":
+                    Application.Current.Properties.Clear();
+                    await Application.Current.SavePropertiesAsync();
                     Application.Current.MainPage = new IntroContentPage();
                     break;
             }

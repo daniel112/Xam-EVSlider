@@ -104,6 +104,7 @@
     <Compile Include="CustomRenderers\PickerBorderlessCustomRenderer.cs" />
     <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
     <Compile Include="Common\DependencyImplementations\MediaService.cs" />
+    <Compile Include="Common\DependencyImplementations\Helpers\ImageHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -150,7 +151,6 @@
     <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 160x160.png" />
     <ImageAsset Include="Assets.xcassets\icon_photo.imageset\photo.png" />
     <ImageAsset Include="Assets.xcassets\icon_user.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\icon_user.imageset\New Piskel.png" />
     <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_1x.png" />
     <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_2x.png" />
     <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_3x.png" />
@@ -196,6 +196,8 @@
     <Folder Include="Assets.xcassets\icon_photo.imageset\" />
     <Folder Include="Assets.xcassets\icon_manage.imageset\" />
     <Folder Include="Common\DependencyImplementations\" />
+    <Folder Include="Assets.xcassets\icon_user.imageset\" />
+    <Folder Include="Common\DependencyImplementations\Helpers\" />
     <Folder Include="Assets.xcassets\icon_user.imageset\" />
   </ItemGroup>
   <ItemGroup>

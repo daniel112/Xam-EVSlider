@@ -75,7 +75,6 @@ namespace EVSlideShow.Core.ViewModels {
 
         public async Task<bool> SendImagesToServerAsync() {
             // turn the list into byte[]
-            // TODO: UPDATE METHOD RETURN
             EVClient client = new EVClient();
             return await client.SendImages(this.User.AuthToken, this.SlideShowNumber, ConvertListToByte());
 

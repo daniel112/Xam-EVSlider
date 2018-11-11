@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Components.Common.DependencyInterface.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels;
@@ -165,10 +166,23 @@ namespace EVSlideShow.Core.Views {
         #region Events
         private void Editor_ImageSaving(object sender, ImageSavingEventArgs args) {
             var stream = args.Stream;
+
+            // TODO: convert to image to resize to 1200x700
+            //Image image = new Image {
+            //    Source = ImageSource.FromStream(() => stream),
+            //    WidthRequest = 1200,
+            //    HeightRequest = 700,
+            //    Aspect = Aspect.AspectFit
+            //};
+
+
             // convert to byte[]
             using (var memoryStream = new MemoryStream()) {
                 stream.CopyTo(memoryStream);
                 var bytes = memoryStream.ToArray();
+
+                var imageHelper = DependencyService.Get<IImageHelper>();
+                bytes = imageHelper.ResizeImage(bytes, 1200, 700);
 
                 // convert bytes to base64
                 string base64 = Convert.ToBase64String(bytes);
@@ -236,4 +250,3 @@ namespace EVSlideShow.Core.Views {
         #endregion
     }
 }
-

@@ -280,6 +280,16 @@ namespace EVSlideShow.Core.Views {
                 return _PickerEVType;
             }
         }
+
+        private DimActivityIndicatorContentView _CustomActivityIndicator;
+        private DimActivityIndicatorContentView CustomActivityIndicator {
+            get {
+                if (_CustomActivityIndicator == null) {
+                    _CustomActivityIndicator = new DimActivityIndicatorContentView();
+                }
+                return _CustomActivityIndicator;
+            }
+        }
         #endregion
 
         #region Initialization
@@ -294,19 +304,13 @@ namespace EVSlideShow.Core.Views {
         #region Private API
         private void Setup() {
 
-            // stacklayout
-            this.StackLayout.Children.Add(this.ButtonClose);
-            this.StackLayout.Children.Add(this.ScrollViewContent);
-
             // image
             this.ContentViewImage.Content = this.ImageLogo;
-
-            // scrollview
-            this.ScrollViewContent.Content = this.FlexLayoutContent;
 
             // stacklayout for checkbox
             this.StackLayoutCheckHorizontal.Children.Add(this.LabelCheckCircle);
             this.StackLayoutCheckHorizontal.Children.Add(this.ButtonCheckCircle);
+
 
             // flexlayout
             this.FlexLayoutContent.Children.Add(this.ContentViewImage);
@@ -319,13 +323,39 @@ namespace EVSlideShow.Core.Views {
             this.FlexLayoutContent.Children.Add(this.ButtonSignUp);
             this.FlexLayoutContent.Children.Add(this.LabelViewTermsOfUse);
 
-            Content = this.StackLayout;
+            // scrollview
+            this.ScrollViewContent.Content = this.FlexLayoutContent;
+
+            // stacklayout
+            this.StackLayout.Children.Add(this.ButtonClose);
+            this.StackLayout.Children.Add(this.ScrollViewContent);
+
+            RelativeLayout relativelayout = new RelativeLayout();
+
+            // stack
+            relativelayout.Children.Add(this.StackLayout, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            // loading
+            relativelayout.Children.Add(CustomActivityIndicator, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            Content = relativelayout;
 
         }
 
         private async void RegisterAccountAsync() {
             if (this.ViewModel.AllInputFilledOut()) {
                 EVClient client = new EVClient();
+                this.CustomActivityIndicator.IsRunning = true;
                 User user = await client.RegisterUser(this.ViewModel.GenerateUserFromInput());
                 if (user.Success) {
                     await DisplayAlert("Success", $"Your account has been created", "Continue");
@@ -336,6 +366,7 @@ namespace EVSlideShow.Core.Views {
                 } else {
                     await DisplayAlert("Register Account Error", $"{user.Message}", "OK");
                 }
+                this.CustomActivityIndicator.IsRunning = false;
             } else {
                 await DisplayAlert("Register Account Error", $"Please fill out all inputs correctly and accept terms of use.", "OK");
             }

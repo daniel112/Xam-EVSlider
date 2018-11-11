@@ -80,6 +80,7 @@
     <Compile Include="Common\DependencyImplementations\MediaService.cs" />
     <Compile Include="Properties\MainApplication.cs" />
     <Compile Include="Common\Helpers\PhotoUtilHelper.cs" />
+    <Compile Include="Common\DependencyImplementations\ImageHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

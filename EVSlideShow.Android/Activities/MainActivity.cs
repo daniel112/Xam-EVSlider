@@ -56,7 +56,7 @@ namespace EVSlideShow.Droid {
                     // if clipData exists, it means there are more than 1 image
                     if (clipData != null) {
                         for (int i = 0; i < clipData.ItemCount; i++) {
-
+                            if (i > 5) { break; } // limit to 5 images
                             try {
                                 ClipData.Item item = clipData.GetItemAt(i);
                                 var uri = item.Uri;
