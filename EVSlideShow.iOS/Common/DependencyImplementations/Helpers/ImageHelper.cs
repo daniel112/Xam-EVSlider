@@ -11,24 +11,34 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations.Helpers {
 
         public byte[] ResizeImage(byte[] imageData, float width, float height) {
             UIImage originalImage = ImageFromByteArray(imageData);
-            UIImageOrientation orientation = originalImage.Orientation;
 
-            //create a 24bit RGB image
-            using (CGBitmapContext context = new CGBitmapContext(IntPtr.Zero,
-                                                 (int)width, (int)height, 8,
-                                                 4 * (int)width, CGColorSpace.CreateDeviceRGB(),
-                                                 CGImageAlphaInfo.PremultipliedFirst)) {
+            var originalHeight = originalImage.Size.Height;
+            var originalWidth = originalImage.Size.Width;
 
-                RectangleF imageRect = new RectangleF(0, 0, width, height);
+            nfloat newHeight = 0;
+            nfloat newWidth = 0;
 
-                // draw the image
-                context.DrawImage(imageRect, originalImage.CGImage);
-
-                UIImage resizedImage = UIImage.FromImage(context.ToImage(), 0, orientation);
-
-                // save the image as a jpeg
-                return resizedImage.AsJPEG().ToArray();
+            if (originalHeight > originalWidth) {
+                newHeight = height;
+                nfloat ratio = originalHeight / height;
+                newWidth = originalWidth / ratio;
+            } else {
+                newWidth = width;
+                nfloat ratio = originalWidth / width;
+                newHeight = originalHeight / ratio;
             }
+
+            width = (float)newWidth;
+            height = (float)newHeight;
+
+            UIGraphics.BeginImageContext(new SizeF(width, height));
+            originalImage.Draw(new RectangleF(0, 0, width, height));
+            var resizedImage = UIGraphics.GetImageFromCurrentImageContext();
+            UIGraphics.EndImageContext();
+
+            var bytesImagen = resizedImage.AsJPEG().ToArray();
+            resizedImage.Dispose();
+            return bytesImagen;
         }
 
         private UIImage ImageFromByteArray(byte[] data) {

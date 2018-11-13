@@ -167,14 +167,6 @@ namespace EVSlideShow.Core.Views {
         private void Editor_ImageSaving(object sender, ImageSavingEventArgs args) {
             var stream = args.Stream;
 
-            // TODO: convert to image to resize to 1200x700
-            //Image image = new Image {
-            //    Source = ImageSource.FromStream(() => stream),
-            //    WidthRequest = 1200,
-            //    HeightRequest = 700,
-            //    Aspect = Aspect.AspectFit
-            //};
-
 
             // convert to byte[]
             using (var memoryStream = new MemoryStream()) {
@@ -183,12 +175,7 @@ namespace EVSlideShow.Core.Views {
 
                 var imageHelper = DependencyService.Get<IImageHelper>();
                 bytes = imageHelper.ResizeImage(bytes, 1200, 700);
-
-                // convert bytes to base64
-                string base64 = Convert.ToBase64String(bytes);
-                Console.WriteLine(base64);
-                // add to list
-                this.ViewModel.UpdatedEncodedImages.Add(base64);
+                this.ViewModel.EncodedBytes.Add(bytes);
             }
 
             args.Cancel = true;
@@ -209,7 +196,7 @@ namespace EVSlideShow.Core.Views {
                     LoadNextImage();
                 } else {
                     this.CustomActivityIndicator.IsRunning = true;
-                    Console.WriteLine(this.ViewModel.UpdatedEncodedImages.Count);
+
                     if (await this.ViewModel.SendImagesToServerAsync()) {
                         // successfully sent to server
                         this.CustomActivityIndicator.IsRunning = false;

@@ -235,9 +235,10 @@ namespace EVSlideShow.Core.Views {
         }
 
         public ManageImageFileContentPage(User user) {
-            this.Setup();
             this.ViewModel.User = user;
             MessagingCenterSubscribe();
+            this.Setup();
+
         }
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
         }
@@ -255,7 +256,7 @@ namespace EVSlideShow.Core.Views {
         #region Private API
         private void Setup() {
 
-            Title = "Manage Image Files(#1)";
+            Title = "Managing Slideshow #1";
             // image
             this.ContentViewImage.Content = this.ImageContentManage;
 
@@ -332,15 +333,15 @@ namespace EVSlideShow.Core.Views {
             switch (option) {
                 case "Slideshow #1":
                     this.ViewModel.SlideShowNumber = 1;
-                    Title = "Manage Image Files(#1)";
+                    Title = "Managing Slideshow #1";
                     break;
                 case "Slideshow #2":
                     this.ViewModel.SlideShowNumber = 2;
-                    Title = "Manage Image Files(#2)";
+                    Title = "Managing Slideshow #2";
                     break;
                 case "Slideshow #3":
                     this.ViewModel.SlideShowNumber = 3;
-                    Title = "Manage Image Files(#3)";
+                    Title = "Managing Slideshow #3";
                     break;
                 case "Logout":
                     Application.Current.Properties.Clear();
@@ -375,8 +376,14 @@ namespace EVSlideShow.Core.Views {
 
             } else {
                 var action = await DisplayActionSheet("Delete Photos", "Cancel", "Delete All", "Delete by #");
-                Console.WriteLine("Action: " + action);
+                switch (action) {
+                    case "Delete All":
 
+                        break;
+                    case "Delete by #":
+
+                        break;
+                }
             }
         }
         #endregion

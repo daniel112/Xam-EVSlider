@@ -48,20 +48,20 @@ namespace EVSlideShow.Core.ViewModels {
         public int ImageIndex = 0;
         public int SlideShowNumber = 1;
 
-
+        public List<byte[]> EncodedBytes = new List<byte[]>();
         #endregion
 
         public ImageCroppingViewModel() {
            
         }
 
-        private List<byte[]> ConvertListToByte() {
-            List<byte[]> result = new List<byte[]>();
-            foreach (var value in UpdatedEncodedImages) {
-                result.Add(Convert.FromBase64String(value));
-            }
-            return result;
-        }
+        //private List<byte[]> ConvertListToByte() {
+        //    List<byte[]> result = new List<byte[]>();
+        //    foreach (var value in UpdatedEncodedImages) {
+        //        result.Add(Convert.FromBase64String(value));
+        //    }
+        //    return result;
+        //}
 
 
         public Image ImageFromBase64(string base64picture) {
@@ -74,10 +74,8 @@ namespace EVSlideShow.Core.ViewModels {
         }
 
         public async Task<bool> SendImagesToServerAsync() {
-            // turn the list into byte[]
             EVClient client = new EVClient();
-            return await client.SendImages(this.User.AuthToken, this.SlideShowNumber, ConvertListToByte());
-
+            return await client.SendImages(this.User.AuthToken, this.SlideShowNumber, EncodedBytes);
         }
     }
 }

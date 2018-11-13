@@ -9,28 +9,17 @@ namespace EVSlideShow.Core.Components.Helpers {
         public static async Task<PermissionStatus> GetPermissionStatusForPhotoLibraryAsync() {
             try {
                 PermissionStatus status = PermissionStatus.Granted;
-                // need access to media library, photos, and storage
-                var mediaLibraryStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.MediaLibrary);
+                // need access to photos
                 var photosStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Photos);
-                var externalStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
-                
-                if (mediaLibraryStatus != PermissionStatus.Granted || photosStatus != PermissionStatus.Granted || externalStatus != PermissionStatus.Granted) {
-                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.MediaLibrary)) {
-                        Console.WriteLine("NEED PERMISSION ANDROID");
-                    }
 
+                if (photosStatus != PermissionStatus.Granted) {
                     // request permission
-                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.MediaLibrary, Permission.Photos, Permission.Storage);
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Photos);
 
                     //Best practice to always check that the key exists
-                    if (results.ContainsKey(Permission.MediaLibrary))
-                        status = results[Permission.MediaLibrary];
-
                     if (results.ContainsKey(Permission.Photos))
                         status = results[Permission.Photos];
 
-                    if (results.ContainsKey(Permission.Storage))
-                        status = results[Permission.Storage];
                 }
 
                 return status;
