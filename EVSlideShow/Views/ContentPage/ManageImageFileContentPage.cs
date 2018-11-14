@@ -378,10 +378,14 @@ namespace EVSlideShow.Core.Views {
                 var action = await DisplayActionSheet("Delete Photos", "Cancel", "Delete All", "Delete by #");
                 switch (action) {
                     case "Delete All":
-
+                        if (await this.ViewModel.DeleteAll()) {
+                            // successful
+                        } else {
+                            // unsuccessful
+                        }
                         break;
                     case "Delete by #":
-
+                        // TODO: display async pop up input
                         break;
                 }
             }

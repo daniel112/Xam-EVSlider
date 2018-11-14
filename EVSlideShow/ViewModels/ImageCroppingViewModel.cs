@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
+using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels.Base;
 using Xamarin.Forms;
 
@@ -55,15 +56,6 @@ namespace EVSlideShow.Core.ViewModels {
            
         }
 
-        //private List<byte[]> ConvertListToByte() {
-        //    List<byte[]> result = new List<byte[]>();
-        //    foreach (var value in UpdatedEncodedImages) {
-        //        result.Add(Convert.FromBase64String(value));
-        //    }
-        //    return result;
-        //}
-
-
         public Image ImageFromBase64(string base64picture) {
             byte[] imageBytes = Convert.FromBase64String(base64picture); return new Image { Source = ImageSource.FromStream(() => new MemoryStream(imageBytes)) };
         }
@@ -74,8 +66,8 @@ namespace EVSlideShow.Core.ViewModels {
         }
 
         public async Task<bool> SendImagesToServerAsync() {
-            EVClient client = new EVClient();
-            return await client.SendImages(this.User.AuthToken, this.SlideShowNumber, EncodedBytes);
+            ImageNetworkManager manager = new ImageNetworkManager();
+            return await manager.SendImages(this.User.AuthToken, this.SlideShowNumber, EncodedBytes);
         }
     }
 }

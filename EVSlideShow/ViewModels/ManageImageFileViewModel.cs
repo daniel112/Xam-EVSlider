@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EVSlideShow.Core.Models;
+using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels.Base;
 
 namespace EVSlideShow.Core.ViewModels {
@@ -20,6 +22,12 @@ namespace EVSlideShow.Core.ViewModels {
         public int SlideShowNumber = 1;
 
         public ManageImageFileViewModel() {
+        }
+
+        public async Task<bool> DeleteAll() {
+            var manager = new ImageNetworkManager();
+            return await manager.DeleteAll(SlideShowNumber, User.AuthToken);
+
         }
     }
 }

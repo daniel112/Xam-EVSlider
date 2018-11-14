@@ -20,13 +20,13 @@
     <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Components\" />
-    <Folder Include="AppSettings\" />
     <Folder Include="Network\" />
     <Folder Include="Constants\" />
     <Folder Include="Views\ContentViews\" />
     <Folder Include="Components\CustomRenderers\" />
     <Folder Include="Components\Helpers\" />
     <Folder Include="Components\Common\DependencyInterface\Helpers\" />
+    <Folder Include="Network\Managers\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="name.png" />
@@ -40,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\ContentPage\TestContentPage.cs" />
+    <Compile Remove="Network\EVClient.cs" />
   </ItemGroup>
 </Project>

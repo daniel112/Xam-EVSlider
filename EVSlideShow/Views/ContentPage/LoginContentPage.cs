@@ -5,6 +5,7 @@ using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
+using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
@@ -292,10 +293,10 @@ namespace EVSlideShow.Core.Views {
         private async void ValidateLoginAsync() {
             //Application.Current.MainPage = new BaseNavigationPage(new ManageImageFileContentPage());
             if (!String.IsNullOrEmpty(this.TextUsername) && !String.IsNullOrEmpty(this.TextPassword)) {
-                EVClient client = new EVClient();
+                UserNetworkManager manager = new UserNetworkManager();
 
                 this.CustomActivityIndicator.IsRunning = true;
-                User user = await client.LoginAsync(this.TextUsername, this.TextPassword);
+                User user = await manager.LoginAsync(this.TextUsername, this.TextPassword);
                 if (user.Success && String.IsNullOrEmpty(user.Message)) {
                     // save user login data to app data
                     Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(user);
@@ -316,9 +317,9 @@ namespace EVSlideShow.Core.Views {
 
         private async void RecoverEmailAsync() {
             if (this.TextEmail.Trim() != "") {
-                EVClient client = new EVClient();
+                UserNetworkManager manager = new UserNetworkManager();
                 this.CustomActivityIndicator.IsRunning = true;
-                bool success = await client.SendEmailForRecovery(this.TextEmail.Trim());
+                bool success = await manager.SendEmailForRecovery(this.TextEmail.Trim());
                 if (success) {
                     await DisplayAlert("Password Recovery", $"If an account exists with that email, you will receive an email within a few minutes", "OK");
                 } else {

@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using EVSlideShow.Core.Models;
 using Newtonsoft.Json;
 
-namespace EVSlideShow.Core.Network {
-    public class EVClient : BaseClient {
-
+namespace EVSlideShow.Core.Network.Managers {
+    public class UserNetworkManager : BaseClient  {
         #region Variables
         private const string baseURL = "http://www.evslideshow.com/";
+
         #endregion
 
         #region Initialization
-        public EVClient() {
-        }
+
         #endregion
 
         #region Private API
@@ -27,7 +22,6 @@ namespace EVSlideShow.Core.Network {
         #endregion
 
         #region Public API
-
         public async Task<User> RegisterUser(User user) {
             User output = new User();
             var method = "users";
@@ -86,6 +80,12 @@ namespace EVSlideShow.Core.Network {
             return user;
         }
 
+        public async Task<bool> SendEmailForRecovery(string email) {
+            // /password_recovery?email=
+            var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + $"password_recovery?email={email}", string.Empty)));
+            return getResponse.IsSuccessStatusCode;
+        }
+
         public async Task<List<User>> GetAllUsers() {
             var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
             var users = new List<User>();
@@ -95,43 +95,6 @@ namespace EVSlideShow.Core.Network {
             }
             return users;
         }
-
-        public async Task<bool> SendEmailForRecovery(string email) {
-            // /password_recovery?email=
-            var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + $"password_recovery?email={email}", string.Empty)));
-            return getResponse.IsSuccessStatusCode;
-        }
-
-
-        public async Task<bool> SendImages(string userAuth, int slideshowNum, List<byte[]> imageDatas) {
-
-            var method = $"images_upload_v2?slideshow_number={slideshowNum}";
-            var uri = new Uri(string.Format(baseURL + method, string.Empty));
-
-            MultipartFormDataContent form = new MultipartFormDataContent();
-            for (int i = 0; i <= imageDatas.Count - 1; i++) {
-                string fileName = $"image{i}.jpg";
-                var imageContent = new ByteArrayContent(imageDatas[i], 0, imageDatas[i].Length);
-                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                form.Add(imageContent, "images[]", fileName);
-            }
-
-                
-            Client.DefaultRequestHeaders.Add("Authorization", userAuth);
-
-            var response = await Client.PostAsync(uri, form);
-
-            if (response.IsSuccessStatusCode) {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("SUCCESS");
-                return true;
-            } else {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"ERROR: {jsonResult}");
-                return false;
-            }
-        }
-
         #endregion
 
         #region Delegates

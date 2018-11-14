@@ -5,6 +5,7 @@ using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network;
+using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.ViewModels.Base;
 using EVSlideShow.Core.Views.Base;
@@ -354,9 +355,9 @@ namespace EVSlideShow.Core.Views {
 
         private async void RegisterAccountAsync() {
             if (this.ViewModel.AllInputFilledOut()) {
-                EVClient client = new EVClient();
+                UserNetworkManager manager = new UserNetworkManager();
                 this.CustomActivityIndicator.IsRunning = true;
-                User user = await client.RegisterUser(this.ViewModel.GenerateUserFromInput());
+                User user = await manager.RegisterUser(this.ViewModel.GenerateUserFromInput());
                 if (user.Success) {
                     await DisplayAlert("Success", $"Your account has been created", "Continue");
                     // save user login data to app data
