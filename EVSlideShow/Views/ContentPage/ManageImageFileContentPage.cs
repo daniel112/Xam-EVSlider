@@ -9,10 +9,11 @@ using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
 using Plugin.Permissions.Abstractions;
+using Rg.Plugins.Popup.Extensions;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
-    public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate {
+    public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate, IInputButtonPopupPage {
 
         #region Variables
         private ScrollView _ScrollViewContent;
@@ -306,7 +307,6 @@ namespace EVSlideShow.Core.Views {
 
         }
         private void MessagingCenterUnsubscribe() {
-            // TODO: havent found a good place to unsubscribe, but it shouldnt matter in this app
             MessagingCenter.Unsubscribe<List<string>>(this, MessagingKeys.DidFinishSelectingImages);
         }
 
@@ -378,18 +378,33 @@ namespace EVSlideShow.Core.Views {
                 var action = await DisplayActionSheet("Delete Photos", "Cancel", "Delete All", "Delete by #");
                 switch (action) {
                     case "Delete All":
+                        // TODO: put loading indicator
                         if (await this.ViewModel.DeleteAll()) {
                             // successful
+                            await DisplayAlert("Success", $"All photos for Slideshow #{ViewModel.SlideShowNumber} have been deleted", "Ok");
+
                         } else {
                             // unsuccessful
+                            await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
+
                         }
                         break;
                     case "Delete by #":
-                        // TODO: display async pop up input
+                        var popupPage = new InputButtonPopupPage("Enter slide number(s) separated by commas", "Delete") {
+                            PageDelegate = this
+                        };
+                        await Navigation.PushPopupAsync(popupPage);
                         break;
                 }
             }
         }
+
+
+        async void IInputButtonPopupPage.DidTapButton(string text) {
+            Console.WriteLine(text);
+            await ViewModel.DeleteByID(text);
+        }
+
         #endregion
 
 

@@ -49,6 +49,22 @@ namespace EVSlideShow.Core.Network.Managers {
             }
         }
 
+        public async Task<bool> DeletePhotosByID(string ids, int slideshowNum, string userAuth) {
+        
+            var method = $"/delete_images?order_ids={ids}&slideshow_number={slideshowNum}";
+            var uri = new Uri(string.Format(baseURL + method, string.Empty));
+
+            Client.DefaultRequestHeaders.Add("Authorization", userAuth);
+
+            var response = await Client.DeleteAsync(uri);
+            if (response.IsSuccessStatusCode) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
         public async Task<bool> DeleteAll(int slideshowNum, string userAuth) {
 
             var method = $"delete_images?all=true&slideshow_number={slideshowNum}";

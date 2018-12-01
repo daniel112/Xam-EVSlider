@@ -104,7 +104,6 @@ namespace EVSlideShow.Core.Views {
         }
 
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
-            // TODO: Possibly look into disabling orientation on this page
         }
         #endregion
 
@@ -174,7 +173,7 @@ namespace EVSlideShow.Core.Views {
                 var bytes = memoryStream.ToArray();
 
                 var imageHelper = DependencyService.Get<IImageHelper>();
-                bytes = imageHelper.ResizeImage(bytes, 1200, 700);
+                bytes = imageHelper.ResizeImage(bytes, 1200, 720);
                 this.ViewModel.EncodedBytes.Add(bytes);
             }
 
@@ -217,10 +216,14 @@ namespace EVSlideShow.Core.Views {
 
         void Editor_EndReset(object sender, EndResetEventArgs args) {
             this.ButtonCropSave.Text = "Crop";
-            Editor.ToggleCropping(12, 7);
+            if (this.ViewModel.User.EVType == EVTypeName.TeslaModel3) {
+                Editor.ToggleCropping(5, 3);
+            } else {
+                Editor.ToggleCropping(12, 7.2f);
+            }
         }
         private void Editor_ImageLoaded(object sender, ImageLoadedEventArgs args) {
-            Editor.ToggleCropping(12, 7);
+            Editor.ToggleCropping(12, 7.2f);
             this.ButtonCropSave.Text = "Crop";
         }
 

@@ -2,6 +2,14 @@
 using Newtonsoft.Json;
 
 namespace EVSlideShow.Core.Models {
+
+    public static class EVTypeName {
+        public const string TeslaModelS = "Tesla Model S";
+        public const string TeslaModelX = "Tesla Model X";
+        public const string TeslaModel3 = "Tesla Model 3";
+
+    }
+
     [Serializable]
     public class User : BaseModel {
 

@@ -1,10 +1,8 @@
 ﻿using System;
 using EVSlideShow.Core.Common;
-using EVSlideShow.Core.Components.CustomRenderers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
-using EVSlideShow.Core.Views.ContentViews;
 using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using Plugin.Share.Abstractions;
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Linq;
-//using Plugin.Share.Abstractions;
 
 namespace EVSlideShow.Core.Common {
     public sealed class AppTheme {

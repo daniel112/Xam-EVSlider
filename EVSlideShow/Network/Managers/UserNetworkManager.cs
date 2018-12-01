@@ -37,16 +37,22 @@ namespace EVSlideShow.Core.Network.Managers {
             // serialize dict into json string
             string json = JsonConvert.SerializeObject(values);
 
-
-            var response = await Client.PostAsync(uri, new StringContent(json));
-            if (response.IsSuccessStatusCode) {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                output = JsonConvert.DeserializeObject<User>(jsonResult);
-                Console.WriteLine("");
-            } else if (response.StatusCode == (HttpStatusCode)422) {
-                var rawResponse = await response.Content.ReadAsStringAsync();
-                output.Message = rawResponse;
+            try {
+                var response = await Client.PostAsync(uri, new StringContent(json));
+                if (response.IsSuccessStatusCode) {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    output = JsonConvert.DeserializeObject<User>(jsonResult);
+                    Console.WriteLine("");
+                } else if (response.StatusCode == (HttpStatusCode)422) {
+                    var rawResponse = await response.Content.ReadAsStringAsync();
+                    output.Message = rawResponse;
+                }
+            } catch(Exception ex) {
+                Console.WriteLine(ex.Message);
+                output.Message = "Network error, please try again later";
+                output.Success = false;
             }
+
 
             return output;
         }
@@ -64,18 +70,24 @@ namespace EVSlideShow.Core.Network.Managers {
 
             // serialize dict into json string
             string json = JsonConvert.SerializeObject(values);
-            var response = await Client.PostAsync(uri, new StringContent(json));
-
-            if (response.IsSuccessStatusCode) {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                user = JsonConvert.DeserializeObject<User>(jsonResult);
-                user.Success = true;
-            } else {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                user = JsonConvert.DeserializeObject<User>(jsonResult);
+            try {
+                var response = await Client.PostAsync(uri, new StringContent(json));
+                if (response.IsSuccessStatusCode) {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<User>(jsonResult);
+                    user.Success = true;
+                } else {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<User>(jsonResult);
+                    user.Message = "Network error, please try again later";
+                    user.Success = false;
+                }
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
                 user.Message = "Network error, please try again later";
                 user.Success = false;
             }
+           
 
             return user;
         }

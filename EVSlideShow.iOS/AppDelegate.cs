@@ -24,6 +24,7 @@ namespace EVSlideShow.iOS {
             UINavigationBar.Appearance.Translucent = false;
 
             Syncfusion.SfImageEditor.XForms.iOS.SfImageEditorRenderer.Init();
+            Rg.Plugins.Popup.Popup.Init();
 
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
