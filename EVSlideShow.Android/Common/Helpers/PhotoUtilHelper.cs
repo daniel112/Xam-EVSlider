@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Database;
 using Android.Graphics;
@@ -7,6 +9,7 @@ using Android.OS;
 using Android.Provider;
 
 namespace EVSlideShow.Droid.Common.Helpers {
+
     public static class PhotoUtilHelper {
 
         #region Variables
@@ -70,14 +73,58 @@ namespace EVSlideShow.Droid.Common.Helpers {
         private static bool IsGooglePhotosUri(Android.Net.Uri uri) {
             return "com.google.android.apps.photos.content".Equals(uri.Authority);
         }
+
+        private static Android.Media.Orientation GetOrientation(Context context, Android.Net.Uri photoUri) {
+            var cursor = context.ContentResolver.Query(photoUri, new String[] { MediaStore.Images.ImageColumns.Orientation }, null, null, null);
+
+            if (cursor.Count != 1) {
+                cursor.Close();
+                return Android.Media.Orientation.Undefined;
+                //return -1;
+            }
+
+            cursor.MoveToFirst();
+            int orientation = cursor.GetInt(0);
+            cursor.Close();
+            cursor = null;
+
+            switch (orientation) {
+                case 90:
+                    return Android.Media.Orientation.Rotate90;
+                case 180:
+                    return Android.Media.Orientation.Rotate180;
+                case 270:
+                    return Android.Media.Orientation.Rotate270;
+                default:
+                    return Android.Media.Orientation.Normal;
+            }
+
+        }
+
         #endregion
 
         #region Public API
-        public static Bitmap ChangeOrientation(string absolutePath, Bitmap bitmap) {
-            ExifInterface ei = new ExifInterface(absolutePath);
+        public static string UpdateAndConvertURI(Context context, Android.Net.Uri photoUri) {
+            System.IO.Stream stream = context.ContentResolver.OpenInputStream(photoUri);
 
-            int orientation = ei.GetAttributeInt(ExifInterface.TagOrientation, 0);
+            // slow
+            Bitmap bitmap = BitmapFactory.DecodeStream(stream);
+            bitmap = UpdateOrientation(context, photoUri, GetActualPathFromURI(photoUri, context), bitmap);
 
+            MemoryStream memStream = new MemoryStream();
+
+            // slow
+            bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
+
+
+            byte[] bitmapData = memStream.ToArray();
+            // slow
+            return Convert.ToBase64String(bitmapData, Base64FormattingOptions.None);
+        }
+
+        public static Bitmap UpdateOrientation(Context context, Android.Net.Uri photoUri, string absolutePath, Bitmap bitmap) {
+
+            var orientation = (int)GetOrientation(context, photoUri);
             switch (orientation) {
                 case (int)Android.Media.Orientation.Rotate90:
                     return Rotate(bitmap, 90);
@@ -98,6 +145,33 @@ namespace EVSlideShow.Droid.Common.Helpers {
                     return bitmap;
             }
         }
+
+        //[Obsolete("Use UpdateOrientation instead")]
+        //public static Bitmap ChangeOrientation(string absolutePath, Bitmap bitmap) {
+        //    ExifInterface ei = new ExifInterface(absolutePath);
+
+        //    int orientation = ei.GetAttributeInt(ExifInterface.TagOrientation, (int)Orientation.Normal);
+
+        //    switch (orientation) {
+        //        case (int)Android.Media.Orientation.Rotate90:
+        //            return Rotate(bitmap, 90);
+
+        //        case (int)Android.Media.Orientation.Rotate180:
+        //            return Rotate(bitmap, 180);
+
+        //        case (int)Android.Media.Orientation.Rotate270:
+        //            return Rotate(bitmap, 270);
+
+        //        case (int)Android.Media.Orientation.FlipHorizontal:
+        //            return Flip(bitmap, true, false);
+
+        //        case (int)Android.Media.Orientation.FlipVertical:
+        //            return Flip(bitmap, false, true);
+
+        //        default:
+        //            return bitmap;
+        //    }
+        //}
 
         public static string GetActualPathFromURI(Android.Net.Uri uri, Context context) {
             bool isKitKat = Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat;

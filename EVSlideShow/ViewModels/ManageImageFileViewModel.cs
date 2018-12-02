@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels.Base;
+using Xamarin.Forms;
 
 namespace EVSlideShow.Core.ViewModels {
     public class ManageImageFileViewModel : BaseViewModel {
@@ -25,16 +26,17 @@ namespace EVSlideShow.Core.ViewModels {
         public ManageImageFileViewModel() {
         }
 
-        public async Task<bool> DeleteAll() {
+        public async Task<NetworkDebug> DeleteAll() {
             var manager = new ImageNetworkManager();
             return await manager.DeleteAll(SlideShowNumber, User.AuthToken);
 
         }
 
-        public async Task<bool> DeleteByID(string ids) {
+        public async Task<NetworkDebug> DeleteByID(string ids) {
             var manager = new ImageNetworkManager();
             return await manager.DeletePhotosByID(ids, SlideShowNumber, User.AuthToken);
 
         }
+
     }
 }

@@ -15,6 +15,15 @@ namespace EVSlideShow.Core.Views.ContentViews {
             }
         }
 
+        public string Message {
+            get {
+                return LabelMessage.Text;
+            }
+            set {
+                LabelMessage.Text = value;
+            }
+        }
+
         private ActivityIndicator _ActivityIndicator;
         private ActivityIndicator ActivityIndicator {
             get {
@@ -33,6 +42,22 @@ namespace EVSlideShow.Core.Views.ContentViews {
             }
         }
 
+        private Label _LabelMessage;
+        private Label LabelMessage {
+            get {
+                if (_LabelMessage == null) {
+                    _LabelMessage = new Label {
+                        TextColor = Color.White,
+                        FontSize = 15,
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand, 
+                        VerticalOptions = LayoutOptions.Center,
+                    };
+                }
+                return _LabelMessage;
+            }
+        }
         #endregion
 
         #region Initialization
@@ -46,8 +71,9 @@ namespace EVSlideShow.Core.Views.ContentViews {
             VerticalOptions = LayoutOptions.FillAndExpand;
             HorizontalOptions = LayoutOptions.FillAndExpand;
             this.IsVisible = false;
-            this.BackgroundColor = Color.Black.MultiplyAlpha(0.4);
-            this.Content = this.ActivityIndicator;
+            this.BackgroundColor = Color.Black.MultiplyAlpha(0.5);
+
+            this.Content = new StackLayout { VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { ActivityIndicator, LabelMessage } };
         }
         #endregion
 

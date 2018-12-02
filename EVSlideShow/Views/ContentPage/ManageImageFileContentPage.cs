@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
 using EVSlideShow.Core.Components.Helpers;
@@ -228,7 +229,16 @@ namespace EVSlideShow.Core.Views {
                 return _ToolbarUser;
             }
         }
-        
+
+        private DimActivityIndicatorContentView _CustomActivityIndicator;
+        private DimActivityIndicatorContentView CustomActivityIndicator {
+            get {
+                if (_CustomActivityIndicator == null) {
+                    _CustomActivityIndicator = new DimActivityIndicatorContentView();
+                }
+                return _CustomActivityIndicator;
+            }
+        }
         #endregion
 
         #region Initialization
@@ -296,26 +306,52 @@ namespace EVSlideShow.Core.Views {
                 }
             };
 
-            Content = this.ScrollViewContent;
+            RelativeLayout relativelayout = new RelativeLayout();
+
+            // stack
+            relativelayout.Children.Add(ScrollViewContent, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            // loading
+            relativelayout.Children.Add(CustomActivityIndicator, Constraint.Constant(0), Constraint.Constant(0),
+            Constraint.RelativeToParent((parent) => {
+                return parent.Width;
+            }), Constraint.RelativeToParent((parent) => {
+                return parent.Height;
+            }));
+
+            Content = relativelayout;
 
         }
 
         #region MessagingCenter
 
         private void MessagingCenterSubscribe() {
-            MessagingCenter.Subscribe<List<string>>(this, MessagingKeys.DidFinishSelectingImages, MessagingCenter_SendToCropView);
+            MessagingCenter.Subscribe<object, object>(this, MessagingKeys.DidFinishSelectingImages, MessagingCenter_SendToCropViewAsync);
+            MessagingCenter.Subscribe<object>(this, MessagingKeys.ShowLoadingIndicator, MessagingCenter_ShowLoadingIndicator);
 
         }
+
         private void MessagingCenterUnsubscribe() {
             MessagingCenter.Unsubscribe<List<string>>(this, MessagingKeys.DidFinishSelectingImages);
+            MessagingCenter.Unsubscribe<List<string>>(this, MessagingKeys.ShowLoadingIndicator);
+
         }
 
-        void MessagingCenter_SendToCropView(object obj) {
+        void MessagingCenter_ShowLoadingIndicator(object sender) {
+            if (!CustomActivityIndicator.IsRunning) { this.CustomActivityIndicator.IsRunning = true; }
+            CustomActivityIndicator.Message = "Compressing image(s)...";
+        }
+
+        async void MessagingCenter_SendToCropViewAsync(object sender, object obj) {
+
             List<string> encodedImages = (List<string>)obj;
-            Console.WriteLine($"{encodedImages.Count} images to crop");
-            this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
-
-
+            await this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
+            if (CustomActivityIndicator.IsRunning) { this.CustomActivityIndicator.IsRunning = false; }
 
         }
         #endregion
@@ -323,7 +359,8 @@ namespace EVSlideShow.Core.Views {
         #region Buttons
 
         void ButtonSubscribe_Clicked(object sender, EventArgs e) {
-
+        
+            DisplayAlert("Not implemented", "To be implemented", "Ok");
 
         }
 
@@ -361,6 +398,8 @@ namespace EVSlideShow.Core.Views {
 
         #region Delegates
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
+           
+           CustomActivityIndicator.Message = "";
             if (buttonText == "Upload") {
                 if (!this.ViewModel.User.IsSubscribed) {
                     await DisplayAlert("No Subscription Found", "Your account is not currently subscribed. Only subscribers have access to photo uploads. You can subscribe by hitting the 'Subscribe' button", "Ok");
@@ -375,20 +414,24 @@ namespace EVSlideShow.Core.Views {
                 }
 
             } else {
-                var action = await DisplayActionSheet("Delete Photos", "Cancel", "Delete All", "Delete by #");
+                var action = await DisplayActionSheet("Delete Photos", "Cancel", null, "Delete by #", "Delete All");
                 switch (action) {
                     case "Delete All":
-                        // TODO: put loading indicator
-                        if (await this.ViewModel.DeleteAll()) {
+                        this.CustomActivityIndicator.IsRunning = true;
+                        var networkResult = await this.ViewModel.DeleteAll();
+                        if (networkResult.Success) {
                             // successful
                             await DisplayAlert("Success", $"All photos for Slideshow #{ViewModel.SlideShowNumber} have been deleted", "Ok");
 
                         } else {
                             // unsuccessful
                             await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
-
                         }
+                        // TODO: DEBUGGING
+                        await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
+                        this.CustomActivityIndicator.IsRunning = false;
                         break;
+
                     case "Delete by #":
                         var popupPage = new InputButtonPopupPage("Enter slide number(s) separated by commas", "Delete") {
                             PageDelegate = this
@@ -396,13 +439,26 @@ namespace EVSlideShow.Core.Views {
                         await Navigation.PushPopupAsync(popupPage);
                         break;
                 }
+
+
             }
         }
 
 
         async void IInputButtonPopupPage.DidTapButton(string text) {
             Console.WriteLine(text);
-            await ViewModel.DeleteByID(text);
+            this.CustomActivityIndicator.IsRunning = true;
+            var networkResult = await this.ViewModel.DeleteByID(text);
+            if (networkResult.Success) {
+                //successful
+                await DisplayAlert("Success", $"Image ID(s):{text} have been deleted", "Ok");
+            } else {
+                // unsuccessful
+                await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
+            }
+            await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
+            this.CustomActivityIndicator.IsRunning = false;
+
         }
 
         #endregion

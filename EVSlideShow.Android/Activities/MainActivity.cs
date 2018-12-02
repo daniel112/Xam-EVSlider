@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using EVSlideShow.Core.Constants;
 using Android.Media;
 using EVSlideShow.Droid.Common.Helpers;
+using System.Threading.Tasks;
 
 namespace EVSlideShow.Droid {
     [Activity(Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
@@ -44,7 +45,7 @@ namespace EVSlideShow.Droid {
             LoadApplication(new App());
         }
 
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data) {
+        protected override async void OnActivityResult(int requestCode, Result resultCode, Intent data) {
             base.OnActivityResult(requestCode, resultCode, data);
 
             if (requestCode == OPENGALLERYCODE && resultCode == Result.Ok) {
@@ -52,24 +53,25 @@ namespace EVSlideShow.Droid {
                 List<string> images = new List<string>();
 
                 if (data != null) {
-
                     ClipData clipData = data.ClipData;
                     // if clipData exists, it means there are more than 1 image
+
                     if (clipData != null) {
+                        // we need to send this message so the view can show loading
+                        MessagingCenter.Send<object>(this, MessagingKeys.ShowLoadingIndicator);
+
                         for (int i = 0; i < clipData.ItemCount; i++) {
                             if (i > 5) { break; } // limit to 5 images
                             try {
                                 ClipData.Item item = clipData.GetItemAt(i);
                                 var uri = item.Uri;
-                                System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
-                                Bitmap bitmap = BitmapFactory.DecodeStream(stream);
-                                bitmap = PhotoUtilHelper.ChangeOrientation(PhotoUtilHelper.GetActualPathFromURI(uri, this), bitmap);
 
-                                MemoryStream memStream = new MemoryStream();
-                                bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
-                                byte[] bitmapData = memStream.ToArray();
-                                var base64String = Convert.ToBase64String(bitmapData, Base64FormattingOptions.None);
-                                images.Add(base64String);
+                                System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
+
+                                await Task.Run(() => {                              
+                                    images.Add(PhotoUtilHelper.UpdateAndConvertURI(this, uri));
+                                });
+
                             } catch (Exception ex) {
                                 Console.WriteLine(ex.Message);
                             }
@@ -80,14 +82,10 @@ namespace EVSlideShow.Droid {
                         try {
                             var uri = data.Data;
                             System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
-                            Bitmap bitmap = BitmapFactory.DecodeStream(stream);
-                            bitmap = PhotoUtilHelper.ChangeOrientation(PhotoUtilHelper.GetActualPathFromURI(uri, this), bitmap);
 
-                            MemoryStream memStream = new MemoryStream();
-                            bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
-                            byte[] bitmapData = memStream.ToArray();
-                            var base64String = Convert.ToBase64String(bitmapData, Base64FormattingOptions.None);
-                            images.Add(base64String);
+                            await Task.Run(() => {
+                                images.Add(PhotoUtilHelper.UpdateAndConvertURI(this, uri));
+                            });
                         } catch (Exception ex) {
                             Console.WriteLine(ex.Message);
                         }
@@ -95,7 +93,7 @@ namespace EVSlideShow.Droid {
                     }
 
                     // post the message with the list attached
-                    MessagingCenter.Send(images, MessagingKeys.DidFinishSelectingImages);
+                    MessagingCenter.Send<object, object>(this, MessagingKeys.DidFinishSelectingImages, images);
                 }
             }
         }
@@ -104,8 +102,7 @@ namespace EVSlideShow.Droid {
         #endregion
 
         #region Private API
-        
-       
+
         #endregion
 
 

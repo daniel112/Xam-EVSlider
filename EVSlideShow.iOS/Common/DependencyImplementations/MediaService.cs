@@ -72,7 +72,7 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                     });
             }
             // post the message with the list attached
-            MessagingCenter.Send(encodedImages, MessagingKeys.DidFinishSelectingImages);
+            MessagingCenter.Send<object, object>(this, MessagingKeys.DidFinishSelectingImages, encodedImages);
 
         }
 
