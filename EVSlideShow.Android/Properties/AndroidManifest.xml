@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.0" package="com.EvSlideShow" android:versionCode="2">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0.0" package="com.EvSlideShow" android:versionCode="3">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="27" />
 	<application android:name="MainApplication" android:label="EVSlideShow" android:icon="@mipmap/ic_launcher_round" android:roundIcon="@mipmap/ic_launcher_round" android:appCategory="maps" android:theme="@style/MyTheme.Splash" android:hardwareAccelerated="false" android:largeHeap="true"></application>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

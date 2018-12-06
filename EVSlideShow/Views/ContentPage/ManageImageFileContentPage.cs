@@ -350,7 +350,7 @@ namespace EVSlideShow.Core.Views {
         }
 
         async void MessagingCenter_SendToCropViewAsync(object sender, object obj) {
-        
+
             List<string> encodedImages = (List<string>)obj;
             if (encodedImages.Count == 0) return; // no images went through, bug
 
@@ -364,38 +364,36 @@ namespace EVSlideShow.Core.Views {
 
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
 
-            //DisplayAlert("Not implemented", "To be implemented", "Ok");
+            var billing = CrossInAppBilling.Current;
             try {
-                var productId = "EV_Slide_Show_Subscription";
-
-                var connected = await CrossInAppBilling.Current.ConnectAsync();
+                var productId = "evslideshow.subscription.single_slideshow";//"EV_Slide_Show_Subscription";
+               //billing.InTestingMode = true;
+                var connected = await billing.ConnectAsync();
 
                 if (!connected) {
                     //Couldn't connect to billing, could be offline, alert user
                     return;
                 }
 
-                var items = await CrossInAppBilling.Current.GetProductInfoAsync(ItemType.Subscription, productId);
+                var items = await billing.GetProductInfoAsync(ItemType.Subscription, productId);
 
-                foreach (var item in items) {
-                    //item info here.
-                }
                 //try to purchase item
-                //var purchase = await CrossInAppBilling.Current.PurchaseAsync(productId, ItemType.Subscription, "apppayload");
-                //if (purchase == null) {
-                //    //Not purchased, alert the user
-                //} else {
-                //    //Purchased, save this information
-                //    var id = purchase.Id;
-                //    var token = purchase.PurchaseToken;
-                //    var state = purchase.State;
-                //}
+                var purchase = await billing.PurchaseAsync(productId, ItemType.Subscription, "apppayload");
+                if (purchase == null) {
+                    //Not purchased, alert the user
+                } else {
+                    var id = purchase.Id;
+                    var token = purchase.PurchaseToken;
+                    var state = purchase.State;
+                }
+            } catch (InAppBillingPurchaseException purchaseEx) {
+                //Billing Exception handle this based on the type
+                await DisplayAlert("Error", $"Error in {purchaseEx.Message}", "Ok");
             } catch (Exception ex) {
-                Console.WriteLine(ex.Message);
-                //Something bad has occurred, alert user
+                await DisplayAlert("Error", $"Issue connecting: {ex.Message}", "Ok");
             } finally {
                 //Disconnect, it is okay if we never connected
-                await CrossInAppBilling.Current.DisconnectAsync();
+                await billing.DisconnectAsync();
             }
         }
 
@@ -433,8 +431,8 @@ namespace EVSlideShow.Core.Views {
 
         #region Delegates
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
-           
-           CustomActivityIndicator.Message = "";
+
+            CustomActivityIndicator.Message = "";
             if (buttonText == "Upload") {
                 if (!this.ViewModel.User.IsSubscribed) {
                     await DisplayAlert("No Subscription Found", "Your account is not currently subscribed. Only subscribers have access to photo uploads. You can subscribe by hitting the 'Subscribe' button", "Ok");

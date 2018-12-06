@@ -30,6 +30,7 @@
     <Folder Include="Components\Helpers\" />
     <Folder Include="Components\Common\DependencyInterface\Helpers\" />
     <Folder Include="Network\Managers\" />
+    <Folder Include="Components\Managers\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="name.png" />
