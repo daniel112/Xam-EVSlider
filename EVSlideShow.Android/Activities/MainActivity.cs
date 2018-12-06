@@ -18,6 +18,7 @@ using EVSlideShow.Core.Constants;
 using Android.Media;
 using EVSlideShow.Droid.Common.Helpers;
 using System.Threading.Tasks;
+using Plugin.InAppBilling;
 
 namespace EVSlideShow.Droid {
     [Activity(Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
@@ -37,6 +38,7 @@ namespace EVSlideShow.Droid {
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity = this;
 
             App.DisplayScreenWidth = (double)Resources.DisplayMetrics.WidthPixels / (double)Resources.DisplayMetrics.Density;
             App.DisplayScreenHeight = (double)Resources.DisplayMetrics.HeightPixels / (double)Resources.DisplayMetrics.Density;
@@ -47,6 +49,7 @@ namespace EVSlideShow.Droid {
 
         protected override async void OnActivityResult(int requestCode, Result resultCode, Intent data) {
             base.OnActivityResult(requestCode, resultCode, data);
+            InAppBillingImplementation.HandleActivityResult(requestCode, resultCode, data);
 
             if (requestCode == OPENGALLERYCODE && resultCode == Result.Ok) {
 

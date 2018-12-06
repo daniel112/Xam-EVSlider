@@ -9,6 +9,8 @@ using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels;
 using EVSlideShow.Core.Views.Base;
 using EVSlideShow.Core.Views.ContentViews;
+using Plugin.InAppBilling;
+using Plugin.InAppBilling.Abstractions;
 using Plugin.Permissions.Abstractions;
 using Rg.Plugins.Popup.Extensions;
 using Xamarin.Forms;
@@ -187,7 +189,7 @@ namespace EVSlideShow.Core.Views {
                         Margin = new Thickness(0, 30, 0, 0),
 
                     };
-                    _ButtonSubscribe.Clicked += ButtonSubscribe_Clicked;
+                    _ButtonSubscribe.Clicked += ButtonSubscribe_ClickedAsync;
                     _ButtonSubscribe.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily_Bold);
 
                 }
@@ -348,8 +350,10 @@ namespace EVSlideShow.Core.Views {
         }
 
         async void MessagingCenter_SendToCropViewAsync(object sender, object obj) {
-
+        
             List<string> encodedImages = (List<string>)obj;
+            if (encodedImages.Count == 0) return; // no images went through, bug
+
             await this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
             if (CustomActivityIndicator.IsRunning) { this.CustomActivityIndicator.IsRunning = false; }
 
@@ -358,10 +362,41 @@ namespace EVSlideShow.Core.Views {
 
         #region Buttons
 
-        void ButtonSubscribe_Clicked(object sender, EventArgs e) {
-        
-            DisplayAlert("Not implemented", "To be implemented", "Ok");
+        async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
 
+            //DisplayAlert("Not implemented", "To be implemented", "Ok");
+            try {
+                var productId = "EV_Slide_Show_Subscription";
+
+                var connected = await CrossInAppBilling.Current.ConnectAsync();
+
+                if (!connected) {
+                    //Couldn't connect to billing, could be offline, alert user
+                    return;
+                }
+
+                var items = await CrossInAppBilling.Current.GetProductInfoAsync(ItemType.Subscription, productId);
+
+                foreach (var item in items) {
+                    //item info here.
+                }
+                //try to purchase item
+                //var purchase = await CrossInAppBilling.Current.PurchaseAsync(productId, ItemType.Subscription, "apppayload");
+                //if (purchase == null) {
+                //    //Not purchased, alert the user
+                //} else {
+                //    //Purchased, save this information
+                //    var id = purchase.Id;
+                //    var token = purchase.PurchaseToken;
+                //    var state = purchase.State;
+                //}
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                //Something bad has occurred, alert user
+            } finally {
+                //Disconnect, it is okay if we never connected
+                await CrossInAppBilling.Current.DisconnectAsync();
+            }
         }
 
         async void ToolbarUser_ClickedAsync(object sender, EventArgs e) {
