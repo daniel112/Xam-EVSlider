@@ -146,32 +146,6 @@ namespace EVSlideShow.Droid.Common.Helpers {
             }
         }
 
-        //[Obsolete("Use UpdateOrientation instead")]
-        //public static Bitmap ChangeOrientation(string absolutePath, Bitmap bitmap) {
-        //    ExifInterface ei = new ExifInterface(absolutePath);
-
-        //    int orientation = ei.GetAttributeInt(ExifInterface.TagOrientation, (int)Orientation.Normal);
-
-        //    switch (orientation) {
-        //        case (int)Android.Media.Orientation.Rotate90:
-        //            return Rotate(bitmap, 90);
-
-        //        case (int)Android.Media.Orientation.Rotate180:
-        //            return Rotate(bitmap, 180);
-
-        //        case (int)Android.Media.Orientation.Rotate270:
-        //            return Rotate(bitmap, 270);
-
-        //        case (int)Android.Media.Orientation.FlipHorizontal:
-        //            return Flip(bitmap, true, false);
-
-        //        case (int)Android.Media.Orientation.FlipVertical:
-        //            return Flip(bitmap, false, true);
-
-        //        default:
-        //            return bitmap;
-        //    }
-        //}
 
         public static string GetActualPathFromURI(Android.Net.Uri uri, Context context) {
             bool isKitKat = Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Kitkat;

@@ -69,8 +69,6 @@ namespace EVSlideShow.Droid {
                                 ClipData.Item item = clipData.GetItemAt(i);
                                 var uri = item.Uri;
 
-                                System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
-
                                 await Task.Run(() => {                              
                                     images.Add(PhotoUtilHelper.UpdateAndConvertURI(this, uri));
                                 });
@@ -83,9 +81,8 @@ namespace EVSlideShow.Droid {
                     } else {
 
                         try {
+                            MessagingCenter.Send<object>(this, MessagingKeys.ShowLoadingIndicator);
                             var uri = data.Data;
-                            System.IO.Stream stream = ContentResolver.OpenInputStream(uri);
-
                             await Task.Run(() => {
                                 images.Add(PhotoUtilHelper.UpdateAndConvertURI(this, uri));
                             });
