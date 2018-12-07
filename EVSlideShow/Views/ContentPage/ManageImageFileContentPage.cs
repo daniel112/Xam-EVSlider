@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EVSlideShow.Core.Common;
 using EVSlideShow.Core.Components.Common.DependencyInterface;
 using EVSlideShow.Core.Components.Helpers;
+using EVSlideShow.Core.Components.Managers;
 using EVSlideShow.Core.Constants;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.ViewModels;
@@ -364,42 +365,45 @@ namespace EVSlideShow.Core.Views {
 
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
 
-            var billing = CrossInAppBilling.Current;
-            try {
-                var productId = "evslideshow.subscription.single_slideshow";//"EV_Slide_Show_Subscription";
-               //billing.InTestingMode = true;
-                var connected = await billing.ConnectAsync();
-
-                if (!connected) {
-                    //Couldn't connect to billing, could be offline, alert user
+            if (!ViewModel.User.IsSubscribed) {
+                // needs subscribe to single first
+                var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
+                if (product.Success) {
+                    // TODO: Display information about the product + confirmation view
+                    Console.WriteLine(product.Product.Name);
+                    Console.WriteLine(product.Product.Description);
+                    Console.WriteLine(product.Product.LocalizedPrice);
+                } else {
+                    if (!String.IsNullOrEmpty(product.Message)) {
+                        await DisplayAlert("Error", product.Message, "Ok");
+                    } else {
+                        await DisplayAlert("Error", "Oops, something went wrong. Please try again later.", "Ok");
+                    }
                     return;
                 }
-
-                var items = await billing.GetProductInfoAsync(ItemType.Subscription, productId);
-
-                //try to purchase item
-                var purchase = await billing.PurchaseAsync(productId, ItemType.Subscription, "apppayload");
-                if (purchase == null) {
-                    //Not purchased, alert the user
+            } else if(!ViewModel.User.HasMultipleSubscription) {
+                // they already have single so they can opt for multiple
+                var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
+                if (product.Success) {
+                    // TODO: Display information about the product + confirmation view
+                    Console.WriteLine(product.Product.Name);
+                    Console.WriteLine(product.Product.Description);
+                    Console.WriteLine(product.Product.LocalizedPrice);
                 } else {
-                    var id = purchase.Id;
-                    var token = purchase.PurchaseToken;
-                    var state = purchase.State;
+                    if (!String.IsNullOrEmpty(product.Message)) {
+                        await DisplayAlert("Error", product.Message, "Ok");
+                    } else {
+                        await DisplayAlert("Error", "Oops, something went wrong. Please try again later.", "Ok");
+                    }
+                    return;
                 }
-            } catch (InAppBillingPurchaseException purchaseEx) {
-                //Billing Exception handle this based on the type
-                await DisplayAlert("Error", $"Error in {purchaseEx.Message}", "Ok");
-            } catch (Exception ex) {
-                await DisplayAlert("Error", $"Issue connecting: {ex.Message}", "Ok");
-            } finally {
-                //Disconnect, it is okay if we never connected
-                await billing.DisconnectAsync();
             }
+
         }
 
         async void ToolbarUser_ClickedAsync(object sender, EventArgs e) {
 
-            var option = await DisplayActionSheet("Select Slideshow", "Cancel", null, "Slideshow #1", "Slideshow #2", "Slideshow #3", "Logout");
+            var option = await DisplayActionSheet("Select Slideshow", "Cancel", null, ViewModel.ToolbarOptions);
             switch (option) {
                 case "Slideshow #1":
                     this.ViewModel.SlideShowNumber = 1;

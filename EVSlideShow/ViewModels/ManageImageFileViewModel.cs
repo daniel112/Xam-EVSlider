@@ -23,6 +23,18 @@ namespace EVSlideShow.Core.ViewModels {
         }
         public int SlideShowNumber = 1;
 
+        public string[] ToolbarOptions {
+            get {
+                if (User.HasMultipleSubscription) {
+                    return new string[] { "Slideshow #1", "Slideshow #2", "Slideshow #3", "Logout" };
+                }
+                if (User.IsSubscribed) {
+                    return new string[] { "Slideshow #1", "Logout" };
+                }
+                return new string[] { "Logout" };
+            }
+        }
+
         public ManageImageFileViewModel() {
         }
 

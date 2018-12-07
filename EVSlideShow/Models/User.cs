@@ -35,7 +35,7 @@ namespace EVSlideShow.Core.Models {
         public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
-        public DateTime ?UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("is_subscribe")]
         public bool IsSubscribed { get; set; }
