@@ -364,7 +364,7 @@ namespace EVSlideShow.Core.Views {
         #region Buttons
 
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
-
+            return;
             if (!ViewModel.User.IsSubscribed) {
                 // needs subscribe to single first
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
@@ -464,8 +464,8 @@ namespace EVSlideShow.Core.Views {
                             // unsuccessful
                             await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
                         }
-                        // TODO: DEBUGGING
-                        await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
+                        // DEBUGGING
+                        //await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
                         this.CustomActivityIndicator.IsRunning = false;
                         break;
 
@@ -483,7 +483,9 @@ namespace EVSlideShow.Core.Views {
 
 
         async void IInputButtonPopupPage.DidTapButton(string text) {
-            Console.WriteLine(text);
+            if (string.IsNullOrEmpty(text)) {
+                return;
+            }
             this.CustomActivityIndicator.IsRunning = true;
             var networkResult = await this.ViewModel.DeleteByID(text);
             if (networkResult.Success) {
@@ -493,7 +495,7 @@ namespace EVSlideShow.Core.Views {
                 // unsuccessful
                 await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
             }
-            await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
+            //await DisplayAlert($"{(int)networkResult.StatusCode} : {networkResult.StatusCode.ToString()}", $"JSON message: {networkResult.Message}", "Ok");
             this.CustomActivityIndicator.IsRunning = false;
 
         }
