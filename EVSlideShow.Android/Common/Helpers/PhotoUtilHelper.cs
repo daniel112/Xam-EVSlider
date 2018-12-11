@@ -116,7 +116,7 @@ namespace EVSlideShow.Droid.Common.Helpers {
             // slow
             bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
 
-
+            // TODO: just return this for android
             byte[] bitmapData = memStream.ToArray();
             // slow
             return Convert.ToBase64String(bitmapData, Base64FormattingOptions.None);

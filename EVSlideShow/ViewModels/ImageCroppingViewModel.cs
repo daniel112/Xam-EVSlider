@@ -50,6 +50,8 @@ namespace EVSlideShow.Core.ViewModels {
         public int SlideShowNumber = 1;
 
         public List<byte[]> EncodedBytes = new List<byte[]>();
+        public List<byte[]> UpdatedEncodedBytes = new List<byte[]>();
+
         #endregion
 
         public ImageCroppingViewModel() {
@@ -60,9 +62,14 @@ namespace EVSlideShow.Core.ViewModels {
             byte[] imageBytes = Convert.FromBase64String(base64picture); return new Image { Source = ImageSource.FromStream(() => new MemoryStream(imageBytes)) };
         }
 
+        public Image ImageFromByteArray(byte[] bytes) {
+            return new Image { Source = ImageSource.FromStream(() => new MemoryStream(bytes)) };
+        }
+
         public bool CanLoadNextImage() {
             ImageIndex++;
-            return ImageIndex <= EncodedImages.Count - 1;
+            return ImageIndex <= UpdatedEncodedBytes.Count - 1;
+            //return ImageIndex <= EncodedImages.Count - 1;
         }
 
         public async Task<bool> SendImagesToServerAsync() {

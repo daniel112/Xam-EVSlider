@@ -68,8 +68,9 @@ namespace EVSlideShow.Core.Views {
         private SfImageEditor Editor {
             get {
                 if (_Editor == null) {
-                    _Editor = new SfImageEditor();
-                    _Editor.BackgroundColor = Color.Transparent;
+                    _Editor = new SfImageEditor {
+                        BackgroundColor = Color.Transparent,
+                    };
                     _Editor.ImageLoaded += Editor_ImageLoaded;
                     _Editor.EndReset += Editor_EndReset;
                     _Editor.ToolbarSettings.IsVisible = false;
@@ -96,6 +97,12 @@ namespace EVSlideShow.Core.Views {
             this.Setup();
 
         }
+        public ImageCroppingContentPage(List<byte[]> byteList, User user, int slideshowNumber) {
+            ViewModel.EncodedBytes = byteList;
+            this.ViewModel.SlideShowNumber = slideshowNumber;
+            this.ViewModel.User = user;
+            this.Setup();
+        }
         public ImageCroppingContentPage(List<string> encodedImages, User user, int slideshowNumber) {
             this.ViewModel.EncodedImages = encodedImages;
             this.ViewModel.SlideShowNumber = slideshowNumber;
@@ -111,7 +118,8 @@ namespace EVSlideShow.Core.Views {
         private void Setup() {
 
             this.Title = "Crop Image";
-            Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
+            Editor.Source = this.ViewModel.ImageFromByteArray(this.ViewModel.EncodedBytes[ViewModel.ImageIndex]).Source;
+            //Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
 
 
             Grid grid = new Grid {
@@ -158,23 +166,23 @@ namespace EVSlideShow.Core.Views {
         }
 
         private void LoadNextImage() {
-            Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
+            Editor.Source = this.ViewModel.ImageFromByteArray(this.ViewModel.EncodedBytes[ViewModel.ImageIndex]).Source;
+            //Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
         }
 
 
         #region Events
         private void Editor_ImageSaving(object sender, ImageSavingEventArgs args) {
             var stream = args.Stream;
-
-
+            
             // convert to byte[]
             using (var memoryStream = new MemoryStream()) {
                 stream.CopyTo(memoryStream);
                 var bytes = memoryStream.ToArray();
 
                 var imageHelper = DependencyService.Get<IImageHelper>();
-                bytes = imageHelper.ResizeImage(bytes, 1200, 720);
-                this.ViewModel.EncodedBytes.Add(bytes);
+                bytes = imageHelper.ResizeImage(bytes, 1200, 700);
+                this.ViewModel.UpdatedEncodedBytes.Add(bytes);
             }
 
             args.Cancel = true;
@@ -186,11 +194,12 @@ namespace EVSlideShow.Core.Views {
         }
 
         async void ButtonCropSave_PressedAsync(object sender, EventArgs e) {
+        
             if (this.ButtonCropSave.Text == "Crop") {
                 Editor.Crop();
                 this.ButtonCropSave.Text = "Save";
             } else if (this.ButtonCropSave.Text == "Save") {
-                Editor.Save();
+                Editor.Save(".png", new Size(1200, 700));
                 if (this.ViewModel.CanLoadNextImage()) {
                     LoadNextImage();
                 } else {
@@ -219,11 +228,11 @@ namespace EVSlideShow.Core.Views {
             if (this.ViewModel.User.EVType == EVTypeName.TeslaModel3) {
                 Editor.ToggleCropping(5, 3);
             } else {
-                Editor.ToggleCropping(12, 7.2f);
+                Editor.ToggleCropping(12, 7.0f);
             }
         }
         private void Editor_ImageLoaded(object sender, ImageLoadedEventArgs args) {
-            Editor.ToggleCropping(12, 7.2f);
+            Editor.ToggleCropping(12, 7.0f);
             this.ButtonCropSave.Text = "Crop";
         }
 

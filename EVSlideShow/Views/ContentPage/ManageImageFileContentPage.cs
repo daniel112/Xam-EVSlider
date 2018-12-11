@@ -15,6 +15,7 @@ using Plugin.InAppBilling.Abstractions;
 using Plugin.Permissions.Abstractions;
 using Rg.Plugins.Popup.Extensions;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace EVSlideShow.Core.Views {
     public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate, IInputButtonPopupPage {
@@ -352,10 +353,12 @@ namespace EVSlideShow.Core.Views {
 
         async void MessagingCenter_SendToCropViewAsync(object sender, object obj) {
 
-            List<string> encodedImages = (List<string>)obj;
-            if (encodedImages.Count == 0) return; // no images went through, bug
+            // TODO: check for android
+            List<byte[]> bytesList = ((System.Collections.IList)obj).Cast<byte[]>().ToList();
+            if (bytesList.Count == 0) return; // no images went through, bug
 
-            await this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
+            await this.Navigation.PushAsync(new ImageCroppingContentPage(bytesList, this.ViewModel.User, this.ViewModel.SlideShowNumber));
+            //await this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
             if (CustomActivityIndicator.IsRunning) { this.CustomActivityIndicator.IsRunning = false; }
 
         }

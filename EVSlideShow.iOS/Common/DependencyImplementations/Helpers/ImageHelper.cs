@@ -36,7 +36,7 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations.Helpers {
             var resizedImage = UIGraphics.GetImageFromCurrentImageContext();
             UIGraphics.EndImageContext();
 
-            var bytesImagen = resizedImage.AsJPEG().ToArray();
+            var bytesImagen = resizedImage.AsPNG().ToArray();
             resizedImage.Dispose();
             return bytesImagen;
         }

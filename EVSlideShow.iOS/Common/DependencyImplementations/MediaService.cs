@@ -55,7 +55,7 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
 
         }
         void PickerController_FinishedPickingAssets(object sender, MultiAssetEventArgs args) {
-            List<string> encodedImages = new List<string>();
+            List<object> encodedImages = new List<object>();
             foreach (var asset in args.Assets) {
                 PHImageManager imageManager = new PHImageManager();
 
@@ -68,7 +68,11 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                 imageManager.RequestImageForAsset(asset,
                     new CGSize(asset.PixelWidth, asset.PixelHeight),PHImageContentMode.Default, options,
                     (image, info) => {
-                        encodedImages.Add(image.AsJPEG().GetBase64EncodedString(NSDataBase64EncodingOptions.None));
+                        // TODO: testing quality
+                        byte[] dataBytes = new byte[image.AsPNG().Length];
+                        System.Runtime.InteropServices.Marshal.Copy(image.AsPNG().Bytes, dataBytes, 0, Convert.ToInt32(image.AsPNG().Length));
+                        encodedImages.Add(dataBytes);
+                        //encodedImages.Add(image.AsPNG().GetBase64EncodedString(NSDataBase64EncodingOptions.None));
                     });
             }
             // post the message with the list attached
