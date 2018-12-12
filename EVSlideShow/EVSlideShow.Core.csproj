@@ -16,7 +16,7 @@
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="Rg.Plugins.Popup" Version="1.1.5.180" />
     <PackageReference Include="Plugin.InAppBilling" Version="2.0.0" />
-    <PackageReference Include="Syncfusion.Xamarin.SfImageEditor" Version="16.3.0.36" />
+    <PackageReference Include="Syncfusion.Xamarin.SfImageEditor" Version="16.4.0.40-beta" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />

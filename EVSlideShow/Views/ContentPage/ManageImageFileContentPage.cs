@@ -271,7 +271,7 @@ namespace EVSlideShow.Core.Views {
         #region Private API
         private void Setup() {
 
-            Title = "Managing Slideshow #1";
+            Title = ViewModel.InitialTitle;
             // image
             this.ContentViewImage.Content = this.ImageContentManage;
 
@@ -332,6 +332,14 @@ namespace EVSlideShow.Core.Views {
 
         }
 
+        private async Task<bool> IsUserSubscribedAsync() {
+            if (!this.ViewModel.User.IsSubscribed) {
+                await DisplayAlert("No Subscription Found", "Your account is not currently subscribed. Only subscribers have access to photo uploads. You can subscribe by hitting the 'Subscribe' button", "Ok");
+                return false;
+            }
+            return true;
+        }
+
         #region MessagingCenter
 
         private void MessagingCenterSubscribe() {
@@ -353,12 +361,10 @@ namespace EVSlideShow.Core.Views {
 
         async void MessagingCenter_SendToCropViewAsync(object sender, object obj) {
 
-            // TODO: check for android
             List<byte[]> bytesList = ((System.Collections.IList)obj).Cast<byte[]>().ToList();
             if (bytesList.Count == 0) return; // no images went through, bug
 
             await this.Navigation.PushAsync(new ImageCroppingContentPage(bytesList, this.ViewModel.User, this.ViewModel.SlideShowNumber));
-            //await this.Navigation.PushAsync(new ImageCroppingContentPage(encodedImages, this.ViewModel.User, this.ViewModel.SlideShowNumber));
             if (CustomActivityIndicator.IsRunning) { this.CustomActivityIndicator.IsRunning = false; }
 
         }
@@ -367,6 +373,8 @@ namespace EVSlideShow.Core.Views {
         #region Buttons
 
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
+            if (!await IsUserSubscribedAsync()) { return; }
+
             return;
             if (!ViewModel.User.IsSubscribed) {
                 // needs subscribe to single first
@@ -384,7 +392,7 @@ namespace EVSlideShow.Core.Views {
                     }
                     return;
                 }
-            } else if(!ViewModel.User.HasMultipleSubscription) {
+            } else if (!ViewModel.User.HasMultipleSubscription) {
                 // they already have single so they can opt for multiple
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
                 if (product.Success) {
@@ -440,11 +448,10 @@ namespace EVSlideShow.Core.Views {
         async void IImageButtonDelegate.ImageButton_DidPress(string buttonText, ImageButtonContentView button) {
 
             CustomActivityIndicator.Message = "";
+            if (!await IsUserSubscribedAsync()) { return; }
+
             if (buttonText == "Upload") {
-                if (!this.ViewModel.User.IsSubscribed) {
-                    await DisplayAlert("No Subscription Found", "Your account is not currently subscribed. Only subscribers have access to photo uploads. You can subscribe by hitting the 'Subscribe' button", "Ok");
-                    return;
-                }
+
                 var status = await PermissionHelper.GetPermissionStatusForPhotoLibraryAsync();
                 if (status == PermissionStatus.Granted) {
                     var mediaServie = DependencyService.Get<IMediaService>();
@@ -461,7 +468,7 @@ namespace EVSlideShow.Core.Views {
                         var networkResult = await this.ViewModel.DeleteAll();
                         if (networkResult.Success) {
                             // successful
-                            await DisplayAlert("Success", $"All photos for Slideshow #{ViewModel.SlideShowNumber} have been deleted", "Ok");
+                            await DisplayAlert("Success", $"All photos for Slideshow #{ViewModel.SlideShowNumber} have been deleted. Please refresh car browser to see changes", "Ok");
 
                         } else {
                             // unsuccessful
@@ -493,7 +500,7 @@ namespace EVSlideShow.Core.Views {
             var networkResult = await this.ViewModel.DeleteByID(text);
             if (networkResult.Success) {
                 //successful
-                await DisplayAlert("Success", $"Image ID(s):{text} have been deleted", "Ok");
+                await DisplayAlert("Success", $"Image ID(s):{text} have been deleted. Please refresh car browser to see changes", "Ok");
             } else {
                 // unsuccessful
                 await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");

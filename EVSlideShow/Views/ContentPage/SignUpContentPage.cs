@@ -358,7 +358,7 @@ namespace EVSlideShow.Core.Views {
                 UserNetworkManager manager = new UserNetworkManager();
                 this.CustomActivityIndicator.IsRunning = true;
                 User user = await manager.RegisterUser(this.ViewModel.GenerateUserFromInput());
-                if (user.Success) {
+                if (user.Success && string.IsNullOrEmpty(user.Message)) {
                     await DisplayAlert("Success", $"Your account has been created", "Continue");
                     // save user login data to app data
                     Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(user);

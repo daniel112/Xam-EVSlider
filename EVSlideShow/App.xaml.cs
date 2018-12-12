@@ -20,7 +20,7 @@ namespace EVSlideShow {
         public App() {
             InitializeComponent();
             //Register Syncfusion license
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzU5OTRAMzEzNjJlMzMyZTMwbXdMRUxWYmhnVFR2QUpiMjdJWWJCNmFqSEcxOGc2R1BLbzI2ZG8rZkF5TT0=");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDk3MDNAMzEzNjJlMzQyZTMwV1V1UHBKOWF3MlMyYU1qdHJWcFRlRHhKc0JSMkIzTmY4bmh0bTM3elpUZz0=");
             if (Application.Current.Properties.ContainsKey("User")) {
                 try {
 

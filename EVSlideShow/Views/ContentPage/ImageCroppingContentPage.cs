@@ -103,12 +103,7 @@ namespace EVSlideShow.Core.Views {
             this.ViewModel.User = user;
             this.Setup();
         }
-        public ImageCroppingContentPage(List<string> encodedImages, User user, int slideshowNumber) {
-            this.ViewModel.EncodedImages = encodedImages;
-            this.ViewModel.SlideShowNumber = slideshowNumber;
-            this.ViewModel.User = user;
-            this.Setup();
-        }
+
 
         protected override void OnOrientationUpdate(DeviceOrientatione orientation) {
         }
@@ -119,7 +114,6 @@ namespace EVSlideShow.Core.Views {
 
             this.Title = "Crop Image";
             Editor.Source = this.ViewModel.ImageFromByteArray(this.ViewModel.EncodedBytes[ViewModel.ImageIndex]).Source;
-            //Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
 
 
             Grid grid = new Grid {
@@ -167,7 +161,6 @@ namespace EVSlideShow.Core.Views {
 
         private void LoadNextImage() {
             Editor.Source = this.ViewModel.ImageFromByteArray(this.ViewModel.EncodedBytes[ViewModel.ImageIndex]).Source;
-            //Editor.Source = this.ViewModel.ImageFromBase64(this.ViewModel.EncodedImages[ViewModel.ImageIndex]).Source;
         }
 
 
@@ -189,7 +182,6 @@ namespace EVSlideShow.Core.Views {
         }
 
         void ButtonReset_Clicked(object sender, EventArgs e) {
-            Console.WriteLine("RESET");
             Editor.Reset();
         }
 
@@ -208,7 +200,7 @@ namespace EVSlideShow.Core.Views {
                     if (await this.ViewModel.SendImagesToServerAsync()) {
                         // successfully sent to server
                         this.CustomActivityIndicator.IsRunning = false;
-                        await DisplayAlert("Success", "Your image(s) have been successfully uploaded.", "Ok");
+                        await DisplayAlert("Success", "Your image(s) have been successfully uploaded. Please refresh car browser to see changes", "Ok");
                         await this.Navigation.PopAsync();
 
                     } else {

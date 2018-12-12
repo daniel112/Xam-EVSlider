@@ -22,7 +22,14 @@ namespace EVSlideShow.Core.ViewModels {
             }
         }
         public int SlideShowNumber = 1;
-
+        public string InitialTitle {
+            get {
+                if (User.IsSubscribed) {
+                    return "Managing Slideshow #1";
+                }
+                return "Home";
+            }
+        }
         public string[] ToolbarOptions {
             get {
                 if (User.HasMultipleSubscription) {

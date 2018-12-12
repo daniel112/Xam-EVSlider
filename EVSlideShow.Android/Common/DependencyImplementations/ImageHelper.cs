@@ -13,7 +13,7 @@ namespace EVSlideShow.Droid.Common.DependencyImplementations {
             Bitmap resizedImage = Bitmap.CreateScaledBitmap(originalImage, (int)width, (int)height, false);
 
             using (MemoryStream ms = new MemoryStream()) {
-                resizedImage.Compress(Bitmap.CompressFormat.Jpeg, 100, ms);
+                resizedImage.Compress(Bitmap.CompressFormat.Png, 100, ms);
                 return ms.ToArray();
             }
         }

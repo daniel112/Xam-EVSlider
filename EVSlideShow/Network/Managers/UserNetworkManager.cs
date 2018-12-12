@@ -25,7 +25,6 @@ namespace EVSlideShow.Core.Network.Managers {
         public async Task<User> RegisterUser(User user) {
             User output = new User();
             var method = "users";
-            var uri = new Uri(string.Format(baseURL + method, string.Empty));
             var values = new Dictionary<string, string>
             {
                 { "password",user.Password },
@@ -34,15 +33,24 @@ namespace EVSlideShow.Core.Network.Managers {
                 { "ev_type", user.EVType },
 
             };
+
             // serialize dict into json string
             string json = JsonConvert.SerializeObject(values);
 
+            // special case for register because it doesnt work if it doesn't have content-type json
+            Client.BaseAddress = new Uri(baseURL);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, method) {
+                Content = new StringContent(json,
+                                    System.Text.Encoding.UTF8,
+                                    "application/json")//CONTENT-TYPE header
+            };
+
             try {
-                var response = await Client.PostAsync(uri, new StringContent(json));
+                var response = await Client.SendAsync(request);
                 if (response.IsSuccessStatusCode) {
                     var jsonResult = await response.Content.ReadAsStringAsync();
                     output = JsonConvert.DeserializeObject<User>(jsonResult);
-                    Console.WriteLine("");
+
                 } else if (response.StatusCode == (HttpStatusCode)422) {
                     var rawResponse = await response.Content.ReadAsStringAsync();
                     output.Message = rawResponse;

@@ -104,7 +104,7 @@ namespace EVSlideShow.Droid.Common.Helpers {
         #endregion
 
         #region Public API
-        public static string UpdateAndConvertURI(Context context, Android.Net.Uri photoUri) {
+        public static byte[] UpdateAndConvertURI(Context context, Android.Net.Uri photoUri) {
             System.IO.Stream stream = context.ContentResolver.OpenInputStream(photoUri);
 
             // slow
@@ -116,10 +116,8 @@ namespace EVSlideShow.Droid.Common.Helpers {
             // slow
             bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, memStream);
 
-            // TODO: just return this for android
-            byte[] bitmapData = memStream.ToArray();
-            // slow
-            return Convert.ToBase64String(bitmapData, Base64FormattingOptions.None);
+            return memStream.ToArray();
+
         }
 
         public static Bitmap UpdateOrientation(Context context, Android.Net.Uri photoUri, string absolutePath, Bitmap bitmap) {

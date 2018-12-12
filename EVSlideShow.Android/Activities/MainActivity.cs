@@ -53,7 +53,7 @@ namespace EVSlideShow.Droid {
 
             if (requestCode == OPENGALLERYCODE && resultCode == Result.Ok) {
 
-                List<string> images = new List<string>();
+                List<byte[]> images = new List<byte[]>();
 
                 if (data != null) {
                     ClipData clipData = data.ClipData;

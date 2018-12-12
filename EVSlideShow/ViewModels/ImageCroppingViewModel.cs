@@ -12,27 +12,6 @@ namespace EVSlideShow.Core.ViewModels {
     public class ImageCroppingViewModel : BaseViewModel {
 
         #region Variables
-        private List<string> _EncodedImages;
-        public List<string> EncodedImages {
-            get {
-                if (_EncodedImages == null) {
-                    _EncodedImages = new List<string>();
-                }
-                return _EncodedImages;
-            }
-            set {
-                _EncodedImages = value;
-            }
-        }
-        public List<string> _UpdatedEncodedImages;
-        public List<string> UpdatedEncodedImages {
-            get {
-                if (_UpdatedEncodedImages == null) {
-                    _UpdatedEncodedImages = new List<string>();
-                }
-                return _UpdatedEncodedImages;
-            }
-        }
 
         public User _User;
         public User User {
@@ -58,9 +37,6 @@ namespace EVSlideShow.Core.ViewModels {
            
         }
 
-        public Image ImageFromBase64(string base64picture) {
-            byte[] imageBytes = Convert.FromBase64String(base64picture); return new Image { Source = ImageSource.FromStream(() => new MemoryStream(imageBytes)) };
-        }
 
         public Image ImageFromByteArray(byte[] bytes) {
             return new Image { Source = ImageSource.FromStream(() => new MemoryStream(bytes)) };
@@ -69,12 +45,11 @@ namespace EVSlideShow.Core.ViewModels {
         public bool CanLoadNextImage() {
             ImageIndex++;
             return ImageIndex <= UpdatedEncodedBytes.Count - 1;
-            //return ImageIndex <= EncodedImages.Count - 1;
         }
 
         public async Task<bool> SendImagesToServerAsync() {
             ImageNetworkManager manager = new ImageNetworkManager();
-            return await manager.SendImages(this.User.AuthToken, this.SlideShowNumber, EncodedBytes);
+            return await manager.SendImages(this.User.AuthToken, this.SlideShowNumber, UpdatedEncodedBytes);
         }
     }
 }
