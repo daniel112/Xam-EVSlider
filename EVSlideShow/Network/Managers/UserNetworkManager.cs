@@ -50,7 +50,7 @@ namespace EVSlideShow.Core.Network.Managers {
                 if (response.IsSuccessStatusCode) {
                     var jsonResult = await response.Content.ReadAsStringAsync();
                     output = JsonConvert.DeserializeObject<User>(jsonResult);
-
+                    if (!string.IsNullOrEmpty(output.AuthToken)) { output.Success = true; }
                 } else if (response.StatusCode == (HttpStatusCode)422) {
                     var rawResponse = await response.Content.ReadAsStringAsync();
                     output.Message = rawResponse;
