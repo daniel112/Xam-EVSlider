@@ -72,7 +72,6 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                         byte[] dataBytes = new byte[image.AsPNG().Length];
                         System.Runtime.InteropServices.Marshal.Copy(image.AsPNG().Bytes, dataBytes, 0, Convert.ToInt32(image.AsPNG().Length));
                         encodedImages.Add(dataBytes);
-                        //encodedImages.Add(image.AsPNG().GetBase64EncodedString(NSDataBase64EncodingOptions.None));
                     });
             }
             // post the message with the list attached

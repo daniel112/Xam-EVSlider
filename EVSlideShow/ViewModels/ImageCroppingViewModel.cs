@@ -44,7 +44,7 @@ namespace EVSlideShow.Core.ViewModels {
 
         public bool CanLoadNextImage() {
             ImageIndex++;
-            return ImageIndex <= UpdatedEncodedBytes.Count - 1;
+            return ImageIndex <= EncodedBytes.Count - 1;
         }
 
         public async Task<bool> SendImagesToServerAsync() {
