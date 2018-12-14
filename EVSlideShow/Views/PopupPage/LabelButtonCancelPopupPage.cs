@@ -7,26 +7,26 @@ using Xamarin.Forms;
 
 namespace EVSlideShow.Core.Views {
 
-    public interface ILabelButtonPopupPage {
-        void DidTapButton();
+    public interface ILabelButtonCancelPopupPage {
+        void DidTapButton(LabelButtonCancelPopupPage page, object output); 
     }
 
-    public class LabelButtonPopupPage : PopupPage {
+    public class LabelButtonCancelPopupPage : PopupPage {
 
         #region Variables
-        public ILabelButtonPopupPage PageDelegate;
-        private StackLayout _FlexLayoutWrapper;
-        private StackLayout FlexLayoutWrapper {
+        public ILabelButtonCancelPopupPage PageDelegate;
+        private StackLayout _StackLayoutWrapper;
+        private StackLayout StackLayoutWrapper {
             get {
-                if (_FlexLayoutWrapper == null) {
-                    _FlexLayoutWrapper = new StackLayout {
+                if (_StackLayoutWrapper == null) {
+                    _StackLayoutWrapper = new StackLayout {
                         HorizontalOptions = LayoutOptions.Center,
                         VerticalOptions = LayoutOptions.Center,
                         BackgroundColor = Color.FromHex(AppTheme.SecondaryColor()),
                         WidthRequest = 280
                     };
                 }
-                return _FlexLayoutWrapper;
+                return _StackLayoutWrapper;
             }
         }
 
@@ -50,6 +50,19 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
+        private ScrollView _ScrollViewMessage;
+        private ScrollView ScrollViewMessage {
+            get {
+                if (_ScrollViewMessage == null) {
+                    _ScrollViewMessage = new ScrollView {
+                        VerticalOptions = LayoutOptions.FillAndExpand,
+                        BackgroundColor = Color.Transparent
+                    };
+                }
+                return _ScrollViewMessage;
+            }
+        }
+
         private Label _LabelMessage;
         private Label LabelMessage {
             get {
@@ -59,16 +72,17 @@ namespace EVSlideShow.Core.Views {
                         VerticalOptions = LayoutOptions.FillAndExpand,
                         HorizontalTextAlignment = TextAlignment.Center,
                         VerticalTextAlignment = TextAlignment.Center,
+                        LineBreakMode = LineBreakMode.WordWrap,
                         Text = "Message placeholder",
-                        FontSize = 18,
-                        HeightRequest = 50,
-                        TextColor = Color.FromHex(AppTheme.DefaultTextColor()),
+                        FontSize = 15,
+                        TextColor = Color.White,
+                        BackgroundColor = Color.Transparent,
+                        Margin = new Thickness(10)
                     };
                 }
                 return _LabelMessage;
             }
         }
-
         private Button _ButtonAction;
         private Button ButtonAction {
             get {
@@ -89,17 +103,38 @@ namespace EVSlideShow.Core.Views {
             }
         }
 
+        private Button _ButtonCancel;
+        private Button ButtonCancel {
+            get {
+                if (_ButtonCancel == null) {
+                    _ButtonCancel = new Button {
+                        Text = "Cancel",
+                        HorizontalOptions = LayoutOptions.FillAndExpand,
+                        BackgroundColor = Color.White,
+                        TextColor = Color.Black,
+                        FontAttributes = FontAttributes.Bold,
+                        FontSize = 18,
+                        CornerRadius = 0,
+                        HeightRequest = 40
+                    };
+                    _ButtonCancel.Clicked += ButtonCancel_Clicked;
+                }
+                return _ButtonCancel;
+            }
+        }
+
         #endregion
 
         #region Initialization
-        public LabelButtonPopupPage() {
+        public LabelButtonCancelPopupPage() {
             SetupContent();
         }
 
-        public LabelButtonPopupPage(string title, string message, string buttonText) {
+        public LabelButtonCancelPopupPage(string title, string message, string buttonText, int? messageHeightLimit) {
             LabelTitle.Text = title;
             LabelMessage.Text = message;
             ButtonAction.Text = buttonText;
+            ScrollViewMessage.HeightRequest = messageHeightLimit != null ? (double)messageHeightLimit : 200;
             SetupContent();
         }
 
@@ -129,11 +164,16 @@ namespace EVSlideShow.Core.Views {
 
         #region Private API
         private void SetupContent() {
-            FlexLayoutWrapper.Children.Add(LabelTitle);
-            FlexLayoutWrapper.Children.Add(LabelMessage);
-            FlexLayoutWrapper.Children.Add(ButtonAction);
+            // scrollview
+            ScrollViewMessage.Content = LabelMessage;
 
-            this.Content = FlexLayoutWrapper;
+            StackLayoutWrapper.Children.Add(LabelTitle);
+            StackLayoutWrapper.Children.Add(ScrollViewMessage);
+
+            StackLayoutWrapper.Children.Add(ButtonAction);
+            StackLayoutWrapper.Children.Add(ButtonCancel);
+
+            this.Content = StackLayoutWrapper;
 
         }
 
@@ -143,9 +183,12 @@ namespace EVSlideShow.Core.Views {
         // UIResponder
         private void ButtonAction_Clicked(object sender, EventArgs e) {
             ClosePopupAsync();
-            PageDelegate.DidTapButton();
+            PageDelegate.DidTapButton(this, LabelTitle.Text);
         }
 
+        private void ButtonCancel_Clicked(object sender, EventArgs e) {
+            ClosePopupAsync();
+        }
         #endregion
 
 

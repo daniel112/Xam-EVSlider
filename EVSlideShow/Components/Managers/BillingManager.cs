@@ -48,22 +48,60 @@ namespace EVSlideShow.Core.Components.Managers {
         #endregion
 
         #region Public API
+        public static async Task<BillingItem> PurchaseProductWithTypeAsync(EVeSubscriptionType type) {
 
-        //try to purchase item
-    //    var purchase = await billing.PurchaseAsync(productId, ItemType.Subscription, "apppayload");
-    //            if (purchase == null) {
-    //                //Not purchased, alert the user
-    //            } else {
-    //                var id = purchase.Id;
-    //    var token = purchase.PurchaseToken;
-    //    var state = purchase.State;
-    //}
+            var item = new BillingItem();
 
-    public static async Task<BillingProduct> GetIAPBillingProductWithTypeAsync(EVeSubscriptionType type) {
-
-            var product = new BillingProduct();
             try {
-                //Billing.InTestingMode = true;
+                Billing.InTestingMode = true; // TODO: REMOVE
+                var connected = await Billing.ConnectAsync();
+                if (!connected) {
+                    item.Message = "Error connecting to store. Check your connection and try again.";
+                }
+
+                string subscriptionProductID;
+                switch (type) {
+                    case EVeSubscriptionType.Unknown:
+                        subscriptionProductID = "";
+                        break;
+                    case EVeSubscriptionType.SingleSubscription:
+                        subscriptionProductID = SingleSubscriptionProductID;
+                        break;
+                    case EVeSubscriptionType.AdditionalSubscription:
+                        subscriptionProductID = AdditionalSubscriptionProductID;
+                        break;
+                    default:
+                        subscriptionProductID = "";
+                        break;
+                }
+
+                //try to purchase item
+                var purchase = await Billing.PurchaseAsync(subscriptionProductID, ItemType.Subscription, "apppayload");
+                if (purchase == null) {
+                    item.Success = false;
+                } else {
+                    item.PurchasedItem = purchase;
+                }
+            } catch (InAppBillingPurchaseException purchaseEx) {
+                item.Message = $"Error in {purchaseEx.Message}";
+                item.Success = false;
+            } catch (Exception ex) {
+                item.Message = $"Issue connecting: {ex.Message}";
+                item.Success = false;
+            } finally {
+                //Disconnect, it is okay if we never connected
+                await Billing.DisconnectAsync();
+            }
+
+            return item;
+        }
+
+
+
+        public static async Task<BillingItem> GetIAPBillingProductWithTypeAsync(EVeSubscriptionType type) {
+
+            var product = new BillingItem();
+            try {
                 var connected = await Billing.ConnectAsync();
 
                 if (!connected) {

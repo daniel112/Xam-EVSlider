@@ -18,9 +18,12 @@ using Xamarin.Forms;
 using System.Linq;
 
 namespace EVSlideShow.Core.Views {
-    public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate, IInputButtonPopupPage {
+    public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate, IInputButtonPopupPage, ILabelButtonCancelPopupPage {
 
         #region Variables
+        private const string StringSingleSubscription = "Single Subscription";
+        private const string StringAdditionalSubscription = "Additional Subscription";
+
         private ScrollView _ScrollViewContent;
         private ScrollView ScrollViewContent {
             get {
@@ -373,17 +376,18 @@ namespace EVSlideShow.Core.Views {
         #region Buttons
 
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
-            if (!await IsUserSubscribedAsync()) { return; }
 
-            return;
+            this.CustomActivityIndicator.IsRunning = true;
             if (!ViewModel.User.IsSubscribed) {
                 // needs subscribe to single first
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
                 if (product.Success) {
-                    // TODO: Display information about the product + confirmation view
-                    Console.WriteLine(product.Product.Name);
-                    Console.WriteLine(product.Product.Description);
-                    Console.WriteLine(product.Product.LocalizedPrice);
+
+                    var popupPage = new LabelButtonCancelPopupPage(StringSingleSubscription, product.Product.Description, $"Pay {product.Product.LocalizedPrice}", 100) {
+                        PageDelegate = this
+                    };
+                    await Navigation.PushPopupAsync(popupPage);
+
                 } else {
                     if (!String.IsNullOrEmpty(product.Message)) {
                         await DisplayAlert("Error", product.Message, "Ok");
@@ -396,10 +400,10 @@ namespace EVSlideShow.Core.Views {
                 // they already have single so they can opt for multiple
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
                 if (product.Success) {
-                    // TODO: Display information about the product + confirmation view
-                    Console.WriteLine(product.Product.Name);
-                    Console.WriteLine(product.Product.Description);
-                    Console.WriteLine(product.Product.LocalizedPrice);
+                    var popupPage = new LabelButtonCancelPopupPage(StringAdditionalSubscription, "Get 2 additional slideshows for your Tesla Screen! Use additional slideshows for family, business, or specific events.", $"Buy for {product.Product.LocalizedPrice}", 100) {
+                        PageDelegate = this
+                    };
+                    await Navigation.PushPopupAsync(popupPage);
                 } else {
                     if (!String.IsNullOrEmpty(product.Message)) {
                         await DisplayAlert("Error", product.Message, "Ok");
@@ -408,7 +412,14 @@ namespace EVSlideShow.Core.Views {
                     }
                     return;
                 }
+            } else {
+                // they already have both memberships
+                // TODO: hide the button if both subscription exists
+                await DisplayAlert("Subscription", "Hide this button", "Ok");
+
             }
+            this.CustomActivityIndicator.IsRunning = false;
+
 
         }
 
@@ -509,6 +520,29 @@ namespace EVSlideShow.Core.Views {
             this.CustomActivityIndicator.IsRunning = false;
 
         }
+
+        async void ILabelButtonCancelPopupPage.DidTapButton(LabelButtonCancelPopupPage page, object output) {
+
+            var subscriptionOption = output.ToString();
+            BillingItem billingItem = new BillingItem();
+            this.CustomActivityIndicator.IsRunning = true;
+            if (subscriptionOption.ToLower() == StringSingleSubscription.ToLower()) {
+                billingItem = await BillingManager.PurchaseProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
+            } else if (subscriptionOption.ToLower() == StringAdditionalSubscription.ToLower()) {
+                billingItem = await BillingManager.PurchaseProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
+
+            }
+
+            if (billingItem.Success == true) {
+                await DisplayAlert("Success", $"Thank you for your support! You have been granted slideshow access", "Ok");
+            } else {
+                await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
+            }
+            this.CustomActivityIndicator.IsRunning = false;
+
+        }
+
+
 
         #endregion
 

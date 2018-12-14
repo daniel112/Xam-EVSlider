@@ -2,8 +2,9 @@
 using Plugin.InAppBilling.Abstractions;
 
 namespace EVSlideShow.Core.Models {
-    public class BillingProduct : BaseModel {
+    public class BillingItem : BaseModel {
         public InAppBillingProduct Product { get; set; }
+        public InAppBillingPurchase PurchasedItem { get; set; }
 
     }
 }
