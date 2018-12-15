@@ -316,7 +316,7 @@ namespace EVSlideShow.Core.Views {
         }
 
         private async void RecoverEmailAsync() {
-            if (this.TextEmail.Trim() != "") {
+            if (!string.IsNullOrEmpty(this.TextEmail)) {
                 UserNetworkManager manager = new UserNetworkManager();
                 this.CustomActivityIndicator.IsRunning = true;
                 bool success = await manager.SendEmailForRecovery(this.TextEmail.Trim());

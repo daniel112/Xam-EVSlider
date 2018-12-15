@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EVSlideShow.Core.Components.Helpers;
 using EVSlideShow.Core.Models;
 using EVSlideShow.Core.Network.Managers;
 using EVSlideShow.Core.ViewModels.Base;
@@ -57,5 +58,32 @@ namespace EVSlideShow.Core.ViewModels {
 
         }
 
+        public async Task<bool> UserSingleSubscribe() {
+            var manager = new UserNetworkManager();
+
+            if (await manager.UserSubscribeAsync(User.AuthToken)) {
+                User.IsSubscribed = true;
+                // save user login data to app data
+                Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(User);
+                await Application.Current.SavePropertiesAsync();
+                return true;
+            }
+            return false;
+
+        }
+
+        public async Task<bool> UserMultipleSubscribe() {
+            var manager = new UserNetworkManager();
+
+            if (await manager.UserMultipleSubscribeAsync(User.AuthToken)) {
+                User.HasMultipleSubscription = true;
+                // save user login data to app data
+                Application.Current.Properties["User"] = ObjectSerializerHelper.ConvertObjectToBase64(User);
+                await Application.Current.SavePropertiesAsync();
+                return true;
+            }
+            return false;
+
+        }
     }
 }

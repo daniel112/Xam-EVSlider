@@ -383,7 +383,8 @@ namespace EVSlideShow.Core.Views {
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
                 if (product.Success) {
 
-                    var popupPage = new LabelButtonCancelPopupPage(StringSingleSubscription, product.Product.Description, $"Pay {product.Product.LocalizedPrice}", 100) {
+                    var popupPage = new LabelButtonCancelPopupPage(StringSingleSubscription, "Subscribe now to get your 30 image slideshow of your very own photos! Images upload to your Tesla screen " +
+                    	"in a matter of seconds directly from your mobile phone", $"Pay {product.Product.LocalizedPrice}", 100) {
                         PageDelegate = this
                     };
                     await Navigation.PushPopupAsync(popupPage);
@@ -400,7 +401,8 @@ namespace EVSlideShow.Core.Views {
                 // they already have single so they can opt for multiple
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
                 if (product.Success) {
-                    var popupPage = new LabelButtonCancelPopupPage(StringAdditionalSubscription, "Get 2 additional slideshows for your Tesla Screen! Use additional slideshows for family, business, or specific events.", $"Buy for {product.Product.LocalizedPrice}", 100) {
+                    var popupPage = new LabelButtonCancelPopupPage(StringAdditionalSubscription, "Get 2 additional slideshows for your Tesla Screen! " +
+                    	"Use additional slideshows for family, business, or specific events.", $"Buy for {product.Product.LocalizedPrice}", 100) {
                         PageDelegate = this
                     };
                     await Navigation.PushPopupAsync(popupPage);
@@ -414,8 +416,7 @@ namespace EVSlideShow.Core.Views {
                 }
             } else {
                 // they already have both memberships
-                // TODO: hide the button if both subscription exists
-                await DisplayAlert("Subscription", "Hide this button", "Ok");
+                await DisplayAlert("Subscription", "You already have full access", "Ok");
 
             }
             this.CustomActivityIndicator.IsRunning = false;
@@ -528,16 +529,21 @@ namespace EVSlideShow.Core.Views {
             this.CustomActivityIndicator.IsRunning = true;
             if (subscriptionOption.ToLower() == StringSingleSubscription.ToLower()) {
                 billingItem = await BillingManager.PurchaseProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
+                if (billingItem.Success && await ViewModel.UserSingleSubscribe()) {
+                    await DisplayAlert("Success", $"Thank you for your support! You have been granted slideshow access", "Ok");
+                    Title = ViewModel.InitialTitle;
+                } else {
+                    await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
+                }
             } else if (subscriptionOption.ToLower() == StringAdditionalSubscription.ToLower()) {
                 billingItem = await BillingManager.PurchaseProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
-
+                if (billingItem.Success && await ViewModel.UserMultipleSubscribe()) {
+                    await DisplayAlert("Success", $"Thank you for your support! You have been granted multiple slideshow access", "Ok");
+                } else {
+                    await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
+                }
             }
 
-            if (billingItem.Success == true) {
-                await DisplayAlert("Success", $"Thank you for your support! You have been granted slideshow access", "Ok");
-            } else {
-                await DisplayAlert("Error", $"Something went wrong, please try again later.", "Ok");
-            }
             this.CustomActivityIndicator.IsRunning = false;
 
         }

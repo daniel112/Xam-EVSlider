@@ -106,6 +106,45 @@ namespace EVSlideShow.Core.Network.Managers {
             return getResponse.IsSuccessStatusCode;
         }
 
+
+        public async Task<bool> UserSubscribeAsync(string authToken) {
+
+            var method = "subscribe";
+            var uri = new Uri(string.Format(baseURL + method, string.Empty));
+            Client.DefaultRequestHeaders.Add("Authorization", authToken);
+
+            try {
+                var response = await Client.PutAsync(uri, null);
+                if (response.IsSuccessStatusCode) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> UserMultipleSubscribeAsync(string authToken) {
+
+            var method = "multiple_slideshow_subscribe";
+            var uri = new Uri(string.Format(baseURL + method, string.Empty));
+            Client.DefaultRequestHeaders.Add("Authorization", authToken);
+
+            try {
+                var response = await Client.PutAsync(uri, null);
+                if (response.IsSuccessStatusCode) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
         public async Task<List<User>> GetAllUsers() {
             var getResponse = await Client.GetAsync(new Uri(string.Format(baseURL + "users", string.Empty)));
             var users = new List<User>();

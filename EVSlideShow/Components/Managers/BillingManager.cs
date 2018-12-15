@@ -81,6 +81,7 @@ namespace EVSlideShow.Core.Components.Managers {
                     item.Success = false;
                 } else {
                     item.PurchasedItem = purchase;
+                    item.Success = true;
                 }
             } catch (InAppBillingPurchaseException purchaseEx) {
                 item.Message = $"Error in {purchaseEx.Message}";

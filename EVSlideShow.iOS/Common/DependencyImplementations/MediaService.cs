@@ -68,7 +68,6 @@ namespace EVSlideShow.iOS.Common.DependencyImplementations {
                 imageManager.RequestImageForAsset(asset,
                     new CGSize(asset.PixelWidth, asset.PixelHeight),PHImageContentMode.Default, options,
                     (image, info) => {
-                        // TODO: testing quality
                         byte[] dataBytes = new byte[image.AsPNG().Length];
                         System.Runtime.InteropServices.Marshal.Copy(image.AsPNG().Bytes, dataBytes, 0, Convert.ToInt32(image.AsPNG().Length));
                         encodedImages.Add(dataBytes);
