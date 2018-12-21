@@ -464,6 +464,13 @@ namespace EVSlideShow.Core.Views {
 
             if (buttonText == "Upload") {
 
+                if (ViewModel.ShouldDisplayWarning) {
+                    ViewModel.ShouldDisplayWarning = false;
+                    await DisplayAlert("WARNING", "Do not select, upload, or edit photos while you are driving. " +
+                    	"Driver is responsible for any accidents occurring while handling EV Slideshow. Upload photos ONLY while in a parked position or have the passenger upload photos for you.", "Ok");
+
+                }
+
                 var status = await PermissionHelper.GetPermissionStatusForPhotoLibraryAsync();
                 if (status == PermissionStatus.Granted) {
                     var mediaServie = DependencyService.Get<IMediaService>();

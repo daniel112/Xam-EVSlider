@@ -10,6 +10,7 @@ using Xamarin.Forms;
 namespace EVSlideShow.Core.ViewModels {
     public class ManageImageFileViewModel : BaseViewModel {
 
+        public bool ShouldDisplayWarning = true;
         public User _User;
         public User User {
             get {
