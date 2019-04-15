@@ -8,7 +8,7 @@ using EVSlideShow.Core.Models;
 namespace EVSlideShow.Core.Network.Managers {
     public class ImageNetworkManager : BaseClient {
         #region Variables
-        private const string baseURL = "http://www.evslideshow.com/";
+        private const string baseURL = "https://www.evslideshow.com/";
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace EVSlideShow.Core.Network.Managers {
         #region Public API
         public async Task<bool> SendImages(string userAuth, int slideshowNum, List<byte[]> imageDatas) {
 
-            var method = $"images_upload_v2?slideshow_number={slideshowNum}";
+            var method = $"/images_upload?slideshow_number={slideshowNum}";
             var uri = new Uri(string.Format(baseURL + method, string.Empty));
 
             MultipartFormDataContent form = new MultipartFormDataContent();
@@ -34,20 +34,25 @@ namespace EVSlideShow.Core.Network.Managers {
                 form.Add(imageContent, "images[]", fileName);
             }
 
+            try {
+                Client.DefaultRequestHeaders.Add("Authorization", userAuth);
 
-            Client.DefaultRequestHeaders.Add("Authorization", userAuth);
+                var response = await Client.PostAsync(uri, form);
 
-            var response = await Client.PostAsync(uri, form);
-
-            if (response.IsSuccessStatusCode) {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("SUCCESS");
-                return true;
-            } else {
-                var jsonResult = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"ERROR: {jsonResult}");
+                if (response.IsSuccessStatusCode) {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("SUCCESS");
+                    return true;
+                } else {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"ERROR: {jsonResult}");
+                    return false;
+                }
+            } catch(Exception ex) {
+                Console.WriteLine($"ERROR: {ex.Message}");
                 return false;
             }
+
         }
 
         public async Task<NetworkDebug> DeletePhotosByID(string ids, int slideshowNum, string userAuth) {

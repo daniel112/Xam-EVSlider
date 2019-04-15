@@ -53,7 +53,10 @@ namespace EVSlideShow.Core.Components.Managers {
             var item = new BillingItem();
 
             try {
-                Billing.InTestingMode = true; // TODO: REMOVE
+#if DEBUG
+                Billing.InTestingMode = true;
+
+#endif
                 var connected = await Billing.ConnectAsync();
                 if (!connected) {
                     item.Message = "Error connecting to store. Check your connection and try again.";

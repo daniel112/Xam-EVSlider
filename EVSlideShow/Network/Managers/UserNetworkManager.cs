@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace EVSlideShow.Core.Network.Managers {
     public class UserNetworkManager : BaseClient  {
         #region Variables
-        private const string baseURL = "http://www.evslideshow.com/";
+        private const string baseURL = "https://www.evslideshow.com/";
 
         #endregion
 
@@ -25,6 +25,7 @@ namespace EVSlideShow.Core.Network.Managers {
         public async Task<User> RegisterUser(User user) {
             User output = new User();
             var method = "users";
+            var uri = new Uri(string.Format(baseURL + method, string.Empty));
             var values = new Dictionary<string, string>
             {
                 { "password",user.Password },
@@ -46,7 +47,7 @@ namespace EVSlideShow.Core.Network.Managers {
             };
 
             try {
-                var response = await Client.SendAsync(request);
+                var response = await Client.PostAsync(uri, new StringContent(json));
                 if (response.IsSuccessStatusCode) {
                     var jsonResult = await response.Content.ReadAsStringAsync();
                     output = JsonConvert.DeserializeObject<User>(jsonResult);
