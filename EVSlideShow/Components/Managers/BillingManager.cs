@@ -21,7 +21,7 @@ namespace EVSlideShow.Core.Components.Managers {
             get {
                 switch (Device.RuntimePlatform) {
                     case Device.iOS:
-                        return "EV_Slide_Show_Subscription";
+                        return "EV_Slide_Show_Subscription_single";
                     case Device.Android:
                         return "evslideshow.subscription.single_slideshow";
                     default:
@@ -33,7 +33,7 @@ namespace EVSlideShow.Core.Components.Managers {
             get {
                 switch (Device.RuntimePlatform) {
                     case Device.iOS:
-                        return "EV_Two_Extra_Slide_Shows_Subscriptions";
+                        return "EV_Slide_Show_Subscription_multiple";
                     case Device.Android:
                         return "evslideshow.subscription.additional_slideshows";
                     default:
