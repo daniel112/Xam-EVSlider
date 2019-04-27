@@ -57,12 +57,18 @@
 		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to your photo library</string>
+	<string>You can select photos to upload for your slideshow</string>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>This app requires access to your Photo Library</string>
+	<string>EVSlideshow requires access to your media for photo upload</string>
 	<key>CFBundleShortVersionString</key>
 	<string>2.0.0</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app requires access to your calendar</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires your location when in use</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app requires access to your location for subscription</string>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>4</string>
 </dict>
 </plist>

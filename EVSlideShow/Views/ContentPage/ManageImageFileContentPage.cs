@@ -16,6 +16,8 @@ using Plugin.Permissions.Abstractions;
 using Rg.Plugins.Popup.Extensions;
 using Xamarin.Forms;
 using System.Linq;
+using Plugin.Share.Abstractions;
+using Plugin.Share;
 
 namespace EVSlideShow.Core.Views {
     public class ManageImageFileContentPage : BaseContentPage<ManageImageFileViewModel>, IImageButtonDelegate, IInputButtonPopupPage, ILabelButtonCancelPopupPage {
@@ -343,6 +345,21 @@ namespace EVSlideShow.Core.Views {
             return true;
         }
 
+        private void OpenWebView(string url) {
+            BrowserOptions options = new BrowserOptions {
+                ChromeShowTitle = false,
+                ChromeToolbarColor = AppTheme.ShareColorMain(),
+                SafariBarTintColor = AppTheme.ShareColorMain(),
+                UseSafariReaderMode = true,
+                UseSafariWebViewController = true
+            };
+
+            // Android: opens in chrome custom tab if available
+            // iOS open in SafariVC if available
+            CrossShare.Current.OpenBrowser(url, options);
+        }
+
+
         #region MessagingCenter
 
         private void MessagingCenterSubscribe() {
@@ -378,13 +395,23 @@ namespace EVSlideShow.Core.Views {
         async void ButtonSubscribe_ClickedAsync(object sender, EventArgs e) {
 
             this.CustomActivityIndicator.IsRunning = true;
+            string productDisclaimer;
+            switch (Device.RuntimePlatform) {
+                case Device.iOS:
+                    productDisclaimer = ViewModel.kAppleSubscriptionDisclaimer; break;
+                case Device.Android:
+                    productDisclaimer = ViewModel.kAndroidSubscriptionDisclaimer; break;
+                default:
+                    productDisclaimer = ""; break;
+            }
             if (!ViewModel.User.IsSubscribed) {
                 // needs subscribe to single first
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.SingleSubscription);
-                if (product.Success) {
 
+                if (product.Success) {
+                
                     var popupPage = new LabelButtonCancelPopupPage(StringSingleSubscription, "Subscribe now to get your 30 image slideshow of your very own photos! Images upload to your Tesla screen " +
-                    	"in a matter of seconds directly from your mobile phone", $"Pay {product.Product.LocalizedPrice}", 100) {
+                    	"in a matter of seconds directly from your mobile phone.\n\n", $"Pay {product.Product.LocalizedPrice}", productDisclaimer, "See Terms and Condition", 200) {
                         PageDelegate = this
                     };
                     await Navigation.PushPopupAsync(popupPage);
@@ -402,7 +429,7 @@ namespace EVSlideShow.Core.Views {
                 var product = await BillingManager.GetIAPBillingProductWithTypeAsync(EVeSubscriptionType.AdditionalSubscription);
                 if (product.Success) {
                     var popupPage = new LabelButtonCancelPopupPage(StringAdditionalSubscription, "Get 2 additional slideshows for your Tesla Screen! " +
-                    	"Use additional slideshows for family, business, or specific events.", $"Buy for {product.Product.LocalizedPrice}", 100) {
+                    	"Use additional slideshows for family, business, or specific events.\n\n" + productDisclaimer, $"Buy for {product.Product.LocalizedPrice}", "See Terms and Condition", productDisclaimer, 200) {
                         PageDelegate = this
                     };
                     await Navigation.PushPopupAsync(popupPage);
@@ -552,6 +579,11 @@ namespace EVSlideShow.Core.Views {
             }
 
             this.CustomActivityIndicator.IsRunning = false;
+
+        }
+
+        void ILabelButtonCancelPopupPage.DidTapDisclaimer(LabelButtonCancelPopupPage page) {
+            this.OpenWebView("http://evslideshowfortesla.com/termsofuse.pdf");
 
         }
 

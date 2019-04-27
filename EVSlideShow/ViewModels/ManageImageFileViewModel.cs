@@ -9,7 +9,10 @@ using Xamarin.Forms;
 
 namespace EVSlideShow.Core.ViewModels {
     public class ManageImageFileViewModel : BaseViewModel {
-
+        public readonly string kAppleSubscriptionDisclaimer = "Your iTunes account will be charged at confirmation of purchase. Your subscription can be managed in iTunes Account Settings and will auto-renew " +
+        	"unless disabled 24 hours prior to the end of billing cycle. Free trials ends at time of purchase.";
+        public readonly string kAndroidSubscriptionDisclaimer = "Your account will be charged at confirmation of purchase. Your subscription can be managed in your Account Settings and will auto-renew " +
+    "unless disabled 24 hours prior to the end of billing cycle. Free trials ends at time of purchase.";
         public bool ShouldDisplayWarning = true;
         public User _User;
         public User User {

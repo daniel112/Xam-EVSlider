@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EVSlideShow.Core.Common;
+using EVSlideShow.Core.Constants;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;
 using Xamarin.Forms;
@@ -8,7 +9,9 @@ using Xamarin.Forms;
 namespace EVSlideShow.Core.Views {
 
     public interface ILabelButtonCancelPopupPage {
-        void DidTapButton(LabelButtonCancelPopupPage page, object output); 
+        void DidTapButton(LabelButtonCancelPopupPage page, object output);
+        void DidTapDisclaimer(LabelButtonCancelPopupPage page);
+
     }
 
     public class LabelButtonCancelPopupPage : PopupPage {
@@ -83,6 +86,49 @@ namespace EVSlideShow.Core.Views {
                 return _LabelMessage;
             }
         }
+
+        private Label _LabelDisclaimer;
+        private Label LabelDisclaimer {
+            get {
+                if (_LabelDisclaimer == null) {
+                    _LabelDisclaimer = new Label {
+                        Text = "",
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        FontSize = 11,
+                        TextColor = Color.White,
+                        BackgroundColor = Color.Transparent,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(5, 0, 5, 0)
+                    };
+                    _LabelDisclaimer.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+                }
+
+                return _LabelDisclaimer;
+            }
+        }
+        private Label _LabelDisclaimerInteractable;
+        private Label LabelDisclaimerInteractable {
+            get {
+                if (_LabelDisclaimerInteractable == null) {
+                    _LabelDisclaimerInteractable = new Label {
+                        Text = "",
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        FontSize = 11,
+                        TextColor = Color.DarkBlue,
+                        BackgroundColor = Color.Transparent,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(5, 0, 5, 10)
+                    };
+                    _LabelDisclaimerInteractable.SetDynamicResource(StyleProperty, ApplicationResourcesConstants.StyleLabelFontFamily);
+                    var tapGestureRecognizer = new TapGestureRecognizer();
+                    tapGestureRecognizer.Tapped += LabelDisclaimerInteractable_Tapped;
+                    _LabelDisclaimerInteractable.GestureRecognizers.Add(tapGestureRecognizer);
+                }
+
+                return _LabelDisclaimerInteractable;
+            }
+        }
+
         private Button _ButtonAction;
         private Button ButtonAction {
             get {
@@ -138,6 +184,16 @@ namespace EVSlideShow.Core.Views {
             SetupContent();
         }
 
+        public LabelButtonCancelPopupPage(string title, string message, string buttonText, string disclaimerText, string disclaimerInteractableText, int? messageHeightLimit) {
+            LabelTitle.Text = title;
+            LabelMessage.Text = message;
+            ButtonAction.Text = buttonText;
+            LabelDisclaimer.Text = disclaimerText;
+            LabelDisclaimerInteractable.Text = disclaimerInteractableText;
+            ScrollViewMessage.HeightRequest = messageHeightLimit != null ? (double)messageHeightLimit : 200;
+            SetupContent();
+        }
+
         protected override void OnAppearing() {
             base.OnAppearing();
         }
@@ -169,6 +225,15 @@ namespace EVSlideShow.Core.Views {
 
             StackLayoutWrapper.Children.Add(LabelTitle);
             StackLayoutWrapper.Children.Add(ScrollViewMessage);
+            if (LabelDisclaimer.Text != "") {
+                StackLayoutWrapper.Children.Add(LabelDisclaimer);
+            }
+
+            if (LabelDisclaimerInteractable.Text != "") {
+               StackLayoutWrapper.Children.Add(LabelDisclaimerInteractable);
+            }
+
+
 
             StackLayoutWrapper.Children.Add(ButtonAction);
             StackLayoutWrapper.Children.Add(ButtonCancel);
@@ -188,6 +253,11 @@ namespace EVSlideShow.Core.Views {
 
         private void ButtonCancel_Clicked(object sender, EventArgs e) {
             ClosePopupAsync();
+        }
+
+        // GestureRecognizers
+        void LabelDisclaimerInteractable_Tapped(object sender, EventArgs e) {
+            PageDelegate.DidTapDisclaimer(this);
         }
         #endregion
 
