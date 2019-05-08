@@ -69,6 +69,6 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app requires access to your location for subscription</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>6</string>
 </dict>
 </plist>
