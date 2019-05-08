@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
@@ -40,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -47,6 +47,18 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="Syncfusion.SfImageEditor.XForms.Android">
+      <HintPath>..\lib\android\Syncfusion.SfImageEditor.XForms.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfImageEditor.XForms">
+      <HintPath>..\lib\android\Syncfusion.SfImageEditor.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.CurrentActivity">
+      <HintPath>..\lib\android\Plugin.CurrentActivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Android.Support.Exif">
+      <HintPath>..\lib\android\Xamarin.Android.Support.Exif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.2.0.871581" />
@@ -57,9 +69,17 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
+    <Compile Include="CustomRenderers\BorderlessEntryCustomRenderer.cs" />
+    <Compile Include="Activities\MainActivity.cs" />
+    <Compile Include="Activities\LaunchActivity.cs" />
+    <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
+    <Compile Include="Common\DependencyImplementations\MediaService.cs" />
+    <Compile Include="Properties\MainApplication.cs" />
+    <Compile Include="Common\Helpers\PhotoUtilHelper.cs" />
+    <Compile Include="Common\DependencyImplementations\ImageHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -71,18 +91,61 @@
     <AndroidResource Include="Resources\layout\Toolbar.axml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\icon_round.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\drawable\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\splash_icon.png" />
+    <AndroidResource Include="Resources\drawable\input_username.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_username.png" />
+    <AndroidResource Include="Resources\drawable\input_password.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_password.png" />
+    <AndroidResource Include="Resources\drawable\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\nav_close.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\nav_close.png" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
+    <AndroidResource Include="Resources\drawable\input_email.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\input_email.png" />
+    <AndroidResource Include="Resources\drawable\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\nav_down_arrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_user.png" />
+    <AndroidResource Include="Resources\drawable\icon_manage.png" />
+    <AndroidResource Include="Resources\drawable\icon_photo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -90,6 +153,20 @@
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
+    <Folder Include="Assets\Fonts\" />
+    <Folder Include="CustomRenderers\" />
+    <Folder Include="Resources\mipmap-hdpi\" />
+    <Folder Include="Resources\mipmap-mdpi\" />
+    <Folder Include="Resources\mipmap-xhdpi\" />
+    <Folder Include="Resources\mipmap-xxhdpi\" />
+    <Folder Include="Resources\mipmap-xxxhdpi\" />
+    <Folder Include="Activities\" />
+    <Folder Include="Common\DependencyImplementations\" />
+    <Folder Include="Common\Helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\Fonts\phagspa.ttf" />
+    <AndroidAsset Include="Assets\Fonts\phagspab.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EVSlideShow\EVSlideShow.Core.csproj">

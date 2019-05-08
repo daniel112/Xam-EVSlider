@@ -18,6 +18,7 @@ namespace EVSlideShow.Core.Views.Base {
         #region Initialization
         protected BaseContentPage() {
             BindingContext = ViewModel;
+            this.BackgroundColor = Color.FromHex(AppTheme.PrimaryColor());
         }
 
 

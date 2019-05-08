@@ -28,6 +28,7 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer: Daniel Yo (ASP6Y3Y92A)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -38,6 +39,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer: Daniel Yo (N34T435J6U)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,8 +63,9 @@
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: Daniel Yo (ASP6Y3Y92A)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>EVSlideShow Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -85,8 +88,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignProvision>Automatic:AppStore</CodesignProvision>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignProvision>EVSlideshow AppStore</CodesignProvision>
+    <CodesignKey>iPhone Distribution: He Reigns, Inc (3SU88XGT5T)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
@@ -95,62 +98,90 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Common\.DS_Store" />
+    <Compile Include="Common\AppSettings\AppSettingsVersionAndBuild.cs" />
+    <Compile Include="CustomRenderers\EntryBorderlessCustomRenderer.cs" />
+    <Compile Include="CustomRenderers\PickerBorderlessCustomRenderer.cs" />
+    <Compile Include="Common\DependencyImplementations\DeviceOrientation.cs" />
+    <Compile Include="Common\DependencyImplementations\MediaService.cs" />
+    <Compile Include="Common\DependencyImplementations\Helpers\ImageHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon1024.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon180.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon167.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon152.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon120.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon87.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon80.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon76.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon60.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon58.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon40.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon29.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon20.png">
-      <Visible>false</Visible>
-    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\40x40.png" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\80x80.png" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\120x120.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\baseline_close_white_24pt_3x.png" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_username.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_username.imageset\Name 96x96.png" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\Password 96x96.png" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\input_email.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\baseline_keyboard_arrow_down_white_24pt_3x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_photo.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 80x80.png" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 120x120.png" />
+    <ImageAsset Include="Assets.xcassets\icon_manage.imageset\Manage 160x160.png" />
+    <ImageAsset Include="Assets.xcassets\icon_photo.imageset\photo.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_1x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_2x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_user.imageset\baseline_person_white_36pt_3x.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\60x60-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\1024x1024-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\76x76-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152x152-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\167x167-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80x80-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\80x80.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120x120-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\120x120.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\180x180-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\29x29-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58x58-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40-2.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58x58.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\87x87-1.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\180x180 copy.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40x40.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Syncfusion.SfImageEditor.XForms">
+      <HintPath>..\lib\ios-unified\Syncfusion.SfImageEditor.XForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfImageEditor.XForms.iOS">
+      <HintPath>..\lib\ios-unified\Syncfusion.SfImageEditor.XForms.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
       <Version>3.2.0.871581</Version>
+    </PackageReference>
+    <PackageReference Include="GMImagePicker.Xamarin">
+      <Version>2.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Plugin.InAppBilling">
+      <Version>2.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -158,5 +189,31 @@
       <Project>{119D0052-BD4B-4321-A6D5-732F6122B921}</Project>
       <Name>EVSlideShow.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets.xcassets\splash_icon.imageset\" />
+    <Folder Include="Resources\Fonts\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\nav_close.imageset\" />
+    <Folder Include="Assets.xcassets\Inputs.spriteatlas\" />
+    <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_username.imageset\" />
+    <Folder Include="CustomRenderers\" />
+    <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_password.imageset\" />
+    <Folder Include="Assets.xcassets\Inputs.spriteatlas\input_email.imageset\" />
+    <Folder Include="Assets.xcassets\Navigation.spriteatlas\nav_down_arrow.imageset\" />
+    <Folder Include="Assets.xcassets\icon_photo.imageset\" />
+    <Folder Include="Assets.xcassets\icon_manage.imageset\" />
+    <Folder Include="Common\DependencyImplementations\" />
+    <Folder Include="Assets.xcassets\icon_user.imageset\" />
+    <Folder Include="Common\DependencyImplementations\Helpers\" />
+    <Folder Include="Assets.xcassets\icon_user.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Fonts\phagspa.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Fonts\phagspab.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
